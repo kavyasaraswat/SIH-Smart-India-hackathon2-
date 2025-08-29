@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STEM Playground - Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #e9d5ff 0%, #a855f7 100%);
+        }
+        .btn-hover {
+            transition: all 0.3s ease;
+        }
+        .btn-hover:hover {
+            transform: scale(1.05);
+        }
+        .image-bg {
+            background-image: url(questify_login.jpg);
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body class="min-h-screen gradient-bg flex items-center justify-center p-6">
+    <div class="w-full max-w-4xl rounded-2xl shadow-2xl bg-white overflow-hidden grid md:grid-cols-2">
+        <!-- Left Side with Image -->
+        <div class="hidden md:block image-bg"></div>
+
+        <!-- Right Side Login Form -->
+        <div class="p-10 flex flex-col justify-center">
+            <h1 class="text-3xl font-bold text-purple-900 mb-4 text-center">Welcome to Questify</h1>
+            <p class="text-gray-600 text-center mb-6">
+                Our gamified learning platform helps students in every corner, including rural areas, explore Science, Technology, Engineering & Math through fun, interactive games that make studying exciting and engaging.
+            </p>
+
+            <!-- Dropdown for Login Type -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Login as</label>
+                <select class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-transparent bg-white">
+                    <option value="">Select role</option>
+                    <option value="admin">Admin Login</option>
+                    <option value="faculty">Faculty Login</option>
+                    <option value="student">Student Login</option>
+                </select>
+            </div>
+
+            <!-- ID Input -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">User ID</label>
+                <input
+                    type="text"
+                    placeholder="Enter your ID"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+                />
+            </div>
+
+            <!-- Password Input -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <input
+                    type="password"
+                    placeholder="Enter your password"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+                />
+            </div>
+
+            <!-- Submit Button -->
+            <button class="btn-hover w-full rounded-xl py-2 bg-purple-600 text-white text-lg shadow-md hover:bg-purple-700 font-medium" onclick="handleLogin()">
+                Login
+            </button>
+
+            <!-- Sign Up Option -->
+            <div class="mt-6 text-center">
+                <span class="text-gray-700 mr-2">Start Your Learning Journey</span>
+                <button class="btn-hover rounded-xl bg-purple-400 hover:bg-purple-500 text-white px-6 py-2 font-medium" onclick="handleSignUp()">
+                    Sign Up
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-md mx-4 text-center">
+            <div class="text-6xl mb-4">🎓</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">Welcome to Questify!</h3>
+            <p class="text-gray-600 mb-6">Ready to start your learning journey?</p>
+            <button onclick="closeModal()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-xl font-medium">
+                Let's Go!
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function handleLogin() {
+            document.getElementById('successModal').classList.remove('hidden');
+        }
+        
+        function handleSignUp() {
+            document.getElementById('successModal').classList.remove('hidden');
+        }
+        
+        function closeModal() {
+            document.getElementById('successModal').classList.add('hidden');
+        }
+        
+        // Close modal when clicking outside
+        document.getElementById('successModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'976b3c08175e59de',t:'MTc1NjQ2MTk3NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
