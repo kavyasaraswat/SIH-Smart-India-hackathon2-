@@ -358,11 +358,15 @@
       </div>
       
       <!-- Single home icon instead of three game icons -->
-       <a href="startuppage.html">
-          <button class="home-icon-container" onclick="window.location.href='startuppage.html'" title="Go to Home Page">
-             <i class="fas fa-home"></i>
-         </button>
-       </a>
+      <button class="home-icon-container" onclick="goHome()" title="Go to Home Page">
+          <i class="fas fa-home"></i>
+      </button>
+
+      <script>
+      function goHome() {
+          window.location.href = 'loding.html?redirect=startuppage.html';
+      }
+      </script>
     </div>
     
     <div class="right-panel">
@@ -390,6 +394,20 @@
         <div class="form-group">
           <label for="lastname">Last Name</label>
           <input type="text" id="lastname" name="lastname" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="class">Class</label>
+          <select id="class" name="class" required>
+            <option value="">Select your class</option>
+            <option value="6">Class 6</option>
+            <option value="7">Class 7</option>
+            <option value="8">Class 8</option>
+            <option value="9">Class 9</option>
+            <option value="10">Class 10</option>
+            <option value="11">Class 11</option>
+            <option value="12">Class 12</option>
+          </select>
         </div>
         
         <div class="form-group teacher-fields">
@@ -434,7 +452,8 @@
       </form>
       
       <div class="login-link">
-        Already have an account? <a href="#">Log In</a>
+        Already have an account?
+        <a href="loding.html?redirect=loginpage.html">Log In</a>
       </div>
     </div>
   </div>

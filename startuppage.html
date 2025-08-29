@@ -64,12 +64,15 @@
     </div>
 
     <div class="absolute top-6 right-6 flex gap-3">
-        <a href="loginpage.html"><button class="btn-hover bg-white bg-opacity-20 hover:bg-white hover:bg-opacity-30 text-white px-4 py-2 rounded-lg font-medium" onclick="showSignIn()">
-            Sign In
-        </button></a>
-        <a href="signup.html"><button class="btn-hover bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium shadow-lg" onclick="showSignUp()">
-            Sign Up
-        </button>
+        <a href="loding.html?redirect=loginpage.html">
+            <button class="btn-hover bg-white bg-opacity-20 hover:bg-white hover:bg-opacity-30 text-white px-4 py-2 rounded-lg font-medium">
+                Sign In
+            </button>
+        </a>
+        <a href="loding.html?redirect=signup.html">
+            <button class="btn-hover bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium shadow-lg">
+                Sign Up
+            </button>
         </a>
     </div>
 
@@ -82,14 +85,16 @@
             Embark on an epic learning adventure where science meets gaming. Master physics, chemistry, biology, and math through interactive quests.
         </p>
         <div class="flex gap-4 justify-center flex-wrap">
-            <a href="loginpage.html">
-                <button class="btn-hover bg-purple-700 hover:bg-purple-800 px-6 py-3 rounded-xl text-lg shadow-lg font-medium" onclick="startQuest()">
-                  Start Your Quest
-              </button>
+            <a href="loding.html?redirect=loginpage.html">
+                <button class="btn-hover bg-purple-700 hover:bg-purple-800 px-6 py-3 rounded-xl text-lg shadow-lg font-medium">
+                    Start Your Quest
+                </button>
             </a>
-            <button class="btn-hover bg-black bg-opacity-40 hover:bg-black hover:bg-opacity-60 px-6 py-3 rounded-xl text-lg font-medium" onclick="exploreSubjects()">
-                Explore Subjects
-            </button>
+            <a href="loding.html?redirect=exploresub.html">
+                <button class="btn-hover bg-black bg-opacity-40 hover:bg-black hover:bg-opacity-60 px-6 py-3 rounded-xl text-lg font-medium">
+                    Explore Subjects
+                </button>
+            </a>
         </div>
     </div>
 
@@ -226,4 +231,13 @@
         `;
         document.head.appendChild(style);
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'976bcd8a723659de',t:'MTc1NjQ2NzkzNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'976bcd8a723659de',t:'MTc1NjQ2NzkzNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const redirectUrl = params.get('redirect') || 'startuppage.html';
+    setTimeout(function() {
+        window.location.href = redirectUrl;
+    }, 2000);
+</script>
+</body>
+</html>

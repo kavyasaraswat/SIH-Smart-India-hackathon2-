@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About STEM - Questify</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #e9d5ff 0%, #a855f7 100%);
+            min-height: 100vh;
+        }
+        
+        .hero-animation {
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .btn-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .btn-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(168, 85, 247, 0.3);
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .icon-glow:hover {
+            filter: drop-shadow(0 0 15px #a855f7);
+            transform: scale(1.1);
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .section-fade {
+            animation: fadeInUp 0.8s ease-out;
+            animation-fill-mode: both;
+        }
+        
+        .section-fade:nth-child(2) { animation-delay: 0.2s; }
+        .section-fade:nth-child(3) { animation-delay: 0.4s; }
+        .section-fade:nth-child(4) { animation-delay: 0.6s; }
+        
+        .floating-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body class="gradient-bg text-white">
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 p-6">
+        <div class="flex justify-between items-center max-w-7xl mx-auto">
+            <div class="flex items-center gap-4">
+                <div class="bg-white bg-opacity-20 rounded-full p-3 shadow-2xl border border-white border-opacity-30">
+                    <span class="text-3xl">🎮</span>
+                </div>
+                <h1 class="text-2xl font-black text-white drop-shadow-lg bg-white bg-opacity-15 px-4 py-2 rounded-lg">Questify</h1>
+            </div>
+
+
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-32 pb-20 px-6">
+        <!-- Hero Section -->
+        <section class="hero-animation text-center max-w-4xl mx-auto mb-20">
+            <h1 class="text-5xl md:text-6xl font-extrabold mb-6 leading-tight">
+                What is <span class="text-purple-200 pulse-animation">STEM</span>?
+            </h1>
+            <p class="text-xl text-white text-opacity-90 mb-8 max-w-3xl mx-auto">
+                Discover the exciting world of Science, Technology, Engineering, and Mathematics - and how Questify transforms learning into an epic gaming adventure!
+            </p>
+        </section>
+
+        <!-- STEM Explanation -->
+        <section class="section-fade max-w-6xl mx-auto mb-20">
+            <div class="glass-effect rounded-3xl p-8 md:p-12 shadow-2xl">
+                <h2 class="text-4xl font-bold text-center mb-12">The Four Pillars of STEM</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Science -->
+                    <div class="text-center">
+                        <div class="floating-icon text-6xl mb-6">🔬</div>
+                        <h3 class="text-2xl font-bold mb-4 text-purple-200">Science</h3>
+                        <p class="text-white text-opacity-80 leading-relaxed">
+                            Explore the natural world through observation, experimentation, and discovery. From atoms to galaxies, understand how everything works.
+                        </p>
+                    </div>
+
+                    <!-- Technology -->
+                    <div class="text-center">
+                        <div class="floating-icon text-6xl mb-6" style="animation-delay: 0.5s;">💻</div>
+                        <h3 class="text-2xl font-bold mb-4 text-purple-200">Technology</h3>
+                        <p class="text-white text-opacity-80 leading-relaxed">
+                            Harness the power of innovation and digital tools. Learn coding, AI, robotics, and how technology shapes our future.
+                        </p>
+                    </div>
+
+                    <!-- Engineering -->
+                    <div class="text-center">
+                        <div class="floating-icon text-6xl mb-6" style="animation-delay: 1s;">⚙</div>
+                        <h3 class="text-2xl font-bold mb-4 text-purple-200">Engineering</h3>
+                        <p class="text-white text-opacity-80 leading-relaxed">
+                            Design and build solutions to real-world problems. From bridges to spacecraft, create things that make life better.
+                        </p>
+                    </div>
+
+                    <!-- Mathematics -->
+                    <div class="text-center">
+                        <div class="floating-icon text-6xl mb-6" style="animation-delay: 1.5s;">📊</div>
+                        <h3 class="text-2xl font-bold mb-4 text-purple-200">Mathematics</h3>
+                        <p class="text-white text-opacity-80 leading-relaxed">
+                            The universal language that connects all sciences. Solve puzzles, find patterns, and unlock the secrets of the universe.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why STEM Matters -->
+        <section class="section-fade max-w-6xl mx-auto mb-20">
+            <div class="glass-effect rounded-3xl p-8 md:p-12 shadow-2xl">
+                <h2 class="text-4xl font-bold text-center mb-8">Why STEM Matters</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="text-center">
+                        <div class="text-5xl mb-4">🚀</div>
+                        <h3 class="text-xl font-bold mb-3">Future Careers</h3>
+                        <p class="text-white text-opacity-80">STEM fields offer the fastest-growing, highest-paying careers of the future.</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-5xl mb-4">🧠</div>
+                        <h3 class="text-xl font-bold mb-3">Critical Thinking</h3>
+                        <p class="text-white text-opacity-80">Develop problem-solving skills that apply to every aspect of life.</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-5xl mb-4">🌍</div>
+                        <h3 class="text-xl font-bold mb-3">Change the World</h3>
+                        <p class="text-white text-opacity-80">Use STEM knowledge to solve global challenges and make a difference.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How Questify Works -->
+        <section class="section-fade max-w-6xl mx-auto mb-20">
+            <div class="glass-effect rounded-3xl p-8 md:p-12 shadow-2xl">
+                <h2 class="text-4xl font-bold text-center mb-12">How Questify Makes Learning Fun</h2>
+                
+                <div class="space-y-12">
+                    <!-- Game-Based Learning -->
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="md:w-1/2">
+                            <div class="text-6xl mb-4">🎮</div>
+                            <h3 class="text-3xl font-bold mb-4 text-purple-200">Game-Based Learning</h3>
+                            <p class="text-lg text-white text-opacity-90 leading-relaxed">
+                                Transform boring textbooks into exciting adventures! Complete quests, battle bosses, and unlock new levels as you master STEM concepts. Every lesson feels like playing your favorite video game.
+                            </p>
+                        </div>
+                        <div class="md:w-1/2 grid grid-cols-2 gap-4">
+                            <div class="bg-white bg-opacity-10 rounded-xl p-4 text-center">
+                                <div class="text-2xl mb-2">⭐</div>
+                                <p class="text-sm">Earn XP Points</p>
+                            </div>
+                            <div class="bg-white bg-opacity-10 rounded-xl p-4 text-center">
+                                <div class="text-2xl mb-2">🏆</div>
+                                <p class="text-sm">Unlock Achievements</p>
+                            </div>
+                            <div class="bg-white bg-opacity-10 rounded-xl p-4 text-center">
+                                <div class="text-2xl mb-2">🎯</div>
+                                <p class="text-sm">Complete Missions</p>
+                            </div>
+                            <div class="bg-white bg-opacity-10 rounded-xl p-4 text-center">
+                                <div class="text-2xl mb-2">👥</div>
+                                <p class="text-sm">Team Challenges</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Simulations -->
+                    <div class="flex flex-col md:flex-row-reverse items-center gap-8">
+                        <div class="md:w-1/2">
+                            <div class="text-6xl mb-4">🔬</div>
+                            <h3 class="text-3xl font-bold mb-4 text-purple-200">Interactive Simulations</h3>
+                            <p class="text-lg text-white text-opacity-90 leading-relaxed">
+                                Conduct virtual experiments, manipulate 3D models, and see concepts come to life! Mix chemicals safely, explore the solar system, or build circuits - all from your device.
+                            </p>
+                        </div>
+                        <div class="md:w-1/2 space-y-4">
+                            <div class="bg-white bg-opacity-10 rounded-xl p-4 flex items-center gap-4">
+                                <div class="text-3xl">⚛</div>
+                                <div>
+                                    <h4 class="font-bold">Virtual Lab</h4>
+                                    <p class="text-sm text-white text-opacity-70">Safe experiments anytime</p>
+                                </div>
+                            </div>
+                            <div class="bg-white bg-opacity-10 rounded-xl p-4 flex items-center gap-4">
+                                <div class="text-3xl">🌌</div>
+                                <div>
+                                    <h4 class="font-bold">3D Exploration</h4>
+                                    <p class="text-sm text-white text-opacity-70">Journey through space and time</p>
+                                </div>
+                            </div>
+                            <div class="bg-white bg-opacity-10 rounded-xl p-4 flex items-center gap-4">
+                                <div class="text-3xl">🧬</div>
+                                <div>
+                                    <h4 class="font-bold">Molecular Models</h4>
+                                    <p class="text-sm text-white text-opacity-70">See atoms and molecules up close</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Personalized Learning -->
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="md:w-1/2">
+                            <div class="text-6xl mb-4">🎯</div>
+                            <h3 class="text-3xl font-bold mb-4 text-purple-200">Personalized Learning Path</h3>
+                            <p class="text-lg text-white text-opacity-90 leading-relaxed">
+                                Our AI adapts to your learning style and pace. Struggling with physics? Get extra practice missions. Excelling in math? Unlock advanced challenges. Every student gets their perfect learning adventure.
+                            </p>
+                        </div>
+                        <div class="md:w-1/2">
+                            <div class="bg-white bg-opacity-10 rounded-xl p-6">
+                                <h4 class="text-xl font-bold mb-4 text-center">Your Learning Journey</h4>
+                                <div class="space-y-3">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-sm">✓</div>
+                                        <span>Basic Physics - Completed</span>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-sm">⚡</div>
+                                        <span>Chemistry Basics - In Progress</span>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center text-sm">🔒</div>
+                                        <span>Advanced Biology - Locked</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="section-fade text-center max-w-4xl mx-auto">
+            <div class="glass-effect rounded-3xl p-8 md:p-12 shadow-2xl">
+                <h2 class="text-4xl font-bold mb-6">Ready to Start Your STEM Adventure?</h2>
+                <p class="text-xl text-white text-opacity-90 mb-8">
+                    Join thousands of students who are already leveling up their knowledge through gaming!
+                </p>
+                <div class="flex gap-4 justify-center flex-wrap">
+                    <a href="javascript:void(0);">
+                        <button class="btn-hover bg-black bg-opacity-40 hover:bg-black hover:bg-opacity-60 px-8 py-4 rounded-xl text-lg font-semibold" onclick="goHome()">
+                          🏠 Back to Home
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function goHome() {
+            // Open loading page in a new tab/window and set redirect in loading page
+            window.location.href = 'loding.html?redirect=startuppage.html';
+        }
+
+        function startLearning() {
+            alert('🎮 Welcome to your STEM adventure!\n\n🌟 Choose your starting quest:\n\n🔬 Science Lab: Explore the periodic table\n💻 Tech Zone: Learn basic programming\n⚙ Engineering Hub: Build virtual machines\n📊 Math Arena: Solve number puzzles\n\nYour journey to becoming a STEM master begins now!');
+        }
+
+        // Add scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section-fade').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
