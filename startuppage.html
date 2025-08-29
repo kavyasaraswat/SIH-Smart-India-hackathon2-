@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questify - Level Up Your STEM Skills</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(90deg, #e9d5ff 0%, #a855f7 100%);
+        }
+        
+        .hero-animation {
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .btn-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .btn-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(168, 85, 247, 0.3);
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .icon-glow:hover {
+            filter: drop-shadow(0 0 10px #a855f7);
+        }
+    </style>
+</head>
+<body class="min-h-screen gradient-bg text-white flex flex-col items-center justify-center px-6">
+    <!-- Header -->
+    <div class="absolute top-6 left-6 flex items-center gap-4">
+        <div class="bg-white bg-opacity-50 rounded-full p-4 shadow-2xl border-2 border-white border-opacity-30">
+            <span class="text-4xl">🎮</span>
+        </div>
+        <h1 class="text-3xl font-black text-white drop-shadow-2xl bg-white bg-opacity-20 px-4 py-2 rounded-lg">Questify</h1>
+    </div>
+
+    <div class="absolute top-6 right-6 flex gap-3">
+        <button class="btn-hover bg-white bg-opacity-20 hover:bg-white hover:bg-opacity-30 text-white px-4 py-2 rounded-lg font-medium" onclick="showSignIn()">
+            Sign In
+        </button>
+        <button class="btn-hover bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium shadow-lg" onclick="showSignUp()">
+            Sign Up
+        </button>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero-animation text-center max-w-3xl">
+        <h1 class="text-5xl font-extrabold mb-6">
+            Level Up Your <span class="text-purple-200">STEM</span> Skills
+        </h1>
+        <p class="text-lg text-white text-opacity-80 mb-8">
+            Embark on an epic learning adventure where science meets gaming. Master physics, chemistry, biology, and math through interactive quests.
+        </p>
+        <div class="flex gap-4 justify-center flex-wrap">
+            <button class="btn-hover bg-purple-700 hover:bg-purple-800 px-6 py-3 rounded-xl text-lg shadow-lg font-medium" onclick="startQuest()">
+                Start Your Quest
+            </button>
+            <button class="btn-hover bg-black bg-opacity-40 hover:bg-black hover:bg-opacity-60 px-6 py-3 rounded-xl text-lg font-medium" onclick="exploreSubjects()">
+                Explore Subjects
+            </button>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-20 max-w-5xl w-full">
+        <!-- Interactive Lessons Card -->
+        <div class="card-hover glass-effect rounded-xl shadow-xl">
+            <div class="flex flex-col items-center text-center p-6">
+                <div class="icon-glow text-white mb-4">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Interactive Lessons</h3>
+                <p class="text-white text-opacity-70">Learn through hands-on experiments and challenges.</p>
+            </div>
+        </div>
+
+        <!-- Achievement System Card -->
+        <div class="card-hover glass-effect rounded-xl shadow-xl">
+            <div class="flex flex-col items-center text-center p-6">
+                <div class="icon-glow text-white mb-4">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="8" r="7"/>
+                        <polyline points="8.21,13.89 7,23 12,20 17,23 15.79,13.88"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Achievement System</h3>
+                <p class="text-white text-opacity-70">Earn badges and unlock new levels as you progress.</p>
+            </div>
+        </div>
+
+        <!-- Collaborative Quests Card -->
+        <div class="card-hover glass-effect rounded-xl shadow-xl">
+            <div class="flex flex-col items-center text-center p-6">
+                <div class="icon-glow text-white mb-4">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Collaborative Quests</h3>
+                <p class="text-white text-opacity-70">Team up with fellow scientists to solve grand challenges.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-md mx-4 text-center text-gray-800">
+            <div class="text-6xl mb-4">🚀</div>
+            <h3 class="text-2xl font-bold mb-2">Ready to Begin!</h3>
+            <p id="modalText" class="text-gray-600 mb-6"></p>
+            <button onclick="closeModal()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-xl font-medium">
+                Let's Go!
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function startQuest() {
+            showModal("Your STEM adventure begins now! Get ready to explore amazing scientific concepts through interactive quests.");
+        }
+        
+        function exploreSubjects() {
+            showModal("Discover physics, chemistry, biology, and mathematics like never before. Choose your learning path!");
+        }
+        
+        function showSignIn() {
+            showModal("Welcome back, scientist! Ready to continue your learning journey?");
+        }
+        
+        function showSignUp() {
+            showModal("Join the Questify community! Create your account and start your STEM adventure today.");
+        }
+        
+        function showModal(message) {
+            document.getElementById('modalText').textContent = message;
+            document.getElementById('successModal').classList.remove('hidden');
+        }
+        
+        function closeModal() {
+            document.getElementById('successModal').classList.add('hidden');
+        }
+        
+        // Close modal when clicking outside
+        document.getElementById('successModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+        
+        // Add some interactive sparkle effects
+        document.addEventListener('mousemove', function(e) {
+            if (Math.random() > 0.98) {
+                createSparkle(e.clientX, e.clientY);
+            }
+        });
+        
+        function createSparkle(x, y) {
+            const sparkle = document.createElement('div');
+            sparkle.innerHTML = '✨';
+            sparkle.style.position = 'fixed';
+            sparkle.style.left = x + 'px';
+            sparkle.style.top = y + 'px';
+            sparkle.style.pointerEvents = 'none';
+            sparkle.style.fontSize = '12px';
+            sparkle.style.zIndex = '1000';
+            sparkle.style.animation = 'sparkleFloat 1s ease-out forwards';
+            
+            document.body.appendChild(sparkle);
+            
+            setTimeout(() => {
+                sparkle.remove();
+            }, 1000);
+        }
+        
+        // Add sparkle animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes sparkleFloat {
+                0% {
+                    opacity: 1;
+                    transform: translateY(0) scale(1);
+                }
+                100% {
+                    opacity: 0;
+                    transform: translateY(-50px) scale(0.5);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'976bcd8a723659de',t:'MTc1NjQ2NzkzNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
