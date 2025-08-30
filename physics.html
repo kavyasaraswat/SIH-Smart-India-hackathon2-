@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics - Subject Dashboard | STEM Adventure</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #e9d5ff 0%, #a855f7 100%); }
+        .card-shadow { box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .feature-card { transition: all 0.3s ease; }
+        .feature-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.15); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .tab-button.active { background: #3b82f6; color: white; }
+    </style>
+</head>
+<body class="bg-white min-h-screen">
+    <!-- Header -->
+    <div class="gradient-bg text-white py-6">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <button onclick="goBack()" class="flex items-center space-x-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-all">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                        <span>Back to Profile</span>
+                    </button>
+                    <div>
+                        <h1 class="text-3xl font-bold">Physics</h1>
+                        <p class="text-white/80">Natural Sciences • Grade 11-12</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="bg-white/20 px-4 py-2 rounded-lg">
+                        <p class="text-sm">Current Semester</p>
+                        <p class="font-semibold">Fall 2024</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subject Overview -->
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-xl card-shadow p-6 text-center">
+                <div class="w-12 h-12 bg-blue-100 rounded-lg mx-auto mb-3 flex items-center justify-center">
+                    <span class="text-2xl">👥</span>
+                </div>
+                <div class="text-2xl font-bold text-gray-800">28</div>
+                <div class="text-gray-600">Students Enrolled</div>
+            </div>
+            <div class="bg-white rounded-xl card-shadow p-6 text-center">
+                <div class="w-12 h-12 bg-green-100 rounded-lg mx-auto mb-3 flex items-center justify-center">
+                    <span class="text-2xl">🔬</span>
+                </div>
+                <div class="text-2xl font-bold text-gray-800">12</div>
+                <div class="text-gray-600">Lab Experiments</div>
+            </div>
+            <div class="bg-white rounded-xl card-shadow p-6 text-center">
+                <div class="w-12 h-12 bg-purple-100 rounded-lg mx-auto mb-3 flex items-center justify-center">
+                    <span class="text-2xl">⚡</span>
+                </div>
+                <div class="text-2xl font-bold text-gray-800">160</div>
+                <div class="text-gray-600">Total Hours</div>
+            </div>
+            <div class="bg-white rounded-xl card-shadow p-6 text-center">
+                <div class="w-12 h-12 bg-yellow-100 rounded-lg mx-auto mb-3 flex items-center justify-center">
+                    <span class="text-2xl">📊</span>
+                </div>
+                <div class="text-2xl font-bold text-gray-800">88%</div>
+                <div class="text-gray-600">Completion Rate</div>
+            </div>
+        </div>
+
+        <!-- Main Content Tabs -->
+        <div class="bg-white rounded-2xl card-shadow overflow-hidden">
+            <!-- Tab Navigation -->
+            <div class="border-b border-gray-200">
+                <nav class="flex space-x-8 px-8 py-4">
+                    <button onclick="switchTab('notes')" class="tab-button active px-4 py-2 rounded-lg font-medium transition-all">
+                        📝 Notes & Materials
+                    </button>
+                    <button onclick="switchTab('syllabus')" class="tab-button px-4 py-2 rounded-lg font-medium transition-all hover:bg-gray-100">
+                        📋 Syllabus
+                    </button>
+                    <button onclick="switchTab('lectures')" class="tab-button px-4 py-2 rounded-lg font-medium transition-all hover:bg-gray-100">
+                        🎯 Lecture Plans
+                    </button>
+                    <button onclick="switchTab('resources')" class="tab-button px-4 py-2 rounded-lg font-medium transition-all hover:bg-gray-100">
+                        📖 NCERT Resources
+                    </button>
+                    <button onclick="switchTab('assessments')" class="tab-button px-4 py-2 rounded-lg font-medium transition-all hover:bg-gray-100">
+                        📊 Assessments
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="p-8">
+                <!-- Notes & Materials Tab -->
+                <div id="notes" class="tab-content active">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Physics Notes & Study Materials</h2>
+                        <button onclick="addNewNote()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-all">
+                            + Add New Note
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="feature-card bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl border border-blue-200">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-semibold text-blue-800">Chapter 1: Motion in a Straight Line</h3>
+                                <span class="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded">Updated</span>
+                            </div>
+                            <p class="text-blue-700 text-sm mb-4">Kinematics, velocity, acceleration, and equations of motion</p>
+                            <div class="flex space-x-2">
+                                <button onclick="viewNote('motion-straight-line')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded text-sm transition-all">View</button>
+                                <button onclick="downloadPDF('motion-straight-line')" class="bg-white hover:bg-gray-50 text-blue-600 px-3 py-2 rounded text-sm border border-blue-200 transition-all">PDF</button>
+                            </div>
+                        </div>
+
+                        <div class="feature-card bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-xl border border-green-200">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-semibold text-green-800">Chapter 2: Laws of Motion</h3>
+                                <span class="text-xs bg-green-200 text-green-800 px-2 py-1 rounded">New</span>
+                            </div>
+                            <p class="text-green-700 text-sm mb-4">Newton's laws, force, momentum, and applications</p>
+                            <div class="flex space-x-2">
+                                <button onclick="viewNote('laws-of-motion')" class="flex-1 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded text-sm transition-all">View</button>
+                                <button onclick="downloadPDF('laws-of-motion')" class="bg-white hover:bg-gray-50 text-green-600 px-3 py-2 rounded text-sm border border-green-200 transition-all">PDF</button>
+                            </div>
+                        </div>
+
+                        <div class="feature-card bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-xl border border-purple-200">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-semibold text-purple-800">Chapter 3: Work, Energy & Power</h3>
+                                <span class="text-xs bg-purple-200 text-purple-800 px-2 py-1 rounded">Draft</span>
+                            </div>
+                            <p class="text-purple-700 text-sm mb-4">Work-energy theorem, conservation of energy, power</p>
+                            <div class="flex space-x-2">
+                                <button onclick="viewNote('work-energy-power')" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded text-sm transition-all">View</button>
+                                <button onclick="downloadPDF('work-energy-power')" class="bg-white hover:bg-gray-50 text-purple-600 px-3 py-2 rounded text-sm border border-purple-200 transition-all">PDF</button>
+                            </div>
+                        </div>
+
+                        <div class="feature-card bg-gradient-to-br from-red-50 to-red-100 p-6 rounded-xl border border-red-200">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-semibold text-red-800">Chapter 4: Waves & Oscillations</h3>
+                                <span class="text-xs bg-red-200 text-red-800 px-2 py-1 rounded">Lab Ready</span>
+                            </div>
+                            <p class="text-red-700 text-sm mb-4">Simple harmonic motion, wave properties, sound waves</p>
+                            <div class="flex space-x-2">
+                                <button onclick="viewNote('waves-oscillations')" class="flex-1 bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded text-sm transition-all">View</button>
+                                <button onclick="downloadPDF('waves-oscillations')" class="bg-white hover:bg-gray-50 text-red-600 px-3 py-2 rounded text-sm border border-red-200 transition-all">PDF</button>
+                            </div>
+                        </div>
+
+                        <div class="feature-card bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-xl border border-orange-200">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-semibold text-orange-800">Chapter 5: Electricity & Magnetism</h3>
+                                <span class="text-xs bg-orange-200 text-orange-800 px-2 py-1 rounded">In Progress</span>
+                            </div>
+                            <p class="text-orange-700 text-sm mb-4">Electric fields, circuits, magnetic fields, electromagnetic induction</p>
+                            <div class="flex space-x-2">
+                                <button onclick="viewNote('electricity-magnetism')" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white px-3 py-2 rounded text-sm transition-all">View</button>
+                                <button onclick="downloadPDF('electricity-magnetism')" class="bg-white hover:bg-gray-50 text-orange-600 px-3 py-2 rounded text-sm border border-orange-200 transition-all">PDF</button>
+                            </div>
+                        </div>
+
+                        <div class="feature-card bg-gradient-to-br from-indigo-50 to-indigo-100 p-6 rounded-xl border border-indigo-200">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-semibold text-indigo-800">Chapter 6: Modern Physics</h3>
+                                <span class="text-xs bg-indigo-200 text-indigo-800 px-2 py-1 rounded">Advanced</span>
+                            </div>
+                            <p class="text-indigo-700 text-sm mb-4">Quantum mechanics, atomic structure, nuclear physics</p>
+                            <div class="flex space-x-2">
+                                <button onclick="viewNote('modern-physics')" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded text-sm transition-all">View</button>
+                                <button onclick="downloadPDF('modern-physics')" class="bg-white hover:bg-gray-50 text-indigo-600 px-3 py-2 rounded text-sm border border-indigo-200 transition-all">PDF</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Syllabus Tab -->
+                <div id="syllabus" class="tab-content">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Physics Course Syllabus</h2>
+                        <button onclick="downloadSyllabusPDF()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-all flex items-center space-x-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            <span>Download PDF</span>
+                        </button>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="bg-gray-50 p-6 rounded-xl">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Course Overview</h3>
+                            <p class="text-gray-700 leading-relaxed">
+                                Physics is the fundamental science that seeks to understand how the universe works. This course covers classical mechanics, 
+                                thermodynamics, waves, electricity, magnetism, and modern physics. Students will develop problem-solving skills and 
+                                gain hands-on experience through laboratory experiments.
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-blue-50 p-6 rounded-xl">
+                                <h4 class="font-semibold text-blue-800 mb-3">Unit 1: Mechanics (Weeks 1-6)</h4>
+                                <ul class="text-blue-700 space-y-1 text-sm">
+                                    <li>• Motion in One and Two Dimensions</li>
+                                    <li>• Newton's Laws of Motion</li>
+                                    <li>• Work, Energy, and Power</li>
+                                    <li>• Rotational Motion</li>
+                                    <li>• Gravitation</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-green-50 p-6 rounded-xl">
+                                <h4 class="font-semibold text-green-800 mb-3">Unit 2: Thermodynamics (Weeks 7-10)</h4>
+                                <ul class="text-green-700 space-y-1 text-sm">
+                                    <li>• Kinetic Theory of Gases</li>
+                                    <li>• Laws of Thermodynamics</li>
+                                    <li>• Heat Engines and Refrigerators</li>
+                                    <li>• Entropy and Statistical Mechanics</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-purple-50 p-6 rounded-xl">
+                                <h4 class="font-semibold text-purple-800 mb-3">Unit 3: Waves & Oscillations (Weeks 11-14)</h4>
+                                <ul class="text-purple-700 space-y-1 text-sm">
+                                    <li>• Simple Harmonic Motion</li>
+                                    <li>• Wave Properties and Behavior</li>
+                                    <li>• Sound Waves and Acoustics</li>
+                                    <li>• Interference and Diffraction</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-orange-50 p-6 rounded-xl">
+                                <h4 class="font-semibold text-orange-800 mb-3">Unit 4: Electricity & Magnetism (Weeks 15-20)</h4>
+                                <ul class="text-orange-700 space-y-1 text-sm">
+                                    <li>• Electric Fields and Potential</li>
+                                    <li>• Current and Resistance</li>
+                                    <li>• Magnetic Fields and Forces</li>
+                                    <li>• Electromagnetic Induction</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-red-50 p-6 rounded-xl">
+                                <h4 class="font-semibold text-red-800 mb-3">Unit 5: Optics (Weeks 21-24)</h4>
+                                <ul class="text-red-700 space-y-1 text-sm">
+                                    <li>• Geometric Optics</li>
+                                    <li>• Lenses and Mirrors</li>
+                                    <li>• Wave Optics</li>
+                                    <li>• Optical Instruments</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-indigo-50 p-6 rounded-xl">
+                                <h4 class="font-semibold text-indigo-800 mb-3">Unit 6: Modern Physics (Weeks 25-28)</h4>
+                                <ul class="text-indigo-700 space-y-1 text-sm">
+                                    <li>• Quantum Mechanics Basics</li>
+                                    <li>• Atomic Structure</li>
+                                    <li>• Nuclear Physics</li>
+                                    <li>• Particle Physics Introduction</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lecture Plans Tab -->
+                <div id="lectures" class="tab-content">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Physics Lecture Plans</h2>
+                        <button onclick="createLecturePlan()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-all">
+                            + Create New Plan
+                        </button>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-all">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-800">Week 1: Introduction to Physics & Kinematics</h3>
+                                    <p class="text-gray-600">Duration: 5 days • 50 minutes each • Lab: Motion Analysis</p>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button onclick="editLecturePlan('week1')" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1 rounded text-sm transition-all">Edit</button>
+                                    <button onclick="downloadLecturePDF('week1')" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm transition-all">PDF</button>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                                <div class="bg-blue-50 p-3 rounded-lg">
+                                    <div class="font-medium text-blue-800 text-sm">Day 1</div>
+                                    <div class="text-blue-700 text-xs">Physics Overview</div>
+                                </div>
+                                <div class="bg-green-50 p-3 rounded-lg">
+                                    <div class="font-medium text-green-800 text-sm">Day 2</div>
+                                    <div class="text-green-700 text-xs">Position & Displacement</div>
+                                </div>
+                                <div class="bg-purple-50 p-3 rounded-lg">
+                                    <div class="font-medium text-purple-800 text-sm">Day 3</div>
+                                    <div class="text-purple-700 text-xs">Velocity & Acceleration</div>
+                                </div>
+                                <div class="bg-yellow-50 p-3 rounded-lg">
+                                    <div class="font-medium text-yellow-800 text-sm">Day 4</div>
+                                    <div class="text-yellow-700 text-xs">Lab: Motion Graphs</div>
+                                </div>
+                                <div class="bg-red-50 p-3 rounded-lg">
+                                    <div class="font-medium text-red-800 text-sm">Day 5</div>
+                                    <div class="text-red-700 text-xs">Problem Solving</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-all">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-800">Week 2: Forces and Newton's Laws</h3>
+                                    <p class="text-gray-600">Duration: 5 days • 50 minutes each • Lab: Force Analysis</p>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button onclick="editLecturePlan('week2')" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1 rounded text-sm transition-all">Edit</button>
+                                    <button onclick="downloadLecturePDF('week2')" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm transition-all">PDF</button>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                                <div class="bg-blue-50 p-3 rounded-lg">
+                                    <div class="font-medium text-blue-800 text-sm">Day 1</div>
+                                    <div class="text-blue-700 text-xs">Force Concepts</div>
+                                </div>
+                                <div class="bg-green-50 p-3 rounded-lg">
+                                    <div class="font-medium text-green-800 text-sm">Day 2</div>
+                                    <div class="text-green-700 text-xs">Newton's First Law</div>
+                                </div>
+                                <div class="bg-purple-50 p-3 rounded-lg">
+                                    <div class="font-medium text-purple-800 text-sm">Day 3</div>
+                                    <div class="text-purple-700 text-xs">Newton's Second Law</div>
+                                </div>
+                                <div class="bg-yellow-50 p-3 rounded-lg">
+                                    <div class="font-medium text-yellow-800 text-sm">Day 4</div>
+                                    <div class="text-yellow-700 text-xs">Lab: Force Measurement</div>
+                                </div>
+                                <div class="bg-red-50 p-3 rounded-lg">
+                                    <div class="font-medium text-red-800 text-sm">Day 5</div>
+                                    <div class="text-red-700 text-xs">Newton's Third Law</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-all">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-800">Week 3: Energy and Work</h3>
+                                    <p class="text-gray-600">Duration: 5 days • 50 minutes each • Lab: Energy Conservation</p>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button onclick="editLecturePlan('week3')" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1 rounded text-sm transition-all">Edit</button>
+                                    <button onclick="downloadLecturePDF('week3')" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm transition-all">PDF</button>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                                <div class="bg-blue-50 p-3 rounded-lg">
+                                    <div class="font-medium text-blue-800 text-sm">Day 1</div>
+                                    <div class="text-blue-700 text-xs">Work Definition</div>
+                                </div>
+                                <div class="bg-green-50 p-3 rounded-lg">
+                                    <div class="font-medium text-green-800 text-sm">Day 2</div>
+                                    <div class="text-green-700 text-xs">Kinetic Energy</div>
+                                </div>
+                                <div class="bg-purple-50 p-3 rounded-lg">
+                                    <div class="font-medium text-purple-800 text-sm">Day 3</div>
+                                    <div class="text-purple-700 text-xs">Potential Energy</div>
+                                </div>
+                                <div class="bg-yellow-50 p-3 rounded-lg">
+                                    <div class="font-medium text-yellow-800 text-sm">Day 4</div>
+                                    <div class="text-yellow-700 text-xs">Lab: Pendulum Energy</div>
+                                </div>
+                                <div class="bg-red-50 p-3 rounded-lg">
+                                    <div class="font-medium text-red-800 text-sm">Day 5</div>
+                                    <div class="text-red-700 text-xs">Conservation Laws</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NCERT Resources Tab -->
+                <div id="resources" class="tab-content">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">NCERT Physics Resources</h2>
+                        <button onclick="downloadAllNCERT()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-all flex items-center space-x-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            <span>Download All PDFs</span>
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="bg-white border-2 border-red-200 rounded-xl p-6 hover:shadow-lg transition-all">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mr-4">
+                                    <span class="text-red-600 font-bold">📚</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">NCERT Class XI</h3>
+                                    <p class="text-gray-600 text-sm">Physics Textbook</p>
+                                </div>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Chapter 2: Units & Measurements</span>
+                                    <button onclick="downloadNCERTPDF('class11-ch2')" class="bg-red-100 hover:bg-red-200 text-red-700 px-2 py-1 rounded text-xs transition-all">PDF</button>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Chapter 3: Motion in Straight Line</span>
+                                    <button onclick="downloadNCERTPDF('class11-ch3')" class="bg-red-100 hover:bg-red-200 text-red-700 px-2 py-1 rounded text-xs transition-all">PDF</button>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Chapter 4: Motion in a Plane</span>
+                                    <button onclick="downloadNCERTPDF('class11-ch4')" class="bg-red-100 hover:bg-red-200 text-red-700 px-2 py-1 rounded text-xs transition-all">PDF</button>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Chapter 5: Laws of Motion</span>
+                                    <button onclick="downloadNCERTPDF('class11-ch5')" class="bg-red-100 hover:bg-red-200 text-red-700 px-2 py-1 rounded text-xs transition-all">PDF</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border-2 border-blue-200 rounded-xl p-6 hover:shadow-lg transition-all">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                                    <span class="text-blue-600 font-bold">📖</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">NCERT Class XII</h3>
+                                    <p class="text-gray-600 text-sm">Physics Textbook</p>
+                                </div>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Chapter 1: Electric Charges & Fields</span>
+                                    <button onclick="downloadNCERTPDF('class12-ch1')" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-2 py-1 rounded text-xs transition-all">PDF</button>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Chapter 2: Electrostatic Potential</span>
+                                    <button onclick="downloadNCERTPDF('class12-ch2')" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-2 py-1 rounded text-xs transition-all">PDF</button>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Chapter 3: Current Electricity</span>
+                                    <button onclick="downloadNCERTPDF('class12-ch3')" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-2 py-1 rounded text-xs transition-all">PDF</button>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Chapter 4: Moving Charges</span>
+                                    <button onclick="downloadNCERTPDF('class12-ch4')" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-2 py-1 rounded text-xs transition-all">PDF</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border-2 border-green-200 rounded-xl p-6 hover:shadow-lg transition-all">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                                    <span class="text-green-600 font-bold">🔬</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">Lab Manual</h3>
+                                    <p class="text-gray-600 text-sm">Practical Physics</p>
+                                </div>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Mechanics Experiments</span>
+                                    <button onclick="downloadNCERTPDF('lab-mechanics')" class="bg-green-100 hover:bg-green-200 text-green-700 px-2 py-1 rounded text-xs transition-all">PDF</button>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Electricity Experiments</span>
+                                    <button onclick="downloadNCERTPDF('lab-electricity')" class="bg-green-100 hover:bg-green-200 text-green-700 px-2 py-1 rounded text-xs transition-all">PDF</button>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Optics Experiments</span>
+                                    <button onclick="downloadNCERTPDF('lab-optics')" class="bg-green-100 hover:bg-green-200 text-green-700 px-2 py-1 rounded text-xs transition-all">PDF</button>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Modern Physics Labs</span>
+                                    <button onclick="downloadNCERTPDF('lab-modern')" class="bg-green-100 hover:bg-green-200 text-green-700 px-2 py-1 rounded text-xs transition-all">PDF</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Resources -->
+                    <div class="mt-8 bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-xl border border-purple-200">
+                        <h3 class="text-lg font-semibold text-purple-800 mb-4">Additional Physics Resources</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex items-center justify-between bg-white p-4 rounded-lg">
+                                <div>
+                                    <div class="font-medium text-gray-800">Physics Formula Sheet</div>
+                                    <div class="text-sm text-gray-600">All important formulas and constants</div>
+                                </div>
+                                <button onclick="downloadNCERTPDF('physics-formulas')" class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded text-sm transition-all">Download</button>
+                            </div>
+                            <div class="flex items-center justify-between bg-white p-4 rounded-lg">
+                                <div>
+                                    <div class="font-medium text-gray-800">Previous Year Papers</div>
+                                    <div class="text-sm text-gray-600">Board exam papers with solutions</div>
+                                </div>
+                                <button onclick="downloadNCERTPDF('previous-papers')" class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded text-sm transition-all">Download</button>
+                            </div>
+                            <div class="flex items-center justify-between bg-white p-4 rounded-lg">
+                                <div>
+                                    <div class="font-medium text-gray-800">Numerical Problems</div>
+                                    <div class="text-sm text-gray-600">Extra practice problems with solutions</div>
+                                </div>
+                                <button onclick="downloadNCERTPDF('numerical-problems')" class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded text-sm transition-all">Download</button>
+                            </div>
+                            <div class="flex items-center justify-between bg-white p-4 rounded-lg">
+                                <div>
+                                    <div class="font-medium text-gray-800">Lab Safety Guide</div>
+                                    <div class="text-sm text-gray-600">Safety protocols and procedures</div>
+                                </div>
+                                <button onclick="downloadNCERTPDF('lab-safety')" class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded text-sm transition-all">Download</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Assessments Tab -->
+                <div id="assessments" class="tab-content">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Physics Assessments & Evaluations</h2>
+                        <button onclick="createAssessment()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-all">
+                            + Create Assessment
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-white border border-gray-200 rounded-xl p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Upcoming Assessments</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                                    <div>
+                                        <div class="font-medium text-yellow-800">Unit Test: Mechanics</div>
+                                        <div class="text-sm text-yellow-700">Due: March 18, 2024</div>
+                                    </div>
+                                    <button onclick="viewAssessment('mechanics-test')" class="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-2 rounded text-sm transition-all">View</button>
+                                </div>
+                                <div class="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200">
+                                    <div>
+                                        <div class="font-medium text-blue-800">Lab Report: Force Analysis</div>
+                                        <div class="text-sm text-blue-700">Due: March 25, 2024</div>
+                                    </div>
+                                    <button onclick="viewAssessment('force-lab')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded text-sm transition-all">View</button>
+                                </div>
+                                <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
+                                    <div>
+                                        <div class="font-medium text-green-800">Quiz: Energy & Work</div>
+                                        <div class="text-sm text-green-700">Due: April 2, 2024</div>
+                                    </div>
+                                    <button onclick="viewAssessment('energy-quiz')" class="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded text-sm transition-all">View</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border border-gray-200 rounded-xl p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Assessment Analytics</h3>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-700">Average Class Score</span>
+                                    <span class="font-semibold text-green-600">78.2 Granada St, Malate, Manila, 1004 Metro Manila, Philippines%</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-700">Lab Completion Rate</span>
+                                    <span class="font-semibold text-blue-600">96%</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-700">Students Needing Help</span>
+                                    <span class="font-semibold text-red-600">5 students</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-700">Lab Safety Score</span>
+                                    <span class="font-semibold text-green-600">100%</span>
+                                </div>
+                                <button onclick="viewDetailedAnalytics()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-lg transition-all">View Detailed Analytics</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lab Schedule -->
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-200">
+                        <h3 class="text-lg font-semibold text-blue-800 mb-4">Upcoming Lab Sessions</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="bg-white p-4 rounded-lg border border-blue-200">
+                                <div class="flex items-center mb-2">
+                                    <span class="text-2xl mr-3">🔬</span>
+                                    <div>
+                                        <div class="font-medium text-gray-800">Pendulum Experiment</div>
+                                        <div class="text-sm text-gray-600">March 20, 2024</div>
+                                    </div>
+                                </div>
+                                <p class="text-sm text-gray-700">Simple harmonic motion analysis</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border border-blue-200">
+                                <div class="flex items-center mb-2">
+                                    <span class="text-2xl mr-3">⚡</span>
+                                    <div>
+                                        <div class="font-medium text-gray-800">Circuit Analysis</div>
+                                        <div class="text-sm text-gray-600">March 27, 2024</div>
+                                    </div>
+                                </div>
+                                <p class="text-sm text-gray-700">Ohm's law verification</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border border-blue-200">
+                                <div class="flex items-center mb-2">
+                                    <span class="text-2xl mr-3">🌊</span>
+                                    <div>
+                                        <div class="font-medium text-gray-800">Wave Properties</div>
+                                        <div class="text-sm text-gray-600">April 3, 2024</div>
+                                    </div>
+                                </div>
+                                <p class="text-sm text-gray-700">Sound wave characteristics</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Navigation functions
+        function goBack() {
+            alert('Returning to Teacher Profile...');
+        }
+
+        // Notes functions
+        function addNewNote() {
+            alert('Opening physics note editor for new chapter...');
+        }
+
+        function viewNote(noteId) {
+            alert(`Opening detailed view for ${noteId} physics notes...`);
+        }
+
+        function downloadPDF(noteId) {
+            // Create a simple PDF using jsPDF
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.setFontSize(20);
+            doc.text(`Physics - ${noteId.replace('-', ' ').toUpperCase()}`, 20, 30);
+            
+            doc.setFontSize(12);
+            doc.text('Chapter Notes and Study Materials', 20, 50);
+            doc.text('Generated from STEM Adventure Platform', 20, 60);
+            doc.text('Date: ' + new Date().toLocaleDateString(), 20, 70);
+            
+            doc.text('Content:', 20, 90);
+            doc.text('• Key physics concepts and laws', 25, 105);
+            doc.text('• Worked examples and derivations', 25, 115);
+            doc.text('• Numerical problems with solutions', 25, 125);
+            doc.text('• Lab experiments and observations', 25, 135);
+            doc.text('• Real-world applications', 25, 145);
+            
+            doc.save(`physics-${noteId}-notes.pdf`);
+        }
+
+        // Syllabus functions
+        function downloadSyllabusPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.setFontSize(20);
+            doc.text('Physics - Course Syllabus', 20, 30);
+            
+            doc.setFontSize(14);
+            doc.text('Fall 2024 Semester', 20, 50);
+            
+            doc.setFontSize(12);
+            doc.text('Course Overview:', 20, 70);
+            doc.text('Comprehensive physics course covering mechanics, thermodynamics,', 20, 80);
+            doc.text('waves, electricity, magnetism, and modern physics.', 20, 90);
+            
+            doc.text('Units Covered:', 20, 110);
+            doc.text('Unit 1: Mechanics (Weeks 1-6)', 25, 125);
+            doc.text('Unit 2: Thermodynamics (Weeks 7-10)', 25, 135);
+            doc.text('Unit 3: Waves & Oscillations (Weeks 11-14)', 25, 145);
+            doc.text('Unit 4: Electricity & Magnetism (Weeks 15-20)', 25, 155);
+            doc.text('Unit 5: Optics (Weeks 21-24)', 25, 165);
+            doc.text('Unit 6: Modern Physics (Weeks 25-28)', 25, 175);
+            
+            doc.save('physics-syllabus.pdf');
+        }
+
+        // Lecture plan functions
+        function createLecturePlan() {
+            alert('Opening physics lecture plan creator...');
+        }
+
+        function editLecturePlan(planId) {
+            alert(`Editing physics lecture plan for ${planId}...`);
+        }
+
+        function downloadLecturePDF(planId) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.setFontSize(18);
+            doc.text(`Physics - ${planId.toUpperCase()} Lecture Plan`, 20, 30);
+            
+            doc.setFontSize(12);
+            doc.text('Duration: 5 days, 50 minutes each', 20, 50);
+            doc.text('Learning Objectives:', 20, 70);
+            doc.text('• Understand fundamental physics concepts', 25, 85);
+            doc.text('• Apply mathematical problem-solving techniques', 25, 95);
+            doc.text('• Conduct laboratory experiments safely', 25, 105);
+            doc.text('• Analyze real-world physics applications', 25, 115);
+            
+            doc.text('Daily Breakdown:', 20, 135);
+            doc.text('Day 1: Conceptual introduction and theory', 25, 150);
+            doc.text('Day 2: Mathematical derivations and examples', 25, 160);
+            doc.text('Day 3: Problem-solving practice', 25, 170);
+            doc.text('Day 4: Laboratory experiment', 25, 180);
+            doc.text('Day 5: Assessment and real-world applications', 25, 190);
+            
+            doc.save(`physics-${planId}-lecture-plan.pdf`);
+        }
+
+        // NCERT functions
+        function downloadNCERTPDF(resourceId) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.setFontSize(18);
+            doc.text('NCERT Physics Resource', 20, 30);
+            
+            doc.setFontSize(14);
+            doc.text(`Resource: ${resourceId.replace('-', ' ').toUpperCase()}`, 20, 50);
+            
+            doc.setFontSize(12);
+            doc.text('This is a sample NCERT physics resource document.', 20, 70);
+            doc.text('In a real implementation, this would contain:', 20, 90);
+            doc.text('• Complete chapter content with theory', 25, 105);
+            doc.text('• Solved numerical examples', 25, 115);
+            doc.text('• Exercise problems with solutions', 25, 125);
+            doc.text('• Laboratory experiments and procedures', 25, 135);
+            doc.text('• Additional practice questions', 25, 145);
+            
+            doc.save(`ncert-physics-${resourceId}.pdf`);
+        }
+
+        function downloadAllNCERT() {
+            alert('Preparing complete NCERT Physics resource package for download...\nThis may take a few moments.');
+        }
+
+        // Assessment functions
+        function createAssessment() {
+            alert('Opening physics assessment creator...');
+        }
+
+        function viewAssessment(assessmentId) {
+            alert(`Opening ${assessmentId} physics assessment details...`);
+        }
+
+        function viewDetailedAnalytics() {
+            alert('Opening detailed physics assessment analytics dashboard...');
+        }
+
+        // Initialize page
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease-in-out';
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

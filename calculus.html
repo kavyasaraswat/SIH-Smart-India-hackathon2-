@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Calculus Subject Dashboard for STEM Adventure">
+    <meta name="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://polyfill.io https://cdn.jsdelivr.net; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self';">
+    <title>Calculus - Subject Dashboard | STEM Adventure</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #fef3c7 0%, #f59e0b 100%); }
+        .card-shadow { box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .feature-card { transition: all 0.3s ease; }
+        .feature-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.15); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .tab-button.active { background: #3b82f6; color: white; }
+        .math-formula { background: #f8fafc; padding: 10px; border-radius: 8px; margin: 10px 0; }
+    </style>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+</head>
+<body class="bg-white min-h-screen">
+    <!-- Header -->
+    <div class="gradient-bg text-white py-6">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <button onclick="goBack()" class="flex items-center space-x-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-all" aria-label="Go back to profile">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                        <span>Back to Profile</span>
+                    </button>
+                    <div>
+                        <h1 class="text-3xl font-bold">Calculus</h1>
+                        <p class="text-white/80">Advanced Mathematics • Grade 11-12</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="bg-white/20 px-4 py-2 rounded-lg">
+                        <p class="text-sm">Current Semester</p>
+                        <p class="font-semibold">Fall 2024</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subject Overview -->
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-xl card-shadow p-6 text-center">
+                <div class="w-12 h-12 bg-blue-100 rounded-lg mx-auto mb-3 flex items-center justify-center">
+                    <span class="text-2xl">👥</span>
+                </div>
+                <div class="text-2xl font-bold text-gray-800">24</div>
+                <div class="text-gray-600">Students Enrolled</div>
+            </div>
+            <div class="bg-white rounded-xl card-shadow p-6 text-center">
+                <div class="w-12 h-12 bg-green-100 rounded-lg mx-auto mb-3 flex items-center justify-center">
+                    <span class="text-2xl">∫</span>
+                </div>
+                <div class="text-2xl font-bold text-gray-800">15</div>
+                <div class="text-gray-600">Core Topics</div>
+            </div>
+            <div class="bg-white rounded-xl card-shadow p-6 text-center">
+                <div class="w-12 h-12 bg-purple-100 rounded-lg mx-auto mb-3 flex items-center justify-center">
+                    <span class="text-2xl">📊</span>
+                </div>
+                <div class="text-2xl font-bold text-gray-800">180</div>
+                <div class="text-gray-600">Total Hours</div>
+            </div>
+            <div class="bg-white rounded-xl card-shadow p-6 text-center">
+                <div class="w-12 h-12 bg-yellow-100 rounded-lg mx-auto mb-3 flex items-center justify-center">
+                    <span class="text-2xl">📈</span>
+                </div>
+                <div class="text-2xl font-bold text-gray-800">92%</div>
+                <div class="text-gray-600">Success Rate</div>
+            </div>
+        </div>
+
+        <!-- Main Content Tabs -->
+        <div class="bg-white rounded-2xl card-shadow overflow-hidden">
+            <!-- Tab Navigation -->
+            <div class="border-b border-gray-200">
+                <nav class="flex space-x-8 px-8 py-4">
+                    <button onclick="switchTab('notes')" class="tab-button active px-4 py-2 rounded-lg font-medium transition-all" aria-label="View Notes & Formulas">
+                        📝 Notes & Formulas
+                    </button>
+                    <button onclick="switchTab('syllabus')" class="tab-button px-4 py-2 rounded-lg font-medium transition-all hover:bg-gray-100" aria-label="View Syllabus">
+                        📋 Syllabus
+                    </button>
+                    <button onclick="switchTab('lectures')" class="tab-button px-4 py-2 rounded-lg font-medium transition-all hover:bg-gray-100" aria-label="View Lecture Plans">
+                        🎯 Lecture Plans
+                    </button>
+                    <button onclick="switchTab('resources')" class="tab-button px-4 py-2 rounded-lg font-medium transition-all hover:bg-gray-100" aria-label="View Textbook Resources">
+                        📖 Textbook Resources
+                    </button>
+                    <button onclick="switchTab('assessments')" class="tab-button px-4 py-2 rounded-lg font-medium transition-all hover:bg-gray-100" aria-label="View Assessments">
+                        📊 Assessments
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="p-8">
+                <!-- Notes & Materials Tab -->
+                <div id="notes" class="tab-content active">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Calculus Notes & Mathematical Formulas</h2>
+                        <button onclick="addNewNote()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-all" aria-label="Add New Note">
+                            + Add New Note
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="feature-card bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl border border-blue-200">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-semibold text-blue-800">Chapter 1: Limits & Continuity</h3>
+                                <span class="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded">Updated</span>
+                            </div>
+                            <div class="math-formula text-center">
+                                $\lim_{x \to a} f(x) = L$
+                            </div>
+                            <p class="text-blue-700 text-sm mb-4">Fundamental concepts of limits, continuity, and discontinuities</p>
+                            <div class="flex space-x-2">
+                                <button onclick="viewNote('limits-continuity')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded text-sm transition-all" aria-label="View Limits & Continuity Notes">View</button>
+                                <button onclick="downloadPDF('limits-continuity')" class="bg-white hover:bg-gray-50 text-blue-600 px-3 py-2 rounded text-sm border border-blue-200 transition-all" aria-label="Download Limits & Continuity PDF">PDF</button>
+                            </div>
+                        </div>
+
+                        <div class="feature-card bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-xl border border-green-200">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-semibold text-green-800">Chapter 2: Derivatives</h3>
+                                <span class="text-xs bg-green-200 text-green-800 px-2 py-1 rounded">New</span>
+                            </div>
+                            <div class="math-formula text-center">
+                                $f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}$
+                            </div>
+                            <p class="text-green-700 text-sm mb-4">Differentiation rules, chain rule, and applications</p>
+                            <div class="flex space-x-2">
+                                <button onclick="viewNote('derivatives')" class="flex-1 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded text-sm transition-all" aria-label="View Derivatives Notes">View</button>
+                                <button onclick="downloadPDF('derivatives')" class="bg-white hover:bg-gray-50 text-green-600 px-3 py-2 rounded text-sm border border-green-200 transition-all" aria-label="Download Derivatives PDF">PDF</button>
+                            </div>
+                        </div>
+
+                        <div class="feature-card bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-xl border border-purple-200">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-semibold text-purple-800">Chapter 3: Applications of Derivatives</h3>
+                                <span class="text-xs bg-purple-200 text-purple-800 px-2 py-1 rounded">Draft</span>
+                            </div>
+                            <div class="math-formula text-center">
+                                $\frac{dy}{dx} = 0$ at extrema
+                            </div>
+                            <p class="text-purple-700 text-sm mb-4">Optimization, related rates, curve sketching</p>
+                            <div class="flex space-x-2">
+                                <button onclick="viewNote('derivative-applications')" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded text-sm transition-all" aria-label="View Applications of Derivatives Notes">View</button>
+                                <button onclick="downloadPDF('derivative-applications')" class="bg-white hover:bg-gray-50 text-purple-600 px-3 py-2 rounded text-sm border border-purple-200 transition-all" aria-label="Download Applications of Derivatives PDF">PDF</button>
+                            </div>
+                        </div>
+
+                        <div class="feature-card bg-gradient-to-br from-red-50 to-red-100 p-6 rounded-xl border border-red-200">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-semibold text-red-800">Chapter 4: Integrals</h3>
+                                <span class="text-xs bg-red-200 text-red-800 px-2 py-1 rounded">Core Topic</span>
+                            </div>
+                            <div class="math-formula text-center">
+                                $\int f(x) dx = F(x) + C$
+                            </div>
+                            <p class="text-red-700 text-sm mb-4">Antiderivatives, integration techniques, definite integrals</p>
+                            <div class="flex space-x-2">
+                                <button onclick="viewNote('integrals')" class="flex-1 bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded text-sm transition-all" aria-label="View Integrals Notes">View</button>
+                                <button onclick="downloadPDF('integrals')" class="bg-white hover:bg-gray-50 text-red-600 px-3 py-2 rounded text-sm border border-red-200 transition-all" aria-label="Download Integrals PDF">PDF</button>
+                            </div>
+                        </div>
+
+                        <div class="feature-card bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-xl border border-orange-200">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-semibold text-orange-800">Chapter 5: Applications of Integrals</h3>
+                                <span class="text-xs bg-orange-200 text-orange-800 px-2 py-1 rounded">In Progress</span>
+                            </div>
+                            <div class="math-formula text-center">
+                                $A = \int_a^b f(x) dx$
+                            </div>
+                            <p class="text-orange-700 text-sm mb-4">Area, volume, arc length, and physics applications</p>
+                            <div class="flex space-x-2">
+                                <button onclick="viewNote('integral-applications')" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white px-3 py-2 rounded text-sm transition-all" aria-label="View Applications of Integrals Notes">View</button>
+                                <button onclick="downloadPDF('integral-applications')" class="bg-white hover:bg-gray-50 text-orange-600 px-3 py-2 rounded text-sm border border-orange-200 transition-all" aria-label="Download Applications of Integrals PDF">PDF</button>
+                            </div>
+                        </div>
+
+                        <div class="feature-card bg-gradient-to-br from-indigo-50 to-indigo-100 p-6 rounded-xl border border-indigo-200">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-semibold text-indigo-800">Chapter 6: Differential Equations</h3>
+                                <span class="text-xs bg-indigo-200 text-indigo-800 px-2 py-1 rounded">Advanced</span>
+                            </div>
+                            <div class="math-formula text-center">
+                                $\frac{dy}{dx} = ky$
+                            </div>
+                            <p class="text-indigo-700 text-sm mb-4">Separable equations, exponential growth/decay models</p>
+                            <div class="flex space-x-2">
+                                <button onclick="viewNote('differential-equations')" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded text-sm transition-all" aria-label="View Differential Equations Notes">View</button>
+                                <button onclick="downloadPDF('differential-equations')" class="bg-white hover:bg-gray-50 text-indigo-600 px-3 py-2 rounded text-sm border border-indigo-200 transition-all" aria-label="Download Differential Equations PDF">PDF</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Formula Reference -->
+                    <div class="mt-8 bg-gradient-to-r from-gray-50 to-gray-100 p-6 rounded-xl border border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Quick Formula Reference</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div class="bg-white p-4 rounded-lg">
+                                <div class="font-medium text-gray-800 mb-2">Power Rule</div>
+                                <div class="math-formula">$\frac{d}{dx}[x^n] = nx^{n-1}$</div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg">
+                                <div class="font-medium text-gray-800 mb-2">Product Rule</div>
+                                <div class="math-formula">$(uv)' = u'v + uv'$</div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg">
+                                <div class="font-medium text-gray-800 mb-2">Chain Rule</div>
+                                <div class="math-formula">$\frac{d}{dx}[f(g(x))] = f'(g(x)) \cdot g'(x)$</div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg">
+                                <div class="font-medium text-gray-800 mb-2">Integration by Parts</div>
+                                <div class="math-formula">$\int u \, dv = uv - \int v \, du$</div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg">
+                                <div class="font-medium text-gray-800 mb-2">Fundamental Theorem</div>
+                                <div class="math-formula">$\int_a^b f'(x) dx = f(b) - f(a)$</div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg">
+                                <div class="font-medium text-gray-800 mb-2">L'Hôpital's Rule</div>
+                                <div class="math-formula">$\lim_{x \to a} \frac{f(x)}{g(x)} = \lim_{x \to a} \frac{f'(x)}{g'(x)}$</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Syllabus Tab -->
+                <div id="syllabus" class="tab-content">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Calculus Course Syllabus</h2>
+                        <button onclick="downloadSyllabusPDF()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-all flex items-center space-x-2" aria-label="Download Syllabus PDF">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            <span>Download PDF</span>
+                        </button>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="bg-gray-50 p-6 rounded-xl">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Course Overview</h3>
+                            <p class="text-gray-700 leading-relaxed">
+                                Calculus is the mathematical study of continuous change. This comprehensive course covers differential and integral calculus, 
+                                including limits, derivatives, integrals, and their applications. Students will develop analytical thinking skills and 
+                                learn to solve complex mathematical problems with real-world applications.
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-blue-50 p-6 rounded-xl">
+                                <h4 class="font-semibold text-blue-800 mb-3">Unit 1: Limits & Continuity (Weeks 1-4)</h4>
+                                <ul class="text-blue-700 space-y-1 text-sm">
+                                    <li>• Introduction to Limits</li>
+                                    <li>• Limit Laws and Theorems</li>
+                                    <li>• Continuity and Discontinuities</li>
+                                    <li>• Intermediate Value Theorem</li>
+                                    <li>• Limits at Infinity</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-green-50 p-6 rounded-xl">
+                                <h4 class="font-semibold text-green-800 mb-3">Unit 2: Derivatives (Weeks 5-10)</h4>
+                                <ul class="text-green-700 space-y-1 text-sm">
+                                    <li>• Definition of Derivative</li>
+                                    <li>• Differentiation Rules</li>
+                                    <li>• Chain Rule and Implicit Differentiation</li>
+                                    <li>• Related Rates</li>
+                                    <li>• Higher Order Derivatives</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-purple-50 p-6 rounded-xl">
+                                <h4 class="font-semibold text-purple-800 mb-3">Unit 3: Applications of Derivatives (Weeks 11-14)</h4>
+                                <ul class="text-purple-700 space-y-1 text-sm">
+                                    <li>• Critical Points and Extrema</li>
+                                    <li>• First and Second Derivative Tests</li>
+                                    <li>• Optimization Problems</li>
+                                    <li>• Curve Sketching</li>
+                                    <li>• Linear Approximation</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-orange-50 p-6 rounded-xl">
+                                <h4 class="font-semibold text-orange-800 mb-3">Unit 4: Integrals (Weeks 15-20)</h4>
+                                <ul class="text-orange-700 space-y-1 text-sm">
+                                    <li>• Antiderivatives</li>
+                                    <li>• Riemann Sums</li>
+                                    <li>• Fundamental Theorem of Calculus</li>
+                                    <li>• Integration Techniques</li>
+                                    <li>• Improper Integrals</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-red-50 p-6 rounded-xl">
+                                <h4 class="font-semibold text-red-800 mb-3">Unit 5: Applications of Integrals (Weeks 21-24)</h4>
+                                <ul class="text-red-700 space-y-1 text-sm">
+                                    <li>• Area Between Curves</li>
+                                    <li>• Volume of Solids of Revolution</li>
+                                    <li>• Arc Length and Surface Area</li>
+                                    <li>• Physics Applications</li>
+                                    <li>• Average Value of Functions</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-indigo-50 p-6 rounded-xl">
+                                <h4 class="font-semibold text-indigo-800 mb-3">Unit 6: Advanced Topics (Weeks 25-28)</h4>
+                                <ul class="text-indigo-700 space-y-1 text-sm">
+                                    <li>• Differential Equations</li>
+                                    <li>• Exponential Growth/Decay</li>
+                                    <li>• Parametric Equations</li>
+                                    <li>• Polar Coordinates</li>
+                                    <li>• Series and Sequences (Introduction)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lecture Plans Tab -->
+                <div id="lectures" class="tab-content">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Calculus Lecture Plans</h2>
+                        <button onclick="createLecturePlan()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-all" aria-label="Create New Lecture Plan">
+                            + Create New Plan
+                        </button>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-all">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-800">Week 1: Introduction to Limits</h3>
+                                    <p class="text-gray-600">Duration: 5 days • 50 minutes each • Focus: Conceptual Understanding</p>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button onclick="editLecturePlan('week1')" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1 rounded text-sm transition-all" aria-label="Edit Week 1 Lecture Plan">Edit</button>
+                                    <button onclick="downloadLecturePDF('week1')" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm transition-all" aria-label="Download Week 1 Lecture PDF">PDF</button>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                                <div class="bg-blue-50 p-3 rounded-lg">
+                                    <div class="font-medium text-blue-800 text-sm">Day 1</div>
+                                    <div class="text-blue-700 text-xs">Intuitive Limits</div>
+                                </div>
+                                <div class="bg-green-50 p-3 rounded-lg">
+                                    <div class="font-medium text-green-800 text-sm">Day 2</div>
+                                    <div class="text-green-700 text-xs">Graphical Approach</div>
+                                </div>
+                                <div class="bg-purple-50 p-3 rounded-lg">
+                                    <div class="font-medium text-purple-800 text-sm">Day 3</div>
+                                    <div class="text-purple-700 text-xs">Numerical Methods</div>
+                                </div>
+                                <div class="bg-yellow-50 p-3 rounded-lg">
+                                    <div class="font-medium text-yellow-800 text-sm">Day 4</div>
+                                    <div class="text-yellow-700 text-xs">Limit Laws</div>
+                                </div>
+                                <div class="bg-red-50 p-3 rounded-lg">
+                                    <div class="font-medium text-red-800 text-sm">Day 5</div>
+                                    <div class="text-red-700 text-xs">Practice Problems</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-all">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-800">Week 2: Derivative Definition</h3>
+                                    <p class="text-gray-600">Duration: 5 days • 50 minutes each • Focus: Mathematical Rigor</p>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button onclick="editLecturePlan('week2')" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1 rounded text-sm transition-all" aria-label="Edit Week 2 Lecture Plan">Edit</button>
+                                    <button onclick="downloadLecturePDF('week2')" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm transition-all" aria-label="Download Week 2 Lecture PDF">PDF</button>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                                <div class="bg-blue-50 p-3 rounded-lg">
+                                    <div class="font-medium text-blue-800 text-sm">Day 1</div>
+                                    <div class="text-blue-700 text-xs">Slope of Tangent</div>
+                                </div>
+                                <div class="bg-green-50 p-3 rounded-lg">
+                                    <div class="font-medium text-green-800 text-sm">Day 2</div>
+                                    <div class="text-green-700 text-xs">Difference Quotient</div>
+                                </div>
+                                <div class="bg-purple-50 p-3 rounded-lg">
+                                    <div class="font-medium text-purple-800 text-sm">Day 3</div>
+                                    <div class="text-purple-700 text-xs">Derivative Formula</div>
+                                </div>
+                                <div class="bg-yellow-50 p-3 rounded-lg">
+                                    <div class="font-medium text-yellow-800 text-sm">Day 4</div>
+                                    <div class="text-yellow-700 text-xs">Basic Examples</div>
+                                </div>
+                                <div class="bg-red-50 p-3 rounded-lg">
+                                    <div class="font-medium text-red-800 text-sm">Day 5</div>
+                                    <div class="text-red-700 text-xs">Differentiability</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-all">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-800">Week 3: Integration Techniques</h3>
+                                    <p class="text-gray-600">Duration: 5 days • 50 minutes each • Focus: Problem Solving</p>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button onclick="editLecturePlan('week3')" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1 rounded text-sm transition-all" aria-label="Edit Week 3 Lecture Plan">Edit</button>
+                                    <button onclick="downloadLecturePDF('week3')" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm transition-all" aria-label="Download Week 3 Lecture PDF">PDF</button>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                                <div class="bg-blue-50 p-3 rounded-lg">
+                                    <div class="font-medium text-blue-800 text-sm">Day 1</div>
+                                    <div class="text-blue-700 text-xs">Substitution Method</div>
+                                </div>
+                                <div class="bg-green-50 p-3 rounded-lg">
+                                    <div class="font-medium text-green-800 text-sm">Day 2</div>
+                                    <div class="text-green-700 text-xs">Integration by Parts</div>
+                                </div>
+                                <div class="bg-purple-50 p-3 rounded-lg">
+                                    <div class="font-medium text-purple-800 text-sm">Day 3</div>
+                                    <div class="text-purple-700 text-xs">Partial Fractions</div>
+                                </div>
+                                <div class="bg-yellow-50 p-3 rounded-lg">
+                                    <div class="font-medium text-yellow-800 text-sm">Day 4</div>
+                                    <div class="text-yellow-700 text-xs">Trigonometric Integrals</div>
+                                </div>
+                                <div class="bg-red-50 p-3 rounded-lg">
+                                    <div class="font-medium text-red-800 text-sm">Day 5</div>
+                                    <div class="text-red-700 text-xs">Mixed Practice</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Textbook Resources Tab -->
+                <div id="resources" class="tab-content">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Calculus Textbook Resources</h2>
+                        <button onclick="downloadAllResources()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-all flex items-center space-x-2" aria-label="Download All Resources PDF">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            <span>Download All PDFs</span>
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="bg-white border-2 border-red-200 rounded-xl p-6 hover:shadow-lg transition-all">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mr-4">
+                                    <span class="text-red-600 font-bold">📚</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">Stewart Calculus</h3>
+                                    <p class="text-gray-600 text-sm">8th Edition</p>
+                                </div>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Chapter 2: Limits & Derivatives</span>
+                                    <button onclick="downloadResourcePDF('stewart-ch2')" class="bg-red-100 hover:bg-red-200 text-red-700 px-2 py-1 rounded text-xs transition-all" aria-label="Download Stewart Chapter 2 PDF">PDF</button>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Chapter 3: Differentiation Rules</span>
+                                    <button onclick="downloadResourcePDF('stewart-ch3')" class="bg-red-100 hover:bg-red-200 text-red-700 px-2 py-1 rounded text-xs transition-all" aria-label="Download Stewart Chapter 3 PDF">PDF</button>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Chapter 4: Applications of Derivatives</span>
+                                    <button onclick="downloadResourcePDF('stewart-ch4')" class="bg-red-100 hover:bg-red-200 text-red-700 px-2 py-1 rounded text-xs transition-all" aria-label="Download Stewart Chapter 4 PDF">PDF</button>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Chapter 5: Integrals</span>
+                                    <button onclick="downloadResourcePDF('stewart-ch5')" class="bg-red-100 hover:bg-red-200 text-red-700 px-2 py-1 rounded text-xs transition-all" aria-label="Download Stewart Chapter 5 PDF">PDF</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border-2 border-blue-200 rounded-xl p-6 hover:shadow-lg transition-all">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                                    <span class="text-blue-600 font-bold">📖</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">Larson Calculus</h3>
+                                    <p class="text-gray-600 text-sm">11th Edition</p>
+                                </div>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Chapter 1: Limits & Continuity</span>
+                                    <button onclick="downloadResourcePDF('larson-ch1')" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-2 py-1 rounded text-xs transition-all" aria-label="Download Larson Chapter 1 PDF">PDF</button>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Chapter 2: Differentiation</span>
+                                    <button onclick="downloadResourcePDF('larson-ch2')" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-2 py-1 rounded text-xs transition-all" aria-label="Download Larson Chapter 2 PDF">PDF</button>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Chapter 3: Applications</span>
+                                    <button onclick="downloadResourcePDF('larson-ch3')" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-2 py-1 rounded text-xs transition-all" aria-label="Download Larson Chapter 3 PDF">PDF</button>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Chapter 4: Integration</span>
+                                    <button onclick="downloadResourcePDF('larson-ch4')" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-2 py-1 rounded text-xs transition-all" aria-label="Download Larson Chapter 4 PDF">PDF</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border-2 border-green-200 rounded-xl p-6 hover:shadow-lg transition-all">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                                    <span class="text-green-600 font-bold">🔢</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">Problem Sets</h3>
+                                    <p class="text-gray-600 text-sm">Practice Materials</p>
+                                </div>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Limit Problems</span>
+                                    <button onclick="downloadResourcePDF('problems-limits')" class="bg-green-100 hover:bg-green-200 text-green-700 px-2 py-1 rounded text-xs transition-all" aria-label="Download Limit Problems PDF">PDF</button>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Derivative Practice</span>
+                                    <button onclick="downloadResourcePDF('problems-derivatives')" class="bg-green-100 hover:bg-green-200 text-green-700 px-2 py-1 rounded text-xs transition-all" aria-label="Download Derivative Practice PDF">PDF</button>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Integration Exercises</span>
+                                    <button onclick="downloadResourcePDF('problems-integrals')" class="bg-green-100 hover:bg-green-200 text-green-700 px-2 py-1 rounded text-xs transition-all" aria-label="Download Integration Exercises PDF">PDF</button>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Application Problems</span>
+                                    <button onclick="downloadResourcePDF('problems-applications')" class="bg-green-100 hover:bg-green-200 text-green-700 px-2 py-1 rounded text-xs transition-all" aria-label="Download Application Problems PDF">PDF</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Resources -->
+                    <div class="mt-8 bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-xl border border-purple-200">
+                        <h3 class="text-lg font-semibold text-purple-800 mb-4">Additional Calculus Resources</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex items-center justify-between bg-white p-4 rounded-lg">
+                                <div>
+                                    <div class="font-medium text-gray-800">Derivative Rules Reference</div>
+                                    <div class="text-sm text-gray-600">Complete differentiation formulas</div>
+                                </div>
+                                <button onclick="downloadResourcePDF('derivative-rules')" class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded text-sm transition-all" aria-label="Download Derivative Rules PDF">Download</button>
+                            </div>
+                            <div class="flex items-center justify-between bg-white p-4 rounded-lg">
+                                <div>
+                                    <div class="font-medium text-gray-800">Integration Table</div>
+                                    <div class="text-sm text-gray-600">Common integral formulas</div>
+                                </div>
+                                <button onclick="downloadResourcePDF('integration-table')" class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded text-sm transition-all" aria-label="Download Integration Table PDF">Download</button>
+                            </div>
+                            <div class="flex items-center justify-between bg-white p-4 rounded-lg">
+                                <div>
+                                    <div class="font-medium text-gray-800">AP Calculus Practice Tests</div>
+                                    <div class="text-sm text-gray-600">Previous years with solutions</div>
+                                </div>
+                                <button onclick="downloadResourcePDF('ap-practice')" class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded text-sm transition-all" aria-label="Download AP Calculus Practice Tests PDF">Download</button>
+                            </div>
+                            <div class="flex items-center justify-between bg-white p-4 rounded-lg">
+                                <div>
+                                    <div class="font-medium text-gray-800">Graphing Calculator Guide</div>
+                                    <div class="text-sm text-gray-600">TI-84 calculus functions</div>
+                                </div>
+                                <button onclick="downloadResourcePDF('calculator-guide')" class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded text-sm transition-all" aria-label="Download Graphing Calculator Guide PDF">Download</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Assessments Tab -->
+                <div id="assessments" class="tab-content">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Calculus Assessments & Evaluations</h2>
+                        <button onclick="createAssessment()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-all" aria-label="Create New Assessment">
+                            + Create Assessment
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-white border border-gray-200 rounded-xl p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Upcoming Assessments</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                                    <div>
+                                        <div class="font-medium text-yellow-800">Unit Test: Derivatives</div>
+                                        <div class="text-sm text-yellow-700">Due: March 22, 2024</div>
+                                    </div>
+                                    <button onclick="viewAssessment('derivatives-test')" class="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-2 rounded text-sm transition-all" aria-label="View Derivatives Test">View</button>
+                                </div>
+                                <div class="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200">
+                                    <div>
+                                        <div class="font-medium text-blue-800">Quiz: Integration Techniques</div>
+                                        <div class="text-sm text-blue-700">Due: March 29, 2024</div>
+                                    </div>
+                                    <button onclick="viewAssessment('integration-quiz')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded text-sm transition-all" aria-label="View Integration Quiz">View</button>
+                                </div>
+                                <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
+                                    <div>
+                                        <div class="font-medium text-green-800">Project: Real-World Applications</div>
+                                        <div class="text-sm text-green-700">Due: April 5, 2024</div>
+                                    </div>
+                                    <button onclick="viewAssessment('applications-project')" class="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded text-sm transition-all" aria-label="View Real-World Applications Project">View</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border border-gray-200 rounded-xl p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Assessment Analytics</h3>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-700">Average Class Score</span>
+                                    <span class="font-semibold text-green-600">85.4%</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-700">Homework Completion</span>
+                                    <span class="font-semibold text-blue-600">94%</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-700">Students Needing Support</span>
+                                    <span class="font-semibold text-red-600">3 students</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-700">AP Readiness Score</span>
+                                    <span class="font-semibold text-green-600">78%</span>
+                                </div>
+                                <button onclick="viewDetailedAnalytics()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-lg transition-all" aria-label="View Detailed Analytics">View Detailed Analytics</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Problem of the Week -->
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-200">
+                        <h3 class="text-lg font-semibold text-blue-800 mb-4">Problem of the Week</h3>
+                        <div class="bg-white p-6 rounded-lg border border-blue-200">
+                            <div class="mb-4">
+                                <h4 class="font-medium text-gray-800 mb-2">Optimization Challenge</h4>
+                                <p class="text-gray-700 text-sm mb-4">
+                                    A farmer has 200 feet of fencing and wants to enclose a rectangular area next to a river. 
+                                    The side along the river needs no fencing. What dimensions will maximize the enclosed area?
+                                </p>
+                                <div class="math-formula">
+                                    Let $x$ = width perpendicular to river, $y$ = length parallel to river<br>
+                                    Constraint: $2x + y = 200$<br>
+                                    Maximize: $A = xy$
+                                </div>
+                            </div>
+                            <div class="flex space-x-3">
+                                <button onclick="viewSolution()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm transition-all" aria-label="View Solution to Optimization Challenge">View Solution</button>
+                                <button onclick="submitSolution()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm transition-all" aria-label="Submit Solution to Optimization Challenge">Submit Answer</button>
+                                <button onclick="getHint()" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded text-sm transition-all" aria-label="Get Hint for Optimization Challenge">Get Hint</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            // Re-render MathJax for the active tab
+            if (window.MathJax) {
+                try {
+                    MathJax.typesetPromise();
+                } catch (error) {
+                    console.error('MathJax rendering failed:', error);
+                }
+            }
+        }
+
+        // Navigation functions
+        function goBack() {
+            alert('Returning to Teacher Profile...');
+        }
+
+        // Notes functions
+        function addNewNote() {
+            alert('Opening calculus note editor for new topic...');
+        }
+
+        function viewNote(noteId) {
+            alert(`Opening detailed view for ${noteId} calculus notes with mathematical formulas...`);
+        }
+
+        function downloadPDF(noteId) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.setFontSize(20);
+            doc.text(`Calculus - ${noteId.replace('-', ' ').toUpperCase()}`, 20, 30);
+            doc.setFontSize(12);
+            doc.text('Mathematical Notes and Formulas', 20, 50);
+            doc.text('Generated from STEM Adventure Platform', 20, 60);
+            doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 70);
+            doc.text('Content:', 20, 90);
+            doc.text('• Key calculus concepts and theorems', 25, 105);
+            doc.text('• Mathematical derivations and proofs', 25, 115);
+            doc.text('• Worked examples with step-by-step solutions', 25, 125);
+            doc.text('• Practice problems with varying difficulty', 25, 135);
+            doc.text('• Real-world applications and modeling', 25, 145);
+            doc.save(`calculus-${noteId}-notes.pdf`);
+        }
+
+        // Syllabus functions
+        function downloadSyllabusPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.setFontSize(20);
+            doc.text('Calculus - Course Syllabus', 20, 30);
+            doc.setFontSize(14);
+            doc.text('Fall 2024 Semester', 20, 50);
+            doc.setFontSize(12);
+            doc.text('Course Overview:', 20, 70);
+            doc.text('Comprehensive calculus course covering limits, derivatives,', 20, 80);
+            doc.text('integrals, and their applications in mathematics and science.', 20, 90);
+            doc.text('Units Covered:', 20, 110);
+            doc.text('Unit 1: Limits & Continuity (Weeks 1-4)', 25, 125);
+            doc.text('Unit 2: Derivatives (Weeks 5-10)', 25, 135);
+            doc.text('Unit 3: Applications of Derivatives (Weeks 11-14)', 25, 145);
+            doc.text('Unit 4: Integrals (Weeks 15-20)', 25, 155);
+            doc.text('Unit 5: Applications of Integrals (Weeks 21-24)', 25, 165);
+            doc.text('Unit 6: Advanced Topics (Weeks 25-28)', 25, 175);
+            doc.save('calculus-syllabus.pdf');
+        }
+
+        // Lecture plan functions
+        function createLecturePlan() {
+            alert('Opening calculus lecture plan creator with mathematical formatting...');
+        }
+
+        function editLecturePlan(planId) {
+            alert(`Editing calculus lecture plan for ${planId}...`);
+        }
+
+        function downloadLecturePDF(planId) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.setFontSize(18);
+            doc.text(`Calculus - ${planId.toUpperCase()} Lecture Plan`, 20, 30);
+            doc.setFontSize(12);
+            doc.text('Duration: 5 days, 50 minutes each', 20, 50);
+            doc.text('Learning Objectives:', 20, 70);
+            doc.text('• Master fundamental calculus concepts', 25, 85);
+            doc.text('• Develop mathematical reasoning skills', 25, 95);
+            doc.text('• Apply calculus to solve real-world problems', 25, 105);
+            doc.text('• Prepare for advanced mathematics courses', 25, 115);
+            doc.text('Daily Breakdown:', 20, 135);
+            doc.text('Day 1: Conceptual introduction with visual aids', 25, 150);
+            doc.text('Day 2: Mathematical definitions and theorems', 25, 160);
+            doc.text('Day 3: Worked examples and problem-solving', 25, 170);
+            doc.text('Day 4: Applications and real-world connections', 25, 180);
+            doc.text('Day 5: Assessment and advanced extensions', 25, 190);
+            doc.save(`calculus-${planId}-lecture-plan.pdf`);
+        }
+
+        // Resource functions
+        function downloadResourcePDF(resourceId) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.setFontSize(18);
+            doc.text('Calculus Textbook Resource', 20, 30);
+            doc.setFontSize(14);
+            doc.text(`Resource: ${resourceId.replace('-', ' ').toUpperCase()}`, 20, 50);
+            doc.setFontSize(12);
+            doc.text('This is a sample calculus textbook resource document.', 20, 70);
+            doc.text('In a real implementation, this would contain:', 20, 90);
+            doc.text('• Complete chapter content with mathematical rigor', 25, 105);
+            doc.text('• Detailed proofs and derivations', 25, 115);
+            doc.text('• Extensive problem sets with solutions', 25, 125);
+            doc.text('• Graphical illustrations and examples', 25, 135);
+            doc.text('• Historical context and applications', 25, 145);
+            doc.save(`calculus-${resourceId}.pdf`);
+        }
+
+        function downloadAllResources() {
+            alert('Preparing complete Calculus textbook resource package for download...\nThis may take a few moments.');
+        }
+
+        // Assessment functions
+        function createAssessment() {
+            alert('Opening calculus assessment creator with mathematical equation support...');
+        }
+
+        function viewAssessment(assessmentId) {
+            alert(`Opening ${assessmentId} calculus assessment with mathematical formatting...`);
+        }
+
+        function viewDetailedAnalytics() {
+            alert('Opening detailed calculus assessment analytics dashboard...');
+        }
+
+        // Problem of the Week functions
+        function viewSolution() {
+            alert('Showing step-by-step solution:\n\n1. Set up constraint: 2x + y = 200, so y = 200 - 2x\n2. Area function: A(x) = x(200 - 2x) = 200x - 2x²\n3. Find critical points: A\'(x) = 200 - 4x = 0\n4. Solve: x = 50 feet\n5. Therefore: y = 200 - 2(50) = 100 feet\n6. Maximum area = 50 × 100 = 5000 square feet');
+        }
+
+        function submitSolution() {
+            alert('Opening solution submission form for the optimization problem...');
+        }
+
+        function getHint() {
+            alert('Hint: Start by expressing the area as a function of one variable using the constraint equation. Then use calculus to find the maximum!');
+        }
+
+        // Initialize page
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease-in-out';
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+                if (window.MathJax) {
+                    try {
+                        MathJax.typesetPromise();
+                    } catch (error) {
+                        console.error('MathJax rendering failed:', error);
+                    }
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>
