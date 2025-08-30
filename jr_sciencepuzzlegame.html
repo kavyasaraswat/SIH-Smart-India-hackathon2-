@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science Puzzle Quest - Educational Challenge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #e9d5ff 0%, #a855f7 100%);
+            font-family: 'Inter', sans-serif;
+        }
+        .game-card {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .puzzle-piece {
+            transition: all 0.5s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .puzzle-piece.locked {
+            filter: grayscale(100%) brightness(0.3);
+        }
+        .puzzle-piece.unlocked {
+            filter: none;
+            animation: reveal 0.8s ease-out;
+        }
+        .puzzle-piece.current {
+            border: 3px solid #fbbf24;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+        }
+        @keyframes reveal {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .option-btn {
+            transition: all 0.3s ease;
+        }
+        .option-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        .correct {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        .wrong {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #fff, transparent),
+                radial-gradient(2px 2px at 40px 70px, #fff, transparent),
+                radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+                radial-gradient(1px 1px at 130px 80px, #fff, transparent),
+                radial-gradient(2px 2px at 160px 30px, #fff, transparent);
+            background-repeat: repeat;
+            background-size: 200px 100px;
+            animation: twinkle 3s ease-in-out infinite alternate;
+        }
+        @keyframes twinkle {
+            0% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+        .puzzle-image {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4">
+    <!-- Stars Background -->
+    <div class="stars"></div>
+    
+    <div class="relative z-10 max-w-6xl mx-auto">
+        <!-- Main Menu -->
+        <div id="mainMenu" class="game-card rounded-2xl p-8 text-center shadow-2xl">
+            <div class="mb-8">
+                <h1 class="text-4xl font-bold text-purple-800 mb-2">🔬 Science Puzzle Quest</h1>
+                <p class="text-purple-600 text-lg">Answer Science Questions to Reveal the Puzzle!</p>
+            </div>
+            <div class="mb-8">
+                <div class="bg-purple-100 rounded-lg p-4 mb-4">
+                    <h3 class="font-semibold text-purple-800 mb-2">How to Play:</h3>
+                    <ul class="text-purple-700 text-sm space-y-1">
+                        <li>🧩 Click on locked puzzle pieces to answer questions</li>
+                        <li>✅ Correct answers unlock the piece (+5 points)</li>
+                        <li>❌ Wrong answers keep the piece locked</li>
+                        <li>🎯 Unlock all 9 pieces to complete the puzzle!</li>
+                    </ul>
+                </div>
+            </div>
+            <button onclick="startGame()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-8 rounded-xl text-xl transition-all duration-300 transform hover:scale-105 shadow-lg">
+                🚀 Start Puzzle
+            </button>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="gameScreen" class="hidden">
+            <!-- Header -->
+            <div class="game-card rounded-2xl p-6 mb-6 shadow-2xl">
+                <div class="flex justify-between items-center">
+                    <div class="bg-purple-100 rounded-lg px-4 py-2">
+                        <span class="text-purple-800 font-semibold">Score: </span>
+                        <span id="score" class="text-purple-900 font-bold text-xl">0</span>
+                    </div>
+                    <div class="bg-purple-100 rounded-lg px-4 py-2">
+                        <span class="text-purple-800 font-semibold">Unlocked: </span>
+                        <span id="unlockedCount" class="text-purple-900 font-bold text-xl">0</span>/9
+                    </div>
+                    <button onclick="goToMainMenu()" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-300">
+                        🏠 Main Menu
+                    </button>
+                </div>
+            </div>
+
+            <!-- Puzzle Grid -->
+            <div class="game-card rounded-2xl p-6 mb-6 shadow-2xl">
+                <h2 class="text-2xl font-bold text-center text-purple-800 mb-6" id="puzzleTitle">Science Puzzle</h2>
+                <div class="grid grid-cols-3 gap-4 max-w-2xl mx-auto" id="puzzleGrid">
+                    <!-- Puzzle pieces will be generated here -->
+                </div>
+            </div>
+
+            <!-- Question Panel -->
+            <div id="questionPanel" class="game-card rounded-2xl p-6 shadow-2xl hidden">
+                <div class="text-center mb-4">
+                    <h3 class="text-xl font-semibold text-purple-800">Unlock Puzzle Piece</h3>
+                </div>
+                <div class="mb-6">
+                    <h4 id="question" class="text-lg font-semibold text-gray-800 mb-4 leading-relaxed"></h4>
+                    <div id="options" class="space-y-3"></div>
+                </div>
+                <div class="text-center">
+                    <button onclick="closeQuestion()" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-300">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Victory Screen -->
+        <div id="victoryScreen" class="game-card rounded-2xl p-8 text-center shadow-2xl hidden">
+            <div class="mb-6">
+                <h2 class="text-4xl font-bold text-green-600 mb-4">🎉 Puzzle Complete!</h2>
+                <p class="text-2xl text-purple-800 mb-4">You've revealed the entire image!</p>
+                <div class="bg-purple-100 rounded-lg p-6 mb-6">
+                    <p class="text-purple-800 text-lg mb-2">Your Final Score:</p>
+                    <p id="finalScore" class="text-4xl font-bold text-purple-900">0</p>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <button onclick="startGame()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg w-full">
+                    🔄 New Puzzle
+                </button>
+                <button onclick="goToMainMenu()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg w-full">
+                    🏠 Main Menu
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Science questions database (60+ questions)
+        const scienceQuestions = [
+            // Plant Life Cycles (12 questions)
+            {
+                question: "What is the process of plants making their own food called?",
+                options: ["Photosynthesis", "Respiration", "Transpiration", "Digestion"],
+                correct: 0,
+                topic: "plant life cycles"
+            },
+            {
+                question: "What is the process of seeds developing into a new plant called?",
+                options: ["Pollination", "Germination", "Photosynthesis", "Transpiration"],
+                correct: 1,
+                topic: "plant life cycles"
+            },
+            {
+                question: "Which part of the plant absorbs water and minerals from the soil?",
+                options: ["Stem", "Leaves", "Roots", "Flowers"],
+                correct: 2,
+                topic: "plant life cycles"
+            },
+            {
+                question: "What are the tiny pores on the underside of leaves called?",
+                options: ["Roots", "Stomata", "Veins", "Chlorophyll"],
+                correct: 1,
+                topic: "plant life cycles"
+            },
+            {
+                question: "Which of these is a seed dispersal mechanism?",
+                options: ["Photosynthesis", "Wind", "Respiration", "Digestion"],
+                correct: 1,
+                topic: "plant life cycles"
+            },
+            {
+                question: "What is the green pigment in plants called?",
+                options: ["Chlorophyll", "Xylem", "Phloem", "Stomata"],
+                correct: 0,
+                topic: "plant life cycles"
+            },
+            {
+                question: "Which part of the plant produces seeds?",
+                options: ["Roots", "Stem", "Leaves", "Flowers"],
+                correct: 3,
+                topic: "plant life cycles"
+            },
+            {
+                question: "What gas do plants release during photosynthesis?",
+                options: ["Carbon dioxide", "Oxygen", "Nitrogen", "Hydrogen"],
+                correct: 1,
+                topic: "plant life cycles"
+            },
+            {
+                question: "Which of these is NOT needed for photosynthesis?",
+                options: ["Sunlight", "Water", "Oxygen", "Carbon dioxide"],
+                correct: 2,
+                topic: "plant life cycles"
+            },
+            {
+                question: "What is the male part of a flower called?",
+                options: ["Pistil", "Stamen", "Petal", "Sepal"],
+                correct: 1,
+                topic: "plant life cycles"
+            },
+            {
+                question: "Which of these is a root vegetable?",
+                options: ["Potato", "Carrot", "Onion", "Cabbage"],
+                correct: 1,
+                topic: "plant life cycles"
+            },
+            {
+                question: "What is the process of transferring pollen from stamen to pistil called?",
+                options: ["Germination", "Photosynthesis", "Pollination", "Transpiration"],
+                correct: 2,
+                topic: "plant life cycles"
+            },
+            
+            // Animals (12 questions)
+            {
+                question: "Which animal undergoes metamorphosis?",
+                options: ["Dog", "Butterfly", "Elephant", "Snake"],
+                correct: 1,
+                topic: "animals"
+            },
+            {
+                question: "What is a baby frog called?",
+                options: ["Calf", "Tadpole", "Pup", "Cub"],
+                correct: 1,
+                topic: "animals"
+            },
+            {
+                question: "Which of these is a mammal?",
+                options: ["Shark", "Frog", "Eagle", "Dolphin"],
+                correct: 3,
+                topic: "animals"
+            },
+            {
+                question: "What do herbivores eat?",
+                options: ["Plants", "Meat", "Both plants and meat", "Insects"],
+                correct: 0,
+                topic: "animals"
+            },
+            {
+                question: "Which animal has feathers?",
+                options: ["Fish", "Reptile", "Bird", "Amphibian"],
+                correct: 2,
+                topic: "animals"
+            },
+            {
+                question: "What is hibernation?",
+                options: ["Long-distance migration", "Deep winter sleep", "Changing skin", "Building nests"],
+                correct: 1,
+                topic: "animals"
+            },
+            {
+                question: "Which animal is nocturnal?",
+                options: ["Eagle", "Owl", "Squirrel", "Butterfly"],
+                correct: 1,
+                topic: "animals"
+            },
+            {
+                question: "What is a group of lions called?",
+                options: ["Herd", "Pack", "Pride", "School"],
+                correct: 2,
+                topic: "animals"
+            },
+            {
+                question: "Which animal has a shell?",
+                options: ["Snail", "Spider", "Earthworm", "Caterpillar"],
+                correct: 0,
+                topic: "animals"
+            },
+            {
+                question: "What is the largest animal on Earth?",
+                options: ["Elephant", "Giraffe", "Blue Whale", "Polar Bear"],
+                correct: 2,
+                topic: "animals"
+            },
+            {
+                question: "Which of these is a reptile?",
+                options: ["Frog", "Salamander", "Turtle", "Salmon"],
+                correct: 2,
+                topic: "animals"
+            },
+            {
+                question: "What do caterpillars turn into?",
+                options: ["Birds", "Butterflies", "Bees", "Beetles"],
+                correct: 1,
+                topic: "animals"
+            },
+            
+            // Seasons (12 questions)
+            {
+                question: "How many seasons are there in a year?",
+                options: ["2", "3", "4", "5"],
+                correct: 2,
+                topic: "seasons"
+            },
+            {
+                question: "Which season comes after winter?",
+                options: ["Spring", "Summer", "Autumn", "Monsoon"],
+                correct: 0,
+                topic: "seasons"
+            },
+            {
+                question: "In which season do trees lose their leaves?",
+                options: ["Spring", "Summer", "Autumn", "Winter"],
+                correct: 2,
+                topic: "seasons"
+            },
+            {
+                question: "Which season is the coldest?",
+                options: ["Spring", "Summer", "Autumn", "Winter"],
+                correct: 3,
+                topic: "seasons"
+            },
+            {
+                question: "What causes seasons on Earth?",
+                options: ["Earth's rotation", "Earth's revolution and tilt", "Distance from the Sun", "The Moon"],
+                correct: 1,
+                topic: "seasons"
+            },
+            {
+                question: "In which season do many animals hibernate?",
+                options: ["Spring", "Summer", "Autumn", "Winter"],
+                correct: 3,
+                topic: "seasons"
+            },
+            {
+                question: "Which season has the longest days?",
+                options: ["Spring", "Summer", "Autumn", "Winter"],
+                correct: 1,
+                topic: "seasons"
+            },
+            {
+                question: "In which season do flowers typically bloom?",
+                options: ["Spring", "Summer", "Autumn", "Winter"],
+                correct: 0,
+                topic: "seasons"
+            },
+            {
+                question: "Which season comes before autumn?",
+                options: ["Spring", "Summer", "Winter", "Monsoon"],
+                correct: 1,
+                topic: "seasons"
+            },
+            {
+                question: "What is the shortest day of the year called?",
+                options: ["Summer solstice", "Winter solstice", "Spring equinox", "Autumn equinox"],
+                correct: 1,
+                topic: "seasons"
+            },
+            {
+                question: "In which season do many birds migrate to warmer places?",
+                options: ["Spring", "Summer", "Autumn", "Winter"],
+                correct: 2,
+                topic: "seasons"
+            },
+            {
+                question: "Which season is known for harvesting crops?",
+                options: ["Spring", "Summer", "Autumn", "Winter"],
+                correct: 2,
+                topic: "seasons"
+            },
+            
+            // The World Around Us (12 questions)
+            {
+                question: "What is the uppermost layer of soil called?",
+                options: ["Bedrock", "Subsoil", "Topsoil", "Weathered rock"],
+                correct: 2,
+                topic: "the world around us"
+            },
+            {
+                question: "Which of these is a renewable resource?",
+                options: ["Coal", "Petroleum", "Solar energy", "Natural gas"],
+                correct: 2,
+                topic: "the world around us"
+            },
+            {
+                question: "What is the main component of air?",
+                options: ["Oxygen", "Carbon dioxide", "Nitrogen", "Hydrogen"],
+                correct: 2,
+                topic: "the world around us"
+            },
+            {
+                question: "Which of these is a natural fiber?",
+                options: ["Nylon", "Polyester", "Cotton", "Acrylic"],
+                correct: 2,
+                topic: "the world around us"
+            },
+            {
+                question: "What is the process of changing water into water vapor called?",
+                options: ["Condensation", "Evaporation", "Sublimation", "Freezing"],
+                correct: 1,
+                topic: "the world around us"
+            },
+            {
+                question: "Which of these materials is biodegradable?",
+                options: ["Plastic", "Glass", "Paper", "Metal"],
+                correct: 2,
+                topic: "the world around us"
+            },
+            {
+                question: "What is the primary source of energy for Earth?",
+                options: ["Wind", "Water", "Sun", "Geothermal"],
+                correct: 2,
+                topic: "the world around us"
+            },
+            {
+                question: "Which of these is a water-borne disease?",
+                options: ["Malaria", "Cholera", "Tuberculosis", "Influenza"],
+                correct: 1,
+                topic: "the world around us"
+            },
+            {
+                question: "What causes earthquakes?",
+                options: ["Weather changes", "Movement of tectonic plates", "Ocean currents", "Volcanic eruptions only"],
+                correct: 1,
+                topic: "the world around us"
+            },
+            {
+                question: "Which of these is a greenhouse gas?",
+                options: ["Oxygen", "Nitrogen", "Carbon dioxide", "Hydrogen"],
+                correct: 2,
+                topic: "the world around us"
+            },
+            {
+                question: "What is recycling?",
+                options: ["Throwing away waste", "Burning waste", "Converting waste into reusable material", "Burying waste"],
+                correct: 2,
+                topic: "the world around us"
+            },
+            {
+                question: "Which of these is a fossil fuel?",
+                options: ["Solar energy", "Wind energy", "Coal", "Hydroelectric power"],
+                correct: 2,
+                topic: "the world around us"
+            },
+            
+            // Space (12 questions)
+            {
+                question: "Which planet is known as the Red Planet?",
+                options: ["Venus", "Mars", "Jupiter", "Saturn"],
+                correct: 1,
+                topic: "space"
+            },
+            {
+                question: "What is the closest star to Earth?",
+                options: ["Proxima Centauri", "Sirius", "Sun", "Alpha Centauri"],
+                correct: 2,
+                topic: "space"
+            },
+            {
+                question: "Which planet has rings around it?",
+                options: ["Earth", "Mars", "Saturn", "Venus"],
+                correct: 2,
+                topic: "space"
+            },
+            {
+                question: "What is a group of stars that form a pattern called?",
+                options: ["Galaxy", "Constellation", "Solar system", "Universe"],
+                correct: 1,
+                topic: "space"
+            },
+            {
+                question: "Which planet is the largest in our solar system?",
+                options: ["Earth", "Saturn", "Jupiter", "Neptune"],
+                correct: 2,
+                topic: "space"
+            },
+            {
+                question: "What is the name of our galaxy?",
+                options: ["Andromeda", "Milky Way", "Sombrero", "Whirlpool"],
+                correct: 1,
+                topic: "space"
+            },
+            {
+                question: "What causes day and night on Earth?",
+                options: ["Earth's revolution", "Earth's rotation", "The Moon's rotation", "The Sun's rotation"],
+                correct: 1,
+                topic: "space"
+            },
+            {
+                question: "Which celestial body orbits Earth?",
+                options: ["Sun", "Mars", "Moon", "Venus"],
+                correct: 2,
+                topic: "space"
+            },
+            {
+                question: "What is a shooting star actually?",
+                options: ["A dying star", "A meteor", "A comet", "A planet"],
+                correct: 1,
+                topic: "space"
+            },
+            {
+                question: "How long does it take Earth to orbit the Sun?",
+                options: ["24 hours", "7 days", "30 days", "365 days"],
+                correct: 3,
+                topic: "space"
+            },
+            {
+                question: "Which planet is closest to the Sun?",
+                options: ["Venus", "Earth", "Mercury", "Mars"],
+                correct: 2,
+                topic: "space"
+            },
+            {
+                question: "What is the name of the first human to walk on the Moon?",
+                options: ["Yuri Gagarin", "Neil Armstrong", "Buzz Aldrin", "John Glenn"],
+                correct: 1,
+                topic: "space"
+            }
+        ];
+
+        // Puzzle types with different themes
+        const puzzleTypes = [
+            {
+                id: 1,
+                name: "Solar System",
+                title: "Solar System Puzzle",
+                pieces: [
+                    { id: 0, name: "Sun", emoji: "☀", color: "bg-yellow-400" },
+                    { id: 1, name: "Mercury", emoji: "🪐", color: "bg-gray-400" },
+                    { id: 2, name: "Venus", emoji: "🪐", color: "bg-orange-300" },
+                    { id: 3, name: "Earth", emoji: "🌍", color: "bg-blue-400" },
+                    { id: 4, name: "Mars", emoji: "🔴", color: "bg-red-400" },
+                    { id: 5, name: "Jupiter", emoji: "🪐", color: "bg-orange-600" },
+                    { id: 6, name: "Saturn", emoji: "🪐", color: "bg-yellow-600" },
+                    { id: 7, name: "Uranus", emoji: "🔵", color: "bg-cyan-400" },
+                    { id: 8, name: "Neptune", emoji: "🔵", color: "bg-blue-600" }
+                ]
+            },
+            {
+                id: 2,
+                name: "Animal Kingdom",
+                title: "Animal Kingdom Puzzle",
+                pieces: [
+                    { id: 0, name: "Lion", emoji: "🦁", color: "bg-yellow-500" },
+                    { id: 1, name: "Elephant", emoji: "🐘", color: "bg-gray-400" },
+                    { id: 2, name: "Eagle", emoji: "🦅", color: "bg-brown-400" },
+                    { id: 3, name: "Dolphin", emoji: "🐬", color: "bg-blue-300" },
+                    { id: 4, name: "Butterfly", emoji: "🦋", color: "bg-purple-300" },
+                    { id: 5, name: "Frog", emoji: "🐸", color: "bg-green-400" },
+                    { id: 6, name: "Turtle", emoji: "🐢", color: "bg-green-300" },
+                    { id: 7, name: "Bee", emoji: "🐝", color: "bg-yellow-300" },
+                    { id: 8, name: "Fish", emoji: "🐠", color: "bg-blue-200" }
+                ]
+            },
+            {
+                id: 3,
+                name: "Plant Life",
+                title: "Plant Life Puzzle",
+                pieces: [
+                    { id: 0, name: "Seed", emoji: "🌱", color: "bg-brown-300" },
+                    { id: 1, name: "Roots", emoji: "🌿", color: "bg-brown-500" },
+                    { id: 2, name: "Stem", emoji: "🪴", color: "bg-green-600" },
+                    { id: 3, name: "Leaves", emoji: "🍃", color: "bg-green-400" },
+                    { id: 4, name: "Flower", emoji: "🌺", color: "bg-pink-300" },
+                    { id: 5, name: "Fruit", emoji: "🍎", color: "bg-red-400" },
+                    { id: 6, name: "Tree", emoji: "🌳", color: "bg-green-700" },
+                    { id: 7, name: "Cactus", emoji: "🌵", color: "bg-green-500" },
+                    { id: 8, name: "Sunflower", emoji: "🌻", color: "bg-yellow-300" }
+                ]
+            },
+            {
+                id: 4,
+                name: "Weather & Seasons",
+                title: "Weather & Seasons Puzzle",
+                pieces: [
+                    { id: 0, name: "Sun", emoji: "☀", color: "bg-yellow-400" },
+                    { id: 1, name: "Rain", emoji: "🌧", color: "bg-blue-300" },
+                    { id: 2, name: "Snow", emoji: "❄", color: "bg-blue-100" },
+                    { id: 3, name: "Wind", emoji: "💨", color: "bg-gray-200" },
+                    { id: 4, name: "Cloud", emoji: "☁", color: "bg-gray-300" },
+                    { id: 5, name: "Lightning", emoji: "⚡", color: "bg-yellow-200" },
+                    { id: 6, name: "Rainbow", emoji: "🌈", color: "bg-gradient-to-r from-red-400 to-purple-400" },
+                    { id: 7, name: "Tornado", emoji: "🌪", color: "bg-gray-400" },
+                    { id: 8, name: "Umbrella", emoji: "☂", color: "bg-red-300" }
+                ]
+            },
+            {
+                id: 5,
+                name: "Earth Science",
+                title: "Earth Science Puzzle",
+                pieces: [
+                    { id: 0, name: "Volcano", emoji: "🌋", color: "bg-red-600" },
+                    { id: 1, name: "Mountain", emoji: "⛰", color: "bg-gray-500" },
+                    { id: 2, name: "Ocean", emoji: "🌊", color: "bg-blue-500" },
+                    { id: 3, name: "Forest", emoji: "🌲", color: "bg-green-600" },
+                    { id: 4, name: "Desert", emoji: "🏜", color: "bg-yellow-500" },
+                    { id: 5, name: "River", emoji: "🌊", color: "bg-blue-400" },
+                    { id: 6, name: "Cave", emoji: "🕳", color: "bg-gray-700" },
+                    { id: 7, name: "Glacier", emoji: "🧊", color: "bg-blue-200" },
+                    { id: 8, name: "Recycling", emoji: "♻", color: "bg-green-400" }
+                ]
+            }
+        ];
+
+        let currentQuestions = [];
+        let currentPuzzle = null;
+        let currentPieceId = null;
+        let score = 0;
+        let unlockedCount = 0;
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function startGame() {
+            // Reset game state
+            currentQuestions = shuffleArray(scienceQuestions);
+            currentPuzzle = shuffleArray(puzzleTypes)[0];
+            
+            // Initialize puzzle pieces
+            currentPuzzle.pieces.forEach(piece => piece.unlocked = false);
+            score = 0;
+            unlockedCount = 0;
+            
+            // Show game screen
+            document.getElementById('mainMenu').classList.add('hidden');
+            document.getElementById('victoryScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.remove('hidden');
+            
+            // Set puzzle title
+            document.getElementById('puzzleTitle').textContent = currentPuzzle.title;
+            
+            // Generate puzzle grid
+            generatePuzzleGrid();
+            updateScore();
+        }
+
+        function generatePuzzleGrid() {
+            const grid = document.getElementById('puzzleGrid');
+            grid.innerHTML = '';
+            
+            currentPuzzle.pieces.forEach(piece => {
+                const pieceElement = document.createElement('div');
+                pieceElement.className = `puzzle-piece ${piece.color} rounded-lg p-6 text-center cursor-pointer border-2 border-gray-300 ${piece.unlocked ? 'unlocked' : 'locked'}`;
+                pieceElement.onclick = () => selectPiece(piece.id);
+                
+                pieceElement.innerHTML = `
+                    <div class="text-4xl mb-2">${piece.unlocked ? piece.emoji : '🔒'}</div>
+                    <div class="font-semibold text-white text-sm">${piece.unlocked ? piece.name : '???'}</div>
+                `;
+                
+                grid.appendChild(pieceElement);
+            });
+        }
+
+        function selectPiece(pieceId) {
+            const piece = currentPuzzle.pieces[pieceId];
+            if (piece.unlocked) return;
+            
+            currentPieceId = pieceId;
+            
+            // Highlight current piece
+            document.querySelectorAll('.puzzle-piece').forEach((el, index) => {
+                el.classList.remove('current');
+                if (index === pieceId) {
+                    el.classList.add('current');
+                }
+            });
+            
+            // Show question
+            showQuestion();
+        }
+
+        function showQuestion() {
+            // Get a random question from the current pool
+            const question = currentQuestions[Math.floor(Math.random() * currentQuestions.length)];
+            
+            document.getElementById('question').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'option-btn w-full bg-white hover:bg-purple-50 border-2 border-purple-200 text-gray-800 font-semibold py-3 px-4 rounded-lg text-left';
+                button.textContent = `${String.fromCharCode(65 + index)}. ${option}`;
+                button.onclick = () => selectAnswer(index, question.correct);
+                optionsContainer.appendChild(button);
+            });
+            
+            document.getElementById('questionPanel').classList.remove('hidden');
+        }
+
+        function selectAnswer(selectedIndex, correctIndex) {
+            const options = document.querySelectorAll('.option-btn');
+            
+            // Disable all buttons
+            options.forEach(btn => btn.disabled = true);
+            
+            if (selectedIndex === correctIndex) {
+                // Correct answer
+                options[selectedIndex].classList.add('correct');
+                score += 5;
+                
+                setTimeout(() => {
+                    unlockPiece(currentPieceId);
+                    closeQuestion();
+                }, 1500);
+            } else {
+                // Wrong answer
+                options[selectedIndex].classList.add('wrong');
+                options[correctIndex].classList.add('correct');
+                
+                setTimeout(() => {
+                    closeQuestion();
+                }, 2000);
+            }
+        }
+
+        function unlockPiece(pieceId) {
+            currentPuzzle.pieces[pieceId].unlocked = true;
+            unlockedCount++;
+            
+            updateScore();
+            generatePuzzleGrid();
+            
+            // Check if puzzle is complete
+            if (unlockedCount === currentPuzzle.pieces.length) {
+                setTimeout(() => {
+                    showVictory();
+                }, 1000);
+            }
+        }
+
+        function closeQuestion() {
+            document.getElementById('questionPanel').classList.add('hidden');
+            document.querySelectorAll('.puzzle-piece').forEach(el => {
+                el.classList.remove('current');
+            });
+            currentPieceId = null;
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('unlockedCount').textContent = unlockedCount;
+        }
+
+        function showVictory() {
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('victoryScreen').classList.remove('hidden');
+            document.getElementById('finalScore').textContent = score;
+        }
+
+        function goToMainMenu() {
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('victoryScreen').classList.add('hidden');
+            document.getElementById('questionPanel').classList.add('hidden');
+            document.getElementById('mainMenu').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

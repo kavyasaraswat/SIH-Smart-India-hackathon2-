@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science Quiz Challenge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e9d5ff 0%, #a855f7 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #a855f7, #9333ea);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
+            transform: rotate(45deg);
+            animation: shine 8s infinite;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            animation: slideInDown 0.8s ease-out;
+        }
+        
+        .topic-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .screen {
+            display: none;
+        }
+        
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .welcome-screen {
+            text-align: center;
+        }
+        
+        .welcome-icon {
+            font-size: 4rem;
+            color: #7e22ce;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+        
+        .instructions {
+            background: #f3e8ff;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        
+        .instructions h3 {
+            color: #7e22ce;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .instructions h3 i {
+            margin-right: 10px;
+        }
+        
+        .instructions ul {
+            list-style-type: none;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .instructions li i {
+            color: #7e22ce;
+            margin-right: 10px;
+            margin-top: 4px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #a855f7, #9333ea);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(168, 85, 247, 0.4);
+            margin: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(168, 85, 247, 0.6);
+        }
+        
+        .btn i {
+            margin-right: 10px;
+        }
+        
+        .quiz-screen {
+            position: relative;
+        }
+        
+        .progress-container {
+            background: #f3e8ff;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .progress-text {
+            font-size: 1.1rem;
+            color: #4c1d95;
+            font-weight: 600;
+        }
+        
+        .progress-percent {
+            font-size: 1.1rem;
+            color: #7e22ce;
+            font-weight: 700;
+        }
+        
+        .progress-bar-container {
+            height: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) inset;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(135deg, #a855f7, #9333ea);
+            border-radius: 10px;
+            width: 0;
+            transition: width 0.5s ease-in-out;
+        }
+        
+        .question-container {
+            background: #f3e8ff;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .question-number {
+            color: #7e22ce;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .question {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            color: #4c1d95;
+            line-height: 1.4;
+        }
+        
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        @media (min-width: 600px) {
+            .options-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .option {
+            background: white;
+            border: 2px solid #d8b4fe;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .option:hover {
+            background: #e9d5ff;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .option.correct {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border-color: #059669;
+        }
+        
+        .option.incorrect {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border-color: #dc2626;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+        }
+        
+        .results-screen {
+            text-align: center;
+        }
+        
+        .result-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+        
+        .result-icon.success {
+            color: #10b981;
+            animation: tada 1s;
+        }
+        
+        .result-icon.average {
+            color: #f59e0b;
+            animation: tada 1s;
+        }
+        
+        .result-icon.poor {
+            color: #ef4444;
+            animation: tada 1s;
+        }
+        
+        .score-display {
+            font-size: 3rem;
+            color: #7e22ce;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .message {
+            font-size: 1.4rem;
+            margin-bottom: 30px;
+            color: #4c1d95;
+        }
+        
+        .topic-stats {
+            background: #f3e8ff;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        
+        .topic-stats h3 {
+            color: #7e22ce;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .topic-stat {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #d8b4fe;
+        }
+        
+        .topic-name {
+            font-weight: 600;
+            color: #4c1d95;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideInDown {
+            from { 
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 100%; }
+            100% { left: 100%; }
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
+        }
+        
+        @keyframes tada {
+            0% {transform: scale(1);}
+            10%, 20% {transform: scale(0.9) rotate(-3deg);}
+            30%, 50%, 70%, 90% {transform: scale(1.1) rotate(3deg);}
+            40%, 60%, 80% {transform: scale(1.1) rotate(-3deg);}
+            100% {transform: scale(1) rotate(0);}
+        }
+        
+        .decoration {
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(to right, rgba(168, 85, 247, 0.1), rgba(233, 213, 255, 0.2));
+            filter: blur(40px);
+            z-index: -1;
+        }
+        
+        .decoration-1 {
+            top: 5%;
+            left: 5%;
+        }
+        
+        .decoration-2 {
+            bottom: 5%;
+            right: 5%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background decorations -->
+    <div class="decoration decoration-1"></div>
+    <div class="decoration decoration-2"></div>
+    
+    <div class="container">
+        <!-- Welcome Screen -->
+        <div class="screen welcome-screen active">
+            <div class="header-content">
+                <h1>Science Quiz Challenge</h1>
+                <p>Test your knowledge of science topics</p>
+                <div>
+                    <span class="topic-badge">Plant Life Cycles</span>
+                    <span class="topic-badge">Animals</span>
+                    <span class="topic-badge">Seasons</span>
+                    <span class="topic-badge">The World Around Us</span>
+                    <span class="topic-badge">Space</span>
+                </div>
+            </div>
+            
+            <div class="content">
+                <div class="welcome-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                
+                <div class="instructions">
+                    <h3><i class="fas fa-info-circle"></i> How to Play</h3>
+                    <ul>
+                        <li><i class="fas fa-question-circle"></i> Answer 25 random science questions from our database of 60 questions</li>
+                        <li><i class="fas fa-check-circle"></i> Each correct answer gives you 4 points</li>
+                        <li><i class="fas fa-trophy"></i> Try to achieve the highest score possible</li>
+                        <li><i class="fas fa-clock"></i> There's no time limit, so think carefully</li>
+                        <li><i class="fas fa-chart-bar"></i> Review your performance at the end of the quiz</li>
+                    </ul>
+                </div>
+                
+                <button class="btn" onclick="startQuiz()">
+                    <i class="fas fa-play"></i> Start Quiz
+                </button>
+            </div>
+        </div>
+        
+        <!-- Quiz Screen -->
+        <div class="screen quiz-screen">
+            <header>
+                <div class="header-content">
+                    <h1>Science Quiz Challenge</h1>
+                    <p>Test your knowledge of science topics</p>
+                </div>
+            </header>
+            
+            <div class="content">
+                <div class="progress-container">
+                    <div class="progress-info">
+                        <div class="progress-text">Question <span id="current-question">1</span> of 25</div>
+                        <div class="progress-percent">Score: <span id="score">0</span></div>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="progress-bar"></div>
+                    </div>
+                </div>
+                
+                <div class="question-container">
+                    <div class="question-number">Topic: <span id="topic">Plant Life Cycles</span></div>
+                    <div class="question" id="question">Which of the following is NOT a component of food?</div>
+                    
+                    <div class="options-container" id="options-container">
+                        <div class="option" data-option="1">Protein</div>
+                        <div class="option" data-option="2">Plastic</div>
+                        <div class="option" data-option="3">Carbohydrate</div>
+                        <div class="option" data-option="4">Vitamin</div>
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <button class="btn" onclick="quitQuiz()">
+                        <i class="fas fa-sign-out-alt"></i> Quit Quiz
+                    </button>
+                    <button class="btn" id="next-btn" onclick="nextQuestion()" style="display: none;">
+                        <i class="fas fa-arrow-right"></i> Next Question
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Results Screen -->
+        <div class="screen results-screen">
+            <header>
+                <div class="header-content">
+                    <h1>Quiz Results</h1>
+                    <p>See how you performed</p>
+                </div>
+            </header>
+            
+            <div class="content">
+                <div class="result-icon success" id="result-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                
+                <div class="score-display" id="final-score">0</div>
+                
+                <div class="message" id="message">Great job! You're a science whiz!</div>
+                
+                <div class="topic-stats">
+                    <h3><i class="fas fa-chart-pie"></i> Performance by Topic</h3>
+                    <div id="topic-stats">
+                        <!-- Topic stats will be inserted here -->
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="startQuiz()">
+                    <i class="fas fa-redo"></i> Try Again
+                </button>
+                <button class="btn" onclick="showWelcomeScreen()">
+                    <i class="fas fa-home"></i> Main Menu
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Quiz questions and answers (60 questions)
+        const questionBank = [
+            // Plant Life Cycles (12 questions)
+            {
+                question: "What is the process of plants making their own food called?",
+                options: ["Photosynthesis", "Respiration", "Transpiration", "Digestion"],
+                answer: 1,
+                topic: "Plant Life Cycles"
+            },
+            {
+                question: "What is the process of seeds developing into a new plant called?",
+                options: ["Pollination", "Germination", "Photosynthesis", "Transpiration"],
+                answer: 2,
+                topic: "Plant Life Cycles"
+            },
+            {
+                question: "Which part of the plant absorbs water and minerals from the soil?",
+                options: ["Stem", "Leaves", "Roots", "Flowers"],
+                answer: 3,
+                topic: "Plant Life Cycles"
+            },
+            {
+                question: "What are the tiny pores on the underside of leaves called?",
+                options: ["Roots", "Stomata", "Veins", "Chlorophyll"],
+                answer: 2,
+                topic: "Plant Life Cycles"
+            },
+            {
+                question: "Which of these is a seed dispersal mechanism?",
+                options: ["Photosynthesis", "Wind", "Respiration", "Digestion"],
+                answer: 2,
+                topic: "Plant Life Cycles"
+            },
+            {
+                question: "What is the green pigment in plants called?",
+                options: ["Chlorophyll", "Xylem", "Phloem", "Stomata"],
+                answer: 1,
+                topic: "Plant Life Cycles"
+            },
+            {
+                question: "Which part of the plant produces seeds?",
+                options: ["Roots", "Stem", "Leaves", "Flowers"],
+                answer: 4,
+                topic: "Plant Life Cycles"
+            },
+            {
+                question: "What gas do plants release during photosynthesis?",
+                options: ["Carbon dioxide", "Oxygen", "Nitrogen", "Hydrogen"],
+                answer: 2,
+                topic: "Plant Life Cycles"
+            },
+            {
+                question: "Which of these is NOT needed for photosynthesis?",
+                options: ["Sunlight", "Water", "Oxygen", "Carbon dioxide"],
+                answer: 3,
+                topic: "Plant Life Cycles"
+            },
+            {
+                question: "What is the male part of a flower called?",
+                options: ["Pistil", "Stamen", "Petal", "Sepal"],
+                answer: 2,
+                topic: "Plant Life Cycles"
+            },
+            {
+                question: "Which of these is a root vegetable?",
+                options: ["Potato", "Carrot", "Onion", "Cabbage"],
+                answer: 2,
+                topic: "Plant Life Cycles"
+            },
+            {
+                question: "What is the process of transferring pollen from stamen to pistil called?",
+                options: ["Germination", "Photosynthesis", "Pollination", "Transpiration"],
+                answer: 3,
+                topic: "Plant Life Cycles"
+            },
+            
+            // Animals (12 questions)
+            {
+                question: "Which animal undergoes metamorphosis?",
+                options: ["Dog", "Butterfly", "Elephant", "Snake"],
+                answer: 2,
+                topic: "Animals"
+            },
+            {
+                question: "What is a baby frog called?",
+                options: ["Calf", "Tadpole", "Pup", "Cub"],
+                answer: 2,
+                topic: "Animals"
+            },
+            {
+                question: "Which of these is a mammal?",
+                options: ["Shark", "Frog", "Eagle", "Dolphin"],
+                answer: 4,
+                topic: "Animals"
+            },
+            {
+                question: "What do herbivores eat?",
+                options: ["Plants", "Meat", "Both plants and meat", "Insects"],
+                answer: 1,
+                topic: "Animals"
+            },
+            {
+                question: "Which animal has feathers?",
+                options: ["Fish", "Reptile", "Bird", "Amphibian"],
+                answer: 3,
+                topic: "Animals"
+            },
+            {
+                question: "What is hibernation?",
+                options: ["Long-distance migration", "Deep winter sleep", "Changing skin", "Building nests"],
+                answer: 2,
+                topic: "Animals"
+            },
+            {
+                question: "Which animal is nocturnal?",
+                options: ["Eagle", "Owl", "Squirrel", "Butterfly"],
+                answer: 2,
+                topic: "Animals"
+            },
+            {
+                question: "What is a group of lions called?",
+                options: ["Herd", "Pack", "Pride", "School"],
+                answer: 3,
+                topic: "Animals"
+            },
+            {
+                question: "Which animal has a shell?",
+                options: ["Snail", "Spider", "Earthworm", "Caterpillar"],
+                answer: 1,
+                topic: "Animals"
+            },
+            {
+                question: "What is the largest animal on Earth?",
+                options: ["Elephant", "Giraffe", "Blue Whale", "Polar Bear"],
+                answer: 3,
+                topic: "Animals"
+            },
+            {
+                question: "Which of these is a reptile?",
+                options: ["Frog", "Salamander", "Turtle", "Salmon"],
+                answer: 3,
+                topic: "Animals"
+            },
+            {
+                question: "What do caterpillars turn into?",
+                options: ["Birds", "Butterflies", "Bees", "Beetles"],
+                answer: 2,
+                topic: "Animals"
+            },
+            
+            // Seasons (12 questions)
+            {
+                question: "How many seasons are there in a year?",
+                options: ["2", "3", "4", "5"],
+                answer: 3,
+                topic: "Seasons"
+            },
+            {
+                question: "Which season comes after winter?",
+                options: ["Spring", "Summer", "Autumn", "Monsoon"],
+                answer: 1,
+                topic: "Seasons"
+            },
+            {
+                question: "In which season do trees lose their leaves?",
+                options: ["Spring", "Summer", "Autumn", "Winter"],
+                answer: 3,
+                topic: "Seasons"
+            },
+            {
+                question: "Which season is the coldest?",
+                options: ["Spring", "Summer", "Autumn", "Winter"],
+                answer: 4,
+                topic: "Seasons"
+            },
+            {
+                question: "What causes seasons on Earth?",
+                options: ["Earth's rotation", "Earth's revolution and tilt", "Distance from the Sun", "The Moon"],
+                answer: 2,
+                topic: "Seasons"
+            },
+            {
+                question: "In which season do many animals hibernate?",
+                options: ["Spring", "Summer", "Autumn", "Winter"],
+                answer: 4,
+                topic: "Seasons"
+            },
+            {
+                question: "Which season has the longest days?",
+                options: ["Spring", "Summer", "Autumn", "Winter"],
+                answer: 2,
+                topic: "Seasons"
+            },
+            {
+                question: "In which season do flowers typically bloom?",
+                options: ["Spring", "Summer", "Autumn", "Winter"],
+                answer: 1,
+                topic: "Seasons"
+            },
+            {
+                question: "Which season comes before autumn?",
+                options: ["Spring", "Summer", "Winter", "Monsoon"],
+                answer: 2,
+                topic: "Seasons"
+            },
+            {
+                question: "What is the shortest day of the year called?",
+                options: ["Summer solstice", "Winter solstice", "Spring equinox", "Autumn equinox"],
+                answer: 2,
+                topic: "Seasons"
+            },
+            {
+                question: "In which season do many birds migrate to warmer places?",
+                options: ["Spring", "Summer", "Autumn", "Winter"],
+                answer: 3,
+                topic: "Seasons"
+            },
+            {
+                question: "Which season is known for harvesting crops?",
+                options: ["Spring", "Summer", "Autumn", "Winter"],
+                answer: 3,
+                topic: "Seasons"
+            },
+            
+            // The World Around Us (12 questions)
+            {
+                question: "What is the uppermost layer of soil called?",
+                options: ["Bedrock", "Subsoil", "Topsoil", "Weathered rock"],
+                answer: 3,
+                topic: "The World Around Us"
+            },
+            {
+                question: "Which of these is a renewable resource?",
+                options: ["Coal", "Petroleum", "Solar energy", "Natural gas"],
+                answer: 3,
+                topic: "The World Around Us"
+            },
+            {
+                question: "What is the main component of air?",
+                options: ["Oxygen", "Carbon dioxide", "Nitrogen", "Hydrogen"],
+                answer: 3,
+                topic: "The World Around Us"
+            },
+            {
+                question: "Which of these is a natural fiber?",
+                options: ["Nylon", "Polyester", "Cotton", "Acrylic"],
+                answer: 3,
+                topic: "The World Around Us"
+            },
+            {
+                question: "What is the process of changing water into water vapor called?",
+                options: ["Condensation", "Evaporation", "Sublimation", "Freezing"],
+                answer: 2,
+                topic: "The World Around Us"
+            },
+            {
+                question: "Which of these materials is biodegradable?",
+                options: ["Plastic", "Glass", "Paper", "Metal"],
+                answer: 3,
+                topic: "The World Around Us"
+            },
+            {
+                question: "What is the primary source of energy for Earth?",
+                options: ["Wind", "Water", "Sun", "Geothermal"],
+                answer: 3,
+                topic: "The World Around Us"
+            },
+            {
+                question: "Which of these is a water-borne disease?",
+                options: ["Malaria", "Cholera", "Tuberculosis", "Influenza"],
+                answer: 2,
+                topic: "The World Around Us"
+            },
+            {
+                question: "What causes earthquakes?",
+                options: ["Weather changes", "Movement of tectonic plates", "Ocean currents", "Volcanic eruptions only"],
+                answer: 2,
+                topic: "The World Around Us"
+            },
+            {
+                question: "Which of these is a greenhouse gas?",
+                options: ["Oxygen", "Nitrogen", "Carbon dioxide", "Hydrogen"],
+                answer: 3,
+                topic: "The World Around Us"
+            },
+            {
+                question: "What is recycling?",
+                options: ["Throwing away waste", "Burning waste", "Converting waste into reusable material", "Burying waste"],
+                answer: 3,
+                topic: "The World Around Us"
+            },
+            {
+                question: "Which of these is a fossil fuel?",
+                options: ["Solar energy", "Wind energy", "Coal", "Hydroelectric power"],
+                answer: 3,
+                topic: "The World Around Us"
+            },
+            
+            // Space (12 questions)
+            {
+                question: "Which planet is known as the Red Planet?",
+                options: ["Venus", "Mars", "Jupiter", "Saturn"],
+                answer: 2,
+                topic: "Space"
+            },
+            {
+                question: "What is the closest star to Earth?",
+                options: ["Proxima Centauri", "Sirius", "Sun", "Alpha Centauri"],
+                answer: 3,
+                topic: "Space"
+            },
+            {
+                question: "Which planet has rings around it?",
+                options: ["Earth", "Mars", "Saturn", "Venus"],
+                answer: 3,
+                topic: "Space"
+            },
+            {
+                question: "What is a group of stars that form a pattern called?",
+                options: ["Galaxy", "Constellation", "Solar system", "Universe"],
+                answer: 2,
+                topic: "Space"
+            },
+            {
+                question: "Which planet is the largest in our solar system?",
+                options: ["Earth", "Saturn", "Jupiter", "Neptune"],
+                answer: 3,
+                topic: "Space"
+            },
+            {
+                question: "What is the name of our galaxy?",
+                options: ["Andromeda", "Milky Way", "Sombrero", "Whirlpool"],
+                answer: 2,
+                topic: "Space"
+            },
+            {
+                question: "What causes day and night on Earth?",
+                options: ["Earth's revolution", "Earth's rotation", "The Moon's rotation", "The Sun's rotation"],
+                answer: 2,
+                topic: "Space"
+            },
+            {
+                question: "Which celestial body orbits Earth?",
+                options: ["Sun", "Mars", "Moon", "Venus"],
+                answer: 3,
+                topic: "Space"
+            },
+            {
+                question: "What is a shooting star actually?",
+                options: ["A dying star", "A meteor", "A comet", "A planet"],
+                answer: 2,
+                topic: "Space"
+            },
+            {
+                question: "How long does it take Earth to orbit the Sun?",
+                options: ["24 hours", "7 days", "30 days", "365 days"],
+                answer: 4,
+                topic: "Space"
+            },
+            {
+                question: "Which planet is closest to the Sun?",
+                options: ["Venus", "Earth", "Mercury", "Mars"],
+                answer: 3,
+                topic: "Space"
+            },
+            {
+                question: "What is the name of the first human to walk on the Moon?",
+                options: ["Yuri Gagarin", "Neil Armstrong", "Buzz Aldrin", "John Glenn"],
+                answer: 2,
+                topic: "Space"
+            }
+        ];
+
+        let questions = [];
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+        let topicStats = {
+            "Plant Life Cycles": { correct: 0, total: 0 },
+            "Animals": { correct: 0, total: 0 },
+            "Seasons": { correct: 0, total: 0 },
+            "The World Around Us": { correct: 0, total: 0 },
+            "Space": { correct: 0, total: 0 }
+        };
+
+        // DOM elements
+        const welcomeScreen = document.querySelector('.welcome-screen');
+        const quizScreen = document.querySelector('.quiz-screen');
+        const resultsScreen = document.querySelector('.results-screen');
+        const questionElement = document.getElementById('question');
+        const topicElement = document.getElementById('topic');
+        const questionNumberElement = document.getElementById('current-question');
+        const scoreElement = document.getElementById('score');
+        const progressBar = document.getElementById('progress-bar');
+        const optionsElements = document.querySelectorAll('.option');
+        const nextButton = document.getElementById('next-btn');
+        const finalScoreElement = document.getElementById('final-score');
+        const messageElement = document.getElementById('message');
+        const resultIcon = document.getElementById('result-icon');
+        const topicStatsElement = document.getElementById('topic-stats');
+
+        // Shuffle array function (Fisher-Yates algorithm)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Initialize the game
+        function startQuiz() {
+            // Select 25 random questions from the bank
+            questions = shuffleArray([...questionBank]).slice(0, 25);
+            
+            // Reset game state
+            currentQuestion = 0;
+            score = 0;
+            
+            // Reset topic stats
+            for (const topic in topicStats) {
+                topicStats[topic].correct = 0;
+                topicStats[topic].total = 0;
+            }
+            
+            // Show quiz screen
+            welcomeScreen.classList.remove('active');
+            resultsScreen.classList.remove('active');
+            quizScreen.classList.add('active');
+            
+            // Load first question
+            loadQuestion();
+            updateScore();
+        }
+
+        // Load current question
+        function loadQuestion() {
+            answered = false;
+            const question = questions[currentQuestion];
+            questionElement.textContent = question.question;
+            topicElement.textContent = question.topic;
+            questionNumberElement.textContent = currentQuestion + 1;
+            
+            // Update progress bar
+            progressBar.style.width = `${((currentQuestion + 1) / 25) * 100}%`;
+            
+            // Update options
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.textContent = option;
+                optionElement.dataset.option = index + 1;
+                optionElement.addEventListener('click', function() {
+                    if (answered) return;
+                    const selectedOption = parseInt(this.dataset.option);
+                    checkAnswer(selectedOption, question.answer);
+                });
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            nextButton.style.display = 'none';
+        }
+
+        // Update score display
+        function updateScore() {
+            scoreElement.textContent = score;
+        }
+
+        // Check if selected answer is correct
+        function checkAnswer(selectedOption, correctAnswer) {
+            if (answered) return;
+            
+            answered = true;
+            const options = document.querySelectorAll('.option');
+            
+            // Update topic stats
+            const currentTopic = questions[currentQuestion].topic;
+            topicStats[currentTopic].total++;
+            
+            options.forEach(option => {
+                if (parseInt(option.dataset.option) === correctAnswer) {
+                    option.classList.add('correct');
+                }
+                
+                if (parseInt(option.dataset.option) === selectedOption && selectedOption !== correctAnswer) {
+                    option.classList.add('incorrect');
+                }
+            });
+            
+            if (selectedOption === correctAnswer) {
+                score += 4;
+                topicStats[currentTopic].correct++;
+                updateScore();
+            }
+            
+            nextButton.style.display = 'block';
+        }
+
+        // Move to next question
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        // Show results
+        function showResults() {
+            quizScreen.classList.remove('active');
+            resultsScreen.classList.add('active');
+            
+            finalScoreElement.textContent = score;
+            
+            // Set message based on score
+            if (score >= 80) {
+                messageElement.textContent = "Excellent! You're a science genius!";
+                resultIcon.className = "result-icon success";
+                resultIcon.innerHTML = '<i class="fas fa-trophy"></i>';
+            } else if (score >= 60) {
+                messageElement.textContent = "Great job! You have good science knowledge!";
+                resultIcon.className = "result-icon average";
+                resultIcon.innerHTML = '<i class="fas fa-star"></i>';
+            } else if (score >= 40) {
+                messageElement.textContent = "Good effort! Keep learning and try again!";
+                resultIcon.className = "result-icon average";
+                resultIcon.innerHTML = '<i class="fas fa-award"></i>';
+            } else {
+                messageElement.textContent = "Keep studying science and try again!";
+                resultIcon.className = "result-icon poor";
+                resultIcon.innerHTML = '<i class="fas fa-rocket"></i>';
+            }
+            
+            // Display topic stats
+            topicStatsElement.innerHTML = '';
+            for (const topic in topicStats) {
+                if (topicStats[topic].total > 0) {
+                    const percentage = Math.round((topicStats[topic].correct / topicStats[topic].total) * 100);
+                    const statElement = document.createElement('div');
+                    statElement.className = 'topic-stat';
+                    statElement.innerHTML = `
+                        <span class="topic-name">${topic}</span>
+                        <span>${topicStats[topic].correct}/${topicStats[topic].total} (${percentage}%)</span>
+                    `;
+                    topicStatsElement.appendChild(statElement);
+                }
+            }
+        }
+
+        // Quit quiz
+        function quitQuiz() {
+            showResults();
+        }
+
+        // Show welcome screen
+        function showWelcomeScreen() {
+            resultsScreen.classList.remove('active');
+            welcomeScreen.classList.add('active');
+        }
+
+        // Initialize the game on load
+        window.onload = function() {
+            // Add event listeners to options
+            optionsElements.forEach(option => {
+                option.addEventListener('click', function() {
+                    if (answered) return;
+                    const selectedOption = parseInt(this.dataset.option);
+                    const correctAnswer = questions[currentQuestion].answer;
+                    checkAnswer(selectedOption, correctAnswer);
+                });
+            });
+        };
+    </script>
+</body>
+</html>

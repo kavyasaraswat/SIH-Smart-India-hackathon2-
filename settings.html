@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | STEM Learning Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e9d5ff 0%, #a855f7 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #a855f7, #9333ea);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
+            transform: rotate(45deg);
+            animation: shine 8s infinite;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            animation: slideInDown 0.8s ease-out;
+        }
+        
+        .back-button {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 1.2rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .settings-content {
+            padding: 30px;
+        }
+        
+        .settings-section {
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .settings-section:nth-child(1) { animation-delay: 0.2s; }
+        .settings-section:nth-child(2) { animation-delay: 0.4s; }
+        .settings-section:nth-child(3) { animation-delay: 0.6s; }
+        .settings-section:nth-child(4) { animation-delay: 0.8s; }
+        .settings-section:nth-child(5) { animation-delay: 1.0s; }
+        
+        h2 {
+            color: #7e22ce;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9d5ff;
+            display: flex;
+            align-items: center;
+        }
+        
+        h2 i {
+            margin-right: 12px;
+            font-size: 1.4rem;
+        }
+        
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f3e8ff;
+            transition: all 0.3s;
+        }
+        
+        .setting-item:hover {
+            background-color: #faf5ff;
+            padding-left: 10px;
+            border-radius: 8px;
+        }
+        
+        .setting-info {
+            flex: 1;
+        }
+        
+        .setting-title {
+            font-weight: 600;
+            color: #4c1d95;
+            margin-bottom: 5px;
+        }
+        
+        .setting-desc {
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #a855f7;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+        
+        select {
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: 1px solid #d8b4fe;
+            background-color: white;
+            color: #4c1d95;
+            font-weight: 500;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        select:focus {
+            border-color: #a855f7;
+            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
+        }
+        
+        .button {
+            background: linear-gradient(135deg, #a855f7, #9333ea);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(168, 85, 247, 0.4);
+        }
+        
+        .button i {
+            margin-right: 8px;
+        }
+        
+        .button.secondary {
+            background: linear-gradient(135deg, #e9d5ff, #d8b4fe);
+            color: #7e22ce;
+        }
+        
+        .account-type {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .account-type button {
+            flex: 1;
+        }
+        
+        /* Password Form Styles */
+        .password-form {
+            display: none;
+            background: #faf5ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border: 1px solid #e9d5ff;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #4c1d95;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #d8b4fe;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #a855f7;
+            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
+        }
+        
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInDown {
+            from { 
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 100%; }
+            100% { left: 100%; }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 15px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .settings-content {
+                padding: 20px;
+            }
+            
+            .setting-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .toggle-switch, select, .button {
+                margin-top: 10px;
+            }
+            
+            .account-type {
+                flex-direction: column;
+            }
+            
+            .form-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="jnrdashboard.html" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="header-content">
+                <h1><i class="fas fa-cog"></i> Settings</h1>
+                <p>Customize your STEM learning experience</p>
+            </div>
+        </header>
+        
+        <div class="settings-content">
+            <div class="settings-section">
+                <h2><i class="fas fa-user"></i> Account Settings</h2>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-title">Language Preference</div>
+                        <div class="setting-desc">Choose your preferred language for content</div>
+                    </div>
+                    <select>
+                        <option>English</option>
+                        <option>Hindi</option>
+                        
+                    </select>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-title">Offline Mode</div>
+                        <div class="setting-desc">Download content for offline access</div>
+                    </div>
+                    <button class="button"><i class="fas fa-download"></i> Manage</button>
+                </div>
+            </div>
+            
+            <div class="settings-section">
+                <h2><i class="fas fa-bell"></i> Notifications</h2>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-title">Push Notifications</div>
+                        <div class="setting-desc">Get alerts for new content and achievements</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-title">Email Updates</div>
+                        <div class="setting-desc">Receive progress reports via email</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="settings-section">
+                <h2><i class="fas fa-paint-brush"></i> Appearance</h2>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-title">Theme</div>
+                        <div class="setting-desc">Choose light or dark mode</div>
+                    </div>
+                    <select>
+                        <option>Light Mode</option>
+                        <option>Dark Mode</option>
+                        <option>Auto</option>
+                    </select>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-title">Font Size</div>
+                        <div class="setting-desc">Adjust text size for better readability</div>
+                    </div>
+                    <select>
+                        <option>Small</option>
+                        <option selected>Medium</option>
+                        <option>Large</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="settings-section">
+                <h2><i class="fas fa-shield-alt"></i> Privacy & Data</h2>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-title">Data Collection</div>
+                        <div class="setting-desc">Help us improve by sharing usage data</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <div class="setting-title">Reset Password</div>
+                        <div class="setting-desc">Change your account password</div>
+                    </div>
+                    <button class="button secondary" id="resetPasswordBtn"><i class="fas fa-key"></i> Reset Password</button>
+                </div>
+                
+                <div class="password-form" id="passwordForm">
+                    <div class="form-group">
+                        <label for="oldPassword">Current Password</label>
+                        <input type="password" id="oldPassword" placeholder="Enter your current password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <input type="password" id="newPassword" placeholder="Enter your new password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm New Password</label>
+                        <input type="password" id="confirmPassword" placeholder="Confirm your new password">
+                    </div>
+                    
+                    <div class="form-buttons">
+                        <button class="button" id="savePasswordBtn">
+                            <i class="fas fa-check"></i> Save Changes
+                        </button>
+                        <button class="button secondary" id="cancelPasswordBtn">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple animation for toggle switches
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleSwitches = document.querySelectorAll('.toggle-switch input');
+            
+            toggleSwitches.forEach(toggle => {
+                toggle.addEventListener('change', function() {
+                    // Add a simple animation effect
+                    const slider = this.nextElementSibling;
+                    slider.style.transition = 'all 0.3s ease';
+                });
+            });
+            
+            // Add pulse animation to buttons on hover
+            const buttons = document.querySelectorAll('.button');
+            buttons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.style.animation = 'pulse 0.5s';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.animation = '';
+                });
+            });
+            
+            // Password reset functionality
+            const resetPasswordBtn = document.getElementById('resetPasswordBtn');
+            const passwordForm = document.getElementById('passwordForm');
+            const cancelPasswordBtn = document.getElementById('cancelPasswordBtn');
+            const savePasswordBtn = document.getElementById('savePasswordBtn');
+            
+            resetPasswordBtn.addEventListener('click', function() {
+                passwordForm.style.display = 'block';
+            });
+            
+            cancelPasswordBtn.addEventListener('click', function() {
+                passwordForm.style.display = 'none';
+                // Clear form fields
+                document.getElementById('oldPassword').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+            });
+            
+            savePasswordBtn.addEventListener('click', function() {
+                const oldPassword = document.getElementById('oldPassword').value;
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                // Simple validation
+                if (!oldPassword || !newPassword || !confirmPassword) {
+                    alert('Please fill in all fields');
+                    return;
+                }
+                
+                if (newPassword !== confirmPassword) {
+                    alert('New passwords do not match');
+                    return;
+                }
+                
+                if (newPassword.length < 6) {
+                    alert('Password must be at least 6 characters long');
+                    return;
+                }
+                
+                // Simulate password change
+                alert('Password changed successfully!');
+                passwordForm.style.display = 'none';
+                
+                // Clear form fields
+                document.getElementById('oldPassword').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subject Progress | STEM Learning Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e9d5ff 0%, #a855f7 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #a855f7, #9333ea);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
+            transform: rotate(45deg);
+            animation: shine 8s infinite;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            animation: slideInDown 0.8s ease-out;
+        }
+        
+        .back-button {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 1.2rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .progress-section {
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .progress-section:nth-child(1) { animation-delay: 0.2s; }
+        .progress-section:nth-child(2) { animation-delay: 0.4s; }
+        .progress-section:nth-child(3) { animation-delay: 0.6s; }
+        
+        h2 {
+            color: #7e22ce;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9d5ff;
+            display: flex;
+            align-items: center;
+        }
+        
+        h2 i {
+            margin-right: 12px;
+            font-size: 1.4rem;
+        }
+        
+        .subject-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .subject-icon {
+            font-size: 3rem;
+            margin-right: 20px;
+            color: #7e22ce;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .subject-info {
+            flex: 1;
+        }
+        
+        .subject-title {
+            font-size: 1.8rem;
+            color: #4c1d95;
+            margin-bottom: 5px;
+        }
+        
+        .subject-desc {
+            color: #6b7280;
+        }
+        
+        .progress-container {
+            background: #f3e8ff;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .progress-text {
+            font-size: 1.1rem;
+            color: #4c1d95;
+            font-weight: 600;
+        }
+        
+        .progress-percent {
+            font-size: 1.1rem;
+            color: #7e22ce;
+            font-weight: 700;
+        }
+        
+        .progress-bar-container {
+            height: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) inset;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(135deg, #a855f7, #9333ea);
+            border-radius: 10px;
+            width: 0;
+            transition: width 1.5s ease-in-out;
+        }
+        
+        .badges-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+        }
+        
+        .badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            border-radius: 15px;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 120px;
+            opacity: 0.4;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .badge.active {
+            opacity: 1;
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .badge.bronze.active {
+            background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+            border: 2px solid #cd7f32;
+        }
+        
+        .badge.silver.active {
+            background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+            border: 2px solid #c0c0c0;
+        }
+        
+        .badge.gold.active {
+            background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+            border: 2px solid #ffd700;
+        }
+        
+        .badge.diamond.active {
+            background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+            border: 2px solid #b9f2ff;
+        }
+        
+        .badge-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+        
+        .badge.bronze .badge-icon {
+            color: #cd7f32;
+        }
+        
+        .badge.silver .badge-icon {
+            color: #c0c0c0;
+        }
+        
+        .badge.gold .badge-icon {
+            color: #ffd700;
+        }
+        
+        .badge.diamond .badge-icon {
+            color: #b9f2ff;
+        }
+        
+        .badge-name {
+            font-weight: 600;
+            color: #4c1d95;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .badge-progress {
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin-top: 5px;
+            transition: all 0.3s;
+        }
+        
+        /* Hover effects for badges */
+        .badge:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+            opacity: 1;
+            z-index: 10;
+        }
+        
+        .badge.bronze:hover {
+            background: linear-gradient(135deg, #f9e2c7, #f5d5b3);
+            border: 2px solid #cd7f32;
+        }
+        
+        .badge.silver:hover {
+            background: linear-gradient(135deg, #f0f0f0, #e5e5e5);
+            border: 2px solid #c0c0c0;
+        }
+        
+        .badge.gold:hover {
+            background: linear-gradient(135deg, #fff9d9, #fff4c2);
+            border: 2px solid #ffd700;
+        }
+        
+        .badge.diamond:hover {
+            background: linear-gradient(135deg, #e6f7ff, #d1f0ff);
+            border: 2px solid #b9f2ff;
+        }
+        
+        .badge:hover .badge-icon {
+            transform: scale(1.2) rotate(5deg);
+        }
+        
+        .badge:hover .badge-name {
+            color: #7e22ce;
+            font-weight: 700;
+        }
+        
+        .badge:hover .badge-progress {
+            color: #4c1d95;
+            font-weight: 600;
+        }
+        
+        .game-button {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #a855f7, #9333ea);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(168, 85, 247, 0.4);
+            margin-top: 20px;
+        }
+        
+        .game-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(168, 85, 247, 0.6);
+        }
+        
+        .game-button i {
+            margin-right: 10px;
+        }
+        
+        .modules-container {
+            background: #f3e8ff;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .module-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+        
+        .module-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .module-item.completed {
+            border-left: 5px solid #10b981;
+        }
+        
+        .module-status {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .module-item.completed .module-status {
+            background: #10b981;
+            color: white;
+        }
+        
+        .module-info {
+            flex: 1;
+        }
+        
+        .module-title {
+            font-weight: 600;
+            color: #4c1d95;
+            margin-bottom: 5px;
+        }
+        
+        .module-desc {
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInDown {
+            from { 
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 100%; }
+            100% { left: 100%; }
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 15px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .subject-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .subject-icon {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .badges-container {
+                flex-wrap: wrap;
+                gap: 15px;
+                justify-content: center;
+            }
+            
+            .badge {
+                width: 100px;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="#" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="header-content">
+                <h1><i class="fas fa-chart-line"></i> Subject Progress</h1>
+                <p>Track your learning journey and achievements</p>
+            </div>
+        </header>
+        
+        <div class="content">
+            <div class="progress-section">
+                <div class="subject-header">
+                    <div class="subject-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <div class="subject-info">
+                        <div class="subject-title">Science</div>
+                        <div class="subject-desc">Animals, Space, Seasons, Plant Life Cycle & The World Around Us</div>
+                    </div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-info">
+                        <div class="progress-text">Your Progress</div>
+                        <div class="progress-percent" id="progress-percent">45%</div>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="progress-bar" style="width: 65%;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="progress-section">
+                <h2><i class="fas fa-trophy"></i> Achievement Badges</h2>
+                
+                <div class="badges-container">
+                    <div class="badge bronze active">
+                        <div class="badge-icon">
+                            <i class="fas fa-medal"></i>
+                        </div>
+                        <div class="badge-name">Bronze</div>
+                        <div class="badge-progress">25% Complete</div>
+                    </div>
+                    
+                    <div class="badge silver active">
+                        <div class="badge-icon">
+                            <i class="fas fa-medal"></i>
+                        </div>
+                        <div class="badge-name">Silver</div>
+                        <div class="badge-progress">50% Complete</div>
+                    </div>
+                    
+                    <div class="badge gold">
+                        <div class="badge-icon">
+                            <i class="fas fa-medal"></i>
+                        </div>
+                        <div class="badge-name">Gold</div>
+                        <div class="badge-progress">75% Complete</div>
+                    </div>
+                    
+                    <div class="badge diamond">
+                        <div class="badge-icon">
+                            <i class="fas fa-gem"></i>
+                        </div>
+                        <div class="badge-name">Diamond</div>
+                        <div class="badge-progress">100% Complete</div>
+                    </div>
+                </div>
+                
+                <a href="jr_sciencebrainbustergame.html" class="game-button">
+                    <i class="fas fa-gamepad"></i> Play Science Game
+                </a>
+            </div>
+            
+            <div class="progress-section">
+                <h2><i class="fas fa-list-check"></i> Learning Modules</h2>
+                
+                <div class="modules-container">
+                    <div class="module-item completed">
+                        <div class="module-status">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="module-info">
+                            <div class="module-title">Plant Life Cycles</div>
+                            <div class="module-desc">Stages Of Plant Growth</div>
+                        </div>
+                    </div>
+                    
+                    <div class="module-item completed">
+                        <div class="module-status">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="module-info">
+                            <div class="module-title">Animals</div>
+                            <div class="module-desc">Groups, Needs, Characteristics</div>
+                        </div>
+                    </div>
+                   
+                    <div class="module-item completed">
+                        <div class="module-status">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="module-info">
+                            <div class="module-title">Seasons</div>
+                            <div class="module-desc">Causes Of Seasonal Changes, World Variations</div>
+                        </div>
+                    </div>
+                    
+                    <div class="module-item">
+                        <div class="module-status">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div class="module-info">
+                            <div class="module-title">The World Around Us</div>
+                            <div class="module-desc">Exploring Diverse Science Phenomena</div>
+                        </div>
+                    </div>
+                    
+                    <div class="module-item">
+                        <div class="module-status">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <div class="module-info">
+                            <div class="module-title">Space</div>
+                            <div class="module-desc">Earth, Solar System, Exploration Basics</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simulate progress bar animation
+            const progressBar = document.getElementById('progress-bar');
+            const progressPercent = document.getElementById('progress-percent');
+            
+            // Reset width for animation
+            progressBar.style.width = '0';
+            
+            // Animate progress bar
+            setTimeout(() => {
+                progressBar.style.width = '65%';
+            }, 500);
+            
+            // Add pulse animation to game button
+            const gameButton = document.querySelector('.game-button');
+            
+            gameButton.addEventListener('mouseenter', function() {
+                this.style.animation = 'pulse 0.5s';
+            });
+            
+            gameButton.addEventListener('mouseleave', function() {
+                this.style.animation = '';
+            });
+            
+            // Add interaction to module items
+            const moduleItems = document.querySelectorAll('.module-item:not(.completed)');
+            
+            moduleItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    if (!this.classList.contains('completed')) {
+                        this.classList.add('completed');
+                        this.querySelector('.module-status').innerHTML = '<i class="fas fa-check"></i>';
+                        
+                        // Update progress (simulated)
+                        const currentWidth = parseFloat(progressBar.style.width);
+                        if (currentWidth < 100) {
+                            const newWidth = Math.min(currentWidth + 10, 100);
+                            progressBar.style.width = newWidth + '%';
+                            progressPercent.textContent = Math.round(newWidth) + '%';
+                            
+                            // Update badges based on progress
+                            updateBadges(newWidth);
+                        }
+                    }
+                });
+            });
+            
+            // Function to update badges based on progress
+            function updateBadges(progress) {
+                const bronzeBadge = document.querySelector('.badge.bronze');
+                const silverBadge = document.querySelector('.badge.silver');
+                const goldBadge = document.querySelector('.badge.gold');
+                const diamondBadge = document.querySelector('.badge.diamond');
+                
+                // Reset all badges
+                [bronzeBadge, silverBadge, goldBadge, diamondBadge].forEach(badge => {
+                    badge.classList.remove('active');
+                });
+                
+                // Activate badges based on progress
+                if (progress >= 25) {
+                    bronzeBadge.classList.add('active');
+                }
+                if (progress >= 50) {
+                    silverBadge.classList.add('active');
+                }
+                if (progress >= 75) {
+                    goldBadge.classList.add('active');
+                }
+                if (progress >= 100) {
+                    diamondBadge.classList.add('active');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

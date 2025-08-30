@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STEM Achievements | Learn & Grow</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #a855f7;
+            --secondary: #e9d5ff;
+            --accent: #9333ea;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #a855f7;
+            --warning: #d8b4fe;
+            --info: #c084fc;
+            --math: #c084fc;
+            --science: #a855f7;
+            --tech: #9333ea;
+            --engineering: #7e22ce;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e9d5ff 0%, #a855f7 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            animation: fadeInDown 1s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 5s infinite;
+        }
+        
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .points-badge {
+            background-color: white;
+            color: var(--primary);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            animation: pulse 2s infinite;
+        }
+        
+        .nav {
+            display: flex;
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            animation: slideInRight 1s ease-out;
+        }
+        
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            padding: 18px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .nav-item.active {
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            color: white;
+        }
+        
+        .section-title {
+            margin: 25px 0;
+            color: white;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            animation: fadeIn 1.2s ease-out;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .section-title i {
+            margin-right: 12px;
+            color: white;
+            font-size: 1.6rem;
+        }
+        
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .achievement-card {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.4s, box-shadow 0.4s;
+            animation: fadeInUp 1s forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .achievement-card:nth-child(1) { animation-delay: 0.2s; }
+        .achievement-card:nth-child(2) { animation-delay: 0.4s; }
+        .achievement-card:nth-child(3) { animation-delay: 0.6s; }
+        .achievement-card:nth-child(4) { animation-delay: 0.8s; }
+        
+        .achievement-header {
+            padding: 20px;
+            color: white;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .achievement-header i {
+            font-size: 28px;
+            margin-right: 15px;
+            transition: transform 0.5s;
+        }
+        
+        .achievement-body {
+            padding: 20px;
+        }
+        
+        .achievement-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+            color: var(--dark);
+        }
+        
+        .achievement-desc {
+            color: #6c757d;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .achievement-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #6c757d;
+            align-items: center;
+        }
+        
+        .math { background: linear-gradient(135deg, #d8b4fe, #c084fc); }
+        .science { background: linear-gradient(135deg, #c084fc, #a855f7); }
+        .tech { background: linear-gradient(135deg, #a855f7, #9333ea); }
+        .engineering { background: linear-gradient(135deg, #9333ea, #7e22ce); }
+        
+        .reward-points {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+            color: #7e22ce;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+        }
+        
+        .reward-points i {
+            margin-right: 5px;
+            color: #7e22ce;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInDown {
+            from { 
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            from { 
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            /* 100% { transform: scale(1); } */
+        }
+        
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 100%; }
+            100% { left: 100%; }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+        
+        .floating {
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .celebrate {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .celebrate::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 60%);
+            opacity: 0;
+            transform: rotate(30deg);
+        }
+        
+        /* Confetti effect */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: var(--secondary);
+            opacity: 0;
+        }
+        
+        /* Subject icons animation */
+        .subject-icon {
+            animation: spinIn 1s ease-out;
+        }
+        
+        @keyframes spinIn {
+            from { 
+                transform: rotate(-180deg) scale(0.5);
+                opacity: 0;
+            }
+            to { 
+                transform: rotate(0) scale(1);
+                opacity: 1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .achievement-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav {
+                flex-direction: column;
+            }
+            
+            .user-info {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="user-info">
+                <div>
+                    <h1>Welcome back, Rohan!</h1>
+                    <p>Your STEM achievements showcase your hard work!</p>
+                </div>
+                <div class="points-badge">
+                    <i class="fas fa-star"></i> 350 points
+                </div>
+            </div>
+        </header>
+        
+        <div class="nav">
+            <a href="jnrdashboard.html" class="nav-item"><i class="fas fa-home"></i> Dashboard</a>
+        </div>
+        
+        <h2 class="section-title"><i class="fas fa-trophy"></i> Your Achievements</h2>
+        
+        <div class="achievement-grid">
+            <!-- Math Achievement -->
+            <div class="achievement-card celebrate">
+                <div class="achievement-header math">
+                    <i class="fas fa-calculator subject-icon"></i>
+                    <h3>Math Wizard</h3>
+                </div>
+                <div class="achievement-body">
+                    <div class="achievement-title">Mastered Algebra Fundamentals</div>
+                    <div class="achievement-desc">Completed all algebra modules with 95% or higher accuracy</div>
+                    <div class="achievement-meta">
+                        <span>Earned: 2 days ago</span>
+                        <span class="reward-points"><i class="fas fa-star"></i> 50</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Science Achievement -->
+            <div class="achievement-card celebrate">
+                <div class="achievement-header science">
+                    <i class="fas fa-flask subject-icon"></i>
+                    <h3>Science Explorer</h3>
+                </div>
+                <div class="achievement-body">
+                    <div class="achievement-title">Completed Chemistry Lab</div>
+                    <div class="achievement-desc">Successfully conducted 10+ chemistry experiments</div>
+                    <div class="achievement-meta">
+                        <span>Earned: Yesterday</span>
+                        <span class="reward-points"><i class="fas fa-star"></i> 45</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Technology Achievement -->
+            <div class="achievement-card celebrate">
+                <div class="achievement-header tech">
+                    <i class="fas fa-code subject-icon"></i>
+                    <h3>Coding Champion</h3>
+                </div>
+                <div class="achievement-body">
+                    <div class="achievement-title">Built First Web Application</div>
+                    <div class="achievement-desc">Designed and coded a functional web page using HTML/CSS</div>
+                    <div class="achievement-meta">
+                        <span>Earned: 1 week ago</span>
+                        <span class="reward-points"><i class="fas fa-star"></i> 75</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Engineering Achievement -->
+            <div class="achievement-card celebrate">
+                <div class="achievement-header engineering">
+                    <i class="fas fa-cogs subject-icon"></i>
+                    <h3>Gaming Pro</h3>
+                </div>
+                <div class="achievement-body">
+                    <div class="achievement-title">Won Two Games Consecutively</div>
+                    <div class="achievement-desc">HURRAY! You are actively particpating in games while doing course.</div>
+                    <div class="achievement-meta">
+                        <span>Earned: 3 days ago</span>
+                        <span class="reward-points"><i class="fas fa-star"></i> 60</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Additional Achievement 1 -->
+            <div class="achievement-card celebrate">
+                <div class="achievement-header math">
+                    <i class="fas fa-shapes subject-icon"></i>
+                    <h3>Geometry Master</h3>
+                </div>
+                <div class="achievement-body">
+                    <div class="achievement-title">Perfect Score in Geometry</div>
+                    <div class="achievement-desc">Solved all geometry problems correctly in the final assessment</div>
+                    <div class="achievement-meta">
+                        <span>Earned: 5 days ago</span>
+                        <span class="reward-points"><i class="fas fa-star"></i> 40</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Additional Achievement 2 -->
+            <div class="achievement-card celebrate">
+                <div class="achievement-header science">
+                    <i class="fas fa-microscope subject-icon"></i>
+                    <h3>Biology Expert</h3>
+                </div>
+                <div class="achievement-body">
+                    <div class="achievement-title">Cell Biology Proficiency</div>
+                    <div class="achievement-desc">Demonstrated advanced understanding of cellular structures and functions</div>
+                    <div class="achievement-meta">
+                        <span>Earned: 4 days ago</span>
+                        <span class="reward-points"><i class="fas fa-star"></i> 55</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple animation triggers
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add floating animation to all achievement cards
+            const cards = document.querySelectorAll('.achievement-card');
+            cards.forEach((card, index) => {
+                // Stagger the animation start times
+                card.style.animationDelay = `${0.2 + (index * 0.2)}s`;
+                
+                // Add a subtle continuous float animation
+                card.style.animation = `fadeInUp 1s ${0.2 + (index * 0.2)}s forwards, float 6s ${2 + (index * 0.5)}s ease-in-out infinite`;
+            });
+            
+            // Animate the points badge
+            const pointsBadge = document.querySelector('.points-badge');
+            setInterval(() => {
+                pointsBadge.classList.toggle('pulse');
+            }, 3000);
+            
+            // Add subtle animation to subject icons on page load
+            const subjectIcons = document.querySelectorAll('.subject-icon');
+            subjectIcons.forEach((icon, index) => {
+                icon.style.animation = `spinIn 1s ${0.5 + (index * 0.2)}s both`;
+            });
+        });
+    </script>
+</body>
+</html>

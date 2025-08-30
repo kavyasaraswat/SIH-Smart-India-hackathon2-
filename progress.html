@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STEM Progress Tracker | Learn & Grow</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #a855f7;
+            --secondary: #e9d5ff;
+            --accent: #9333ea;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #a855f7;
+            --warning: #d8b4fe;
+            --info: #c084fc;
+            --math: #c084fc;
+            --science: #a855f7;
+            --tech: #9333ea;
+            --engineering: #7e22ce;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e9d5ff 0%, #a855f7 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: rgb(255, 255, 255);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            animation: fadeInDown 1s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 5s infinite;
+        }
+        
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .points-badge {
+            background-color: white;
+            color: var(--primary);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            animation: pulse 2s infinite;
+        }
+        
+        .nav {
+            display: flex;
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            animation: slideInRight 1s ease-out;
+        }
+        
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            padding: 18px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .nav-item.active {
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            color: white;
+        }
+        
+        .section-title {
+            margin: 25px 0;
+            color: rgb(255, 255, 255);
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            animation: fadeIn 1.2s ease-out;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .section-title i {
+            margin-right: 12px;
+            color: white;
+            font-size: 1.6rem;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            animation: fadeInUp 1s forwards;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card:nth-child(1) { 
+            animation-delay: 0.2s; 
+            grid-column: 1 / -1;
+        }
+        
+        .card-header {
+            padding: 25px;
+            color: white;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-header i {
+            font-size: 32px;
+            margin-right: 15px;
+            transition: transform 0.5s;
+        }
+        
+        .card:hover .card-header i {
+            transform: scale(1.2) rotate(5deg);
+        }
+        
+        .card-body {
+            padding: 30px;
+        }
+        
+        .progress-container {
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .progress-main {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .circular-progress {
+            position: relative;
+            height: 180px;
+            width: 180px;
+            margin: 0 auto 20px;
+        }
+        
+        .circular-progress svg {
+            height: 180px;
+            width: 180px;
+            transform: rotate(-90deg);
+        }
+        
+        .circular-progress circle {
+            fill: transparent;
+            stroke-width: 12;
+            stroke: #f0f0f0;
+            transform-origin: center;
+        }
+        
+        .circular-progress circle:last-child {
+            stroke: var(--primary);
+            stroke-dasharray: 565;
+            stroke-dashoffset: 565;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 2s ease;
+        }
+        
+        .progress-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .progress-label {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark);
+            text-align: center;
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            align-items: center;
+        }
+        
+        .progress-info span:first-child {
+            font-weight: 600;
+        }
+        
+        .progress-bar {
+            height: 14px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            width: 0;
+            transition: width 1.5s ease-out;
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .stat-box {
+            text-align: center;
+            padding: 20px 15px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(168, 85, 247, 0.2);
+        }
+        
+        .stat-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s;
+            opacity: 0;
+        }
+        
+        .stat-box:hover::before {
+            animation: shine 1.5s;
+        }
+        
+        .stat-box i {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            transition: transform 0.3s;
+        }
+        
+        .stat-box:hover i {
+            transform: scale(1.2);
+        }
+        
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 10px 0;
+            transition: all 0.3s;
+        }
+        
+        .stat-box:hover .stat-value {
+            transform: scale(1.1);
+        }
+        
+        .stat-label {
+            font-size: 0.95rem;
+            color: #6c757d;
+            font-weight: 500;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInDown {
+            from { 
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            from { 
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes shine {
+            0% { left: -100%; opacity: 0; }
+            50% { opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+        
+        .floating {
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .math { background: linear-gradient(135deg, #793fb7, #c084fc); }
+        .science { background: linear-gradient(135deg, #c084fc, #a855f7); }
+        .tech { background: linear-gradient(135deg, #a855f7, #9333ea); }
+        .engineering { background: linear-gradient(135deg, #9333ea, #7e22ce); }
+        .overall { background: linear-gradient(135deg, #9333ea, #7e22ce); }
+        
+        @media (max-width: 900px) {
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .circular-progress {
+                height: 150px;
+                width: 150px;
+            }
+            
+            .circular-progress svg {
+                height: 150px;
+                width: 150px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .circular-progress {
+                height: 120px;
+                width: 120px;
+            }
+            
+            .circular-progress svg {
+                height: 120px;
+                width: 120px;
+            }
+            
+            .progress-value {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="user-info">
+                <div>
+                    <h1>Welcome back, Rohan!</h1>
+                    <p>Track your STEM learning progress and achievements</p>
+                </div>
+                <div class="points-badge">
+                    <i class="fas fa-star"></i> 350 points
+                </div>
+            </div>
+        </header>
+        
+        <div class="nav">
+            <a href="jnrdashboard.html" class="nav-item"><i class="fas fa-home"></i> Dashboard</a>
+        </div>
+        
+        <!-- <h2 class="section-title"><i class="fas fa-chart-line"></i> Your Learning Progress</h2> -->
+        
+        <div class="dashboard">
+            <div class="card">
+                <div class="card-header overall">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>Your Learning Progress</h3>
+                </div>
+                <div class="card-body">
+                    <div class="progress-main">
+                        <div class="circular-progress">
+                            <svg>
+                                <circle cx="90" cy="90" r="80"></circle>
+                                <circle cx="90" cy="90" r="80" id="progress-circle"></circle>
+                            </svg>
+                            <div class="progress-value">65%</div>
+                        </div>
+                        <div class="progress-label">STEM Mastery</div>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <i class="fas fa-check-circle"></i>
+                            <div class="stat-value">24</div>
+                            <div class="stat-label">Lessons Completed</div>
+                        </div>
+                        <div class="stat-box">
+                            <i class="fas fa-trophy"></i>
+                            <div class="stat-value">8</div>
+                            <div class="stat-label">Badges Earned</div>
+                        </div>
+                        <div class="stat-box">
+                            <i class="fas fa-gamepad"></i>
+                            <div class="stat-value">12</div>
+                            <div class="stat-label">Games Played</div>
+                        </div>
+                        <div class="stat-box">
+                            <i class="fas fa-clock"></i>
+                            <div class="stat-value">18h</div>
+                            <div class="stat-label">Time Spent</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple animation triggers
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate circular progress
+            setTimeout(() => {
+                const progressCircle = document.getElementById('progress-circle');
+                progressCircle.style.strokeDashoffset = 565 - (565 * 0.65);
+            }, 500);
+            
+            // Animate progress bars
+            setTimeout(() => {
+                document.querySelectorAll('.progress-fill').forEach(bar => {
+                    bar.style.width = bar.style.width;
+                });
+            }, 500);
+            
+            // Add floating animation to all cards
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                // Stagger the animation start times
+                card.style.animationDelay = `${0.2 + (index * 0.2)}s`;
+            });
+            
+            // Animate the points badge
+            const pointsBadge = document.querySelector('.points-badge');
+            setInterval(() => {
+                pointsBadge.classList.toggle('pulse');
+            }, 3000);
+            
+            // Add hover effects to stat boxes
+            const statBoxes = document.querySelectorAll('.stat-box');
+            statBoxes.forEach(box => {
+                box.addEventListener('mouseenter', () => {
+                    box.classList.add('floating');
+                });
+                box.addEventListener('mouseleave', () => {
+                    box.classList.remove('floating');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
