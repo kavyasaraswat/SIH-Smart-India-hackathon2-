@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Profile - STEM Adventure</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #e9d5ff 0%, #a855f7 100%); }
+        .card-shadow { box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .subject-badge { transition: all 0.3s ease; }
+        .subject-badge:hover { transform: translateY(-2px); }
+    </style>
+</head>
+<body class="min-h-screen" style="background: linear-gradient(135deg, #e9d5ff 0%, #a855f7 100%);">
+    <!-- Header -->
+    <div class="gradient-bg text-white py-6">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <button onclick="goBack()" class="flex items-center space-x-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-all duration-300">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                        <span>Back to Dashboard</span>
+                    </button>
+                    <h1 class="text-2xl font-bold">Teacher Profile</h1>
+                </div>
+                <div class="text-right">
+                    <p class="text-white/80">Questify</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-6xl mx-auto px-6 py-8">
+        <!-- Profile Header Card -->
+        <div class="bg-white rounded-2xl card-shadow p-8 mb-8">
+            <div class="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
+                <!-- Profile Picture -->
+                <div class="relative">
+                    <div class="w-32 h-32 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white text-4xl font-bold shadow-lg">
+                        <span id="profileInitials">DR</span>
+                    </div>
+                    <div class="absolute -bottom-2 -right-2 bg-green-500 w-8 h-8 rounded-full border-4 border-white flex items-center justify-center">
+                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Basic Info -->
+                <div class="flex-1 text-center md:text-left">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2" id="teacherName">Dr. Sarah Rodriguez</h2>
+                    <p class="text-lg text-gray-600 mb-4" id="teacherTitle">Senior Questfy Educator</p>
+                    
+                    <div class="flex flex-wrap justify-center md:justify-start gap-4 mb-6">
+                        <div class="flex items-center space-x-2 bg-blue-50 px-4 py-2 rounded-lg">
+                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                            <span class="text-blue-700" id="teacherEmail">sarah.rodriguez@stemedu.com</span>
+                        </div>
+                        <div class="flex items-center space-x-2 bg-green-50 px-4 py-2 rounded-lg">
+                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="text-green-700" id="experience">8 Years Experience</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-wrap justify-center md:justify-start gap-3">
+                        <button onclick="sendMessage()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 flex items-center space-x-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-3.582 8-8 8a9.863 9.863 0 01-4.906-1.298L3 21l1.298-5.094A9.863 9.863 0 013 12c0-4.418 3.582-8 8-8s8 3.582 8 8z"></path>
+                            </svg>
+                            <span>Send Message</span>
+                        </button>
+                        <button onclick="viewSchedule()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-medium transition-all duration-300 flex items-center space-x-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>View Schedule</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Teaching Domains & Subjects -->
+        <div class="grid md:grid-cols-2 gap-8 mb-8">
+            <!-- Teaching Domains -->
+            <div class="bg-white rounded-2xl card-shadow p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                    <svg class="w-6 h-6 text-purple-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                    </svg>
+                    Teaching Domains
+                </h3>
+                <div class="space-y-4" id="teachingDomains">
+                    <div class="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 rounded-xl border-l-4 border-blue-500 cursor-pointer transition-all duration-300 hover:shadow-md">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                                <span class="text-white font-bold">📊</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Mathematics</h4>
+                                <p class="text-sm text-gray-600">Primary Domain</p>
+                            </div>
+                        </div>
+                        <span class="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-medium">Active</span>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-4 bg-gradient-to-r from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 rounded-xl border-l-4 border-green-500 cursor-pointer transition-all duration-300 hover:shadow-md">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
+                                <span class="text-white font-bold">🔬</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Science</h4>
+                                <p class="text-sm text-gray-600">Secondary Domain</p>
+                            </div>
+                        </div>
+                        <span class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">Active</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subjects Teaching -->
+            <div class="bg-white rounded-2xl card-shadow p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                    <svg class="w-6 h-6 text-orange-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                    Current Subjects
+                </h3>
+                <div class="grid grid-cols-1 gap-3" id="currentSubjects">
+                    <div class="subject-badge bg-blue-50 hover:bg-blue-100 p-4 rounded-xl border border-blue-200 cursor-pointer">
+                        <div class="flex items-center justify-between">
+                            <a href="algebra.html">
+                                <div>
+                                  <h4 class="font-semibold text-blue-800">Algebra II</h4>
+                                  <p class="text-sm text-blue-600">Grade 10-11 • 28 Students</p>
+                                </div>
+                            </a>
+                            <div class="text-blue-500">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="subject-badge bg-green-50 hover:bg-green-100 p-4 rounded-xl border border-green-200 cursor-pointer">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h4 class="font-semibold text-green-800">Physics</h4>
+                                <p class="text-sm text-green-600">Grade 11-12 • 24 Students</p>
+                            </div>
+                            <div class="text-green-500">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="subject-badge bg-purple-50 hover:bg-purple-100 p-4 rounded-xl border border-purple-200 cursor-pointer">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h4 class="font-semibold text-purple-800">Calculus</h4>
+                                <p class="text-sm text-purple-600">Grade 12 • 18 Students</p>
+                            </div>
+                            <div class="text-purple-500">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Information -->
+        <div class="grid md:grid-cols-3 gap-6">
+            <!-- Stats -->
+            <div class="bg-white rounded-2xl card-shadow p-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">Teaching Stats</h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Total Students</span>
+                        <span class="font-bold text-2xl text-blue-600">70</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Classes This Week</span>
+                        <span class="font-bold text-2xl text-green-600">15</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Average Rating</span>
+                        <span class="font-bold text-2xl text-yellow-600">4.8⭐</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Qualifications -->
+            <div class="bg-white rounded-2xl card-shadow p-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">Qualifications</h3>
+                <div class="space-y-3">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                        <div>
+                            <p class="font-medium text-gray-800">Ph.D. Mathematics</p>
+                            <p class="text-sm text-gray-600">Stanford University</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <div class="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                        <div>
+                            <p class="font-medium text-gray-800">M.S. Physics</p>
+                            <p class="text-sm text-gray-600">MIT</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <div class="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
+                        <div>
+                            <p class="font-medium text-gray-800">Teaching Certificate</p>
+                            <p class="text-sm text-gray-600">State Certified</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Hours -->
+            <div class="bg-white rounded-2xl card-shadow p-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">Office Hours</h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Monday</span>
+                        <span class="font-medium">2:00 - 4:00 PM</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Wednesday</span>
+                        <span class="font-medium">1:00 - 3:00 PM</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Friday</span>
+                        <span class="font-medium">3:00 - 5:00 PM</span>
+                    </div>
+                    <div class="mt-4 p-3 bg-blue-50 rounded-lg">
+                        <p class="text-sm text-blue-700">📍 Room 204, Science Building</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            // Simulate going back to dashboard
+            alert('Returning to Teacher Dashboard...');
+        }
+
+        function sendMessage() {
+            alert('Opening message composer for Dr. Sarah Rodriguez...');
+        }
+
+        function viewSchedule() {
+            alert('Opening teacher schedule view...');
+        }
+
+        // Add click handlers for subject cards
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.subject-badge').forEach(card => {
+                card.addEventListener('click', function() {
+                    const subjectName = this.querySelector('h4').textContent;
+                    alert(`Opening details for ${subjectName} class...`);
+                });
+            });
+
+            // Initialize profile with sample data (in real app, this would come from API)
+            const teacherData = {
+                name: "Dr. Sarah Rodriguez",
+                title: "Senior STEM Educator",
+                email: "sarah.rodriguez@stemedu.com",
+                experience: "8 Years Experience",
+                initials: "SR"
+            };
+            
+            // Update profile initials
+            document.getElementById('profileInitials').textContent = teacherData.initials;
+            document.getElementById('teacherName').textContent = teacherData.name;
+            document.getElementById('teacherTitle').textContent = teacherData.title;
+            document.getElementById('teacherEmail').textContent = teacherData.email;
+            document.getElementById('experience').textContent = teacherData.experience;
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'977644c2c6e9918a',t:'MTc1NjU3NzY3NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
