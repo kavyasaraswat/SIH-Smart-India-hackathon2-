@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +13,7 @@
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
             background: linear-gradient(135deg, #e9d5ff 0%, #a855f7 100%);
             color: #333;
@@ -23,7 +24,7 @@
             justify-content: center;
             align-items: center;
         }
-        
+
         .container {
             width: 100%;
             max-width: 800px;
@@ -33,7 +34,7 @@
             overflow: hidden;
             animation: fadeIn 0.8s ease-out;
         }
-        
+
         header {
             background: linear-gradient(135deg, #a855f7, #9333ea);
             color: white;
@@ -42,7 +43,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         header::before {
             content: '';
             position: absolute;
@@ -50,22 +51,22 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
             transform: rotate(45deg);
             animation: shine 8s infinite;
         }
-        
+
         .header-content {
             position: relative;
             z-index: 2;
         }
-        
+
         h1 {
             font-size: 2.2rem;
             margin-bottom: 10px;
             animation: slideInDown 0.8s ease-out;
         }
-        
+
         .back-button {
             position: absolute;
             left: 20px;
@@ -78,28 +79,42 @@
             align-items: center;
             transition: all 0.3s;
         }
-        
+
         .back-button:hover {
             transform: translateY(-50%) scale(1.1);
         }
-        
+
         .settings-content {
             padding: 30px;
         }
-        
+
         .settings-section {
             margin-bottom: 30px;
             animation: fadeInUp 0.6s forwards;
             opacity: 0;
             transform: translateY(20px);
         }
-        
-        .settings-section:nth-child(1) { animation-delay: 0.2s; }
-        .settings-section:nth-child(2) { animation-delay: 0.4s; }
-        .settings-section:nth-child(3) { animation-delay: 0.6s; }
-        .settings-section:nth-child(4) { animation-delay: 0.8s; }
-        .settings-section:nth-child(5) { animation-delay: 1.0s; }
-        
+
+        .settings-section:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .settings-section:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .settings-section:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        .settings-section:nth-child(4) {
+            animation-delay: 0.8s;
+        }
+
+        .settings-section:nth-child(5) {
+            animation-delay: 1.0s;
+        }
+
         h2 {
             color: #7e22ce;
             margin-bottom: 20px;
@@ -108,12 +123,12 @@
             display: flex;
             align-items: center;
         }
-        
+
         h2 i {
             margin-right: 12px;
             font-size: 1.4rem;
         }
-        
+
         .setting-item {
             display: flex;
             justify-content: space-between;
@@ -122,41 +137,41 @@
             border-bottom: 1px solid #f3e8ff;
             transition: all 0.3s;
         }
-        
+
         .setting-item:hover {
             background-color: #faf5ff;
             padding-left: 10px;
             border-radius: 8px;
         }
-        
+
         .setting-info {
             flex: 1;
         }
-        
+
         .setting-title {
             font-weight: 600;
             color: #4c1d95;
             margin-bottom: 5px;
         }
-        
+
         .setting-desc {
             font-size: 0.9rem;
             color: #6b7280;
         }
-        
+
         .toggle-switch {
             position: relative;
             display: inline-block;
             width: 60px;
             height: 30px;
         }
-        
+
         .toggle-switch input {
             opacity: 0;
             width: 0;
             height: 0;
         }
-        
+
         .slider {
             position: absolute;
             cursor: pointer;
@@ -168,7 +183,7 @@
             transition: .4s;
             border-radius: 34px;
         }
-        
+
         .slider:before {
             position: absolute;
             content: "";
@@ -180,15 +195,15 @@
             transition: .4s;
             border-radius: 50%;
         }
-        
-        input:checked + .slider {
+
+        input:checked+.slider {
             background-color: #a855f7;
         }
-        
-        input:checked + .slider:before {
+
+        input:checked+.slider:before {
             transform: translateX(30px);
         }
-        
+
         select {
             padding: 8px 15px;
             border-radius: 8px;
@@ -199,12 +214,12 @@
             outline: none;
             transition: all 0.3s;
         }
-        
+
         select:focus {
             border-color: #a855f7;
             box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
         }
-        
+
         .button {
             background: linear-gradient(135deg, #a855f7, #9333ea);
             color: white;
@@ -217,31 +232,31 @@
             display: inline-flex;
             align-items: center;
         }
-        
+
         .button:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(168, 85, 247, 0.4);
         }
-        
+
         .button i {
             margin-right: 8px;
         }
-        
+
         .button.secondary {
             background: linear-gradient(135deg, #e9d5ff, #d8b4fe);
             color: #7e22ce;
         }
-        
+
         .account-type {
             display: flex;
             gap: 15px;
             margin-top: 10px;
         }
-        
+
         .account-type button {
             flex: 1;
         }
-        
+
         /* Password Form Styles */
         .password-form {
             display: none;
@@ -251,18 +266,18 @@
             margin-top: 15px;
             border: 1px solid #e9d5ff;
         }
-        
+
         .form-group {
             margin-bottom: 15px;
         }
-        
+
         .form-group label {
             display: block;
             margin-bottom: 5px;
             font-weight: 500;
             color: #4c1d95;
         }
-        
+
         .form-group input {
             width: 100%;
             padding: 10px 15px;
@@ -271,93 +286,119 @@
             font-size: 1rem;
             transition: all 0.3s;
         }
-        
+
         .form-group input:focus {
             outline: none;
             border-color: #a855f7;
             box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
         }
-        
+
         .form-buttons {
             display: flex;
             gap: 10px;
             margin-top: 10px;
         }
-        
+
         /* Animations */
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
-        
+
         @keyframes fadeInUp {
-            from { 
+            from {
                 opacity: 0;
                 transform: translateY(20px);
             }
-            to { 
+
+            to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-        
+
         @keyframes slideInDown {
-            from { 
+            from {
                 opacity: 0;
                 transform: translateY(-20px);
             }
-            to { 
+
+            to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-        
+
         @keyframes shine {
-            0% { left: -100%; }
-            20% { left: 100%; }
-            100% { left: 100%; }
+            0% {
+                left: -100%;
+            }
+
+            20% {
+                left: 100%;
+            }
+
+            100% {
+                left: 100%;
+            }
         }
-        
+
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
-        
+
         /* Responsive styles */
         @media (max-width: 768px) {
             .container {
                 border-radius: 15px;
                 margin: 10px;
             }
-            
+
             h1 {
                 font-size: 1.8rem;
             }
-            
+
             .settings-content {
                 padding: 20px;
             }
-            
+
             .setting-item {
                 flex-direction: column;
                 align-items: flex-start;
             }
-            
-            .toggle-switch, select, .button {
+
+            .toggle-switch,
+            select,
+            .button {
                 margin-top: 10px;
             }
-            
+
             .account-type {
                 flex-direction: column;
             }
-            
+
             .form-buttons {
                 flex-direction: column;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <header>
@@ -369,23 +410,22 @@
                 <p>Customize your STEM learning experience</p>
             </div>
         </header>
-        
+
         <div class="settings-content">
             <div class="settings-section">
                 <h2><i class="fas fa-user"></i> Account Settings</h2>
-                
+
                 <div class="setting-item">
                     <div class="setting-info">
                         <div class="setting-title">Language Preference</div>
                         <div class="setting-desc">Choose your preferred language for content</div>
                     </div>
-                    <select>
-                        <option>English</option>
-                        <option>Hindi</option>
-                        
+                    <select id="languageSelect">
+                        <option value="en">English</option>
+                        <option value="hi">Hindi</option>
                     </select>
                 </div>
-                
+
                 <div class="setting-item">
                     <div class="setting-info">
                         <div class="setting-title">Offline Mode</div>
@@ -394,10 +434,10 @@
                     <button class="button"><i class="fas fa-download"></i> Manage</button>
                 </div>
             </div>
-            
+
             <div class="settings-section">
                 <h2><i class="fas fa-bell"></i> Notifications</h2>
-                
+
                 <div class="setting-item">
                     <div class="setting-info">
                         <div class="setting-title">Push Notifications</div>
@@ -408,7 +448,7 @@
                         <span class="slider"></span>
                     </label>
                 </div>
-                
+
                 <div class="setting-item">
                     <div class="setting-info">
                         <div class="setting-title">Email Updates</div>
@@ -420,10 +460,10 @@
                     </label>
                 </div>
             </div>
-            
+
             <div class="settings-section">
                 <h2><i class="fas fa-paint-brush"></i> Appearance</h2>
-                
+
                 <div class="setting-item">
                     <div class="setting-info">
                         <div class="setting-title">Theme</div>
@@ -435,7 +475,7 @@
                         <option>Auto</option>
                     </select>
                 </div>
-                
+
                 <div class="setting-item">
                     <div class="setting-info">
                         <div class="setting-title">Font Size</div>
@@ -448,10 +488,10 @@
                     </select>
                 </div>
             </div>
-            
+
             <div class="settings-section">
                 <h2><i class="fas fa-shield-alt"></i> Privacy & Data</h2>
-                
+
                 <div class="setting-item">
                     <div class="setting-info">
                         <div class="setting-title">Data Collection</div>
@@ -462,31 +502,32 @@
                         <span class="slider"></span>
                     </label>
                 </div>
-                
+
                 <div class="setting-item">
                     <div class="setting-info">
                         <div class="setting-title">Reset Password</div>
                         <div class="setting-desc">Change your account password</div>
                     </div>
-                    <button class="button secondary" id="resetPasswordBtn"><i class="fas fa-key"></i> Reset Password</button>
+                    <button class="button secondary" id="resetPasswordBtn"><i class="fas fa-key"></i> Reset
+                        Password</button>
                 </div>
-                
+
                 <div class="password-form" id="passwordForm">
                     <div class="form-group">
                         <label for="oldPassword">Current Password</label>
                         <input type="password" id="oldPassword" placeholder="Enter your current password">
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="newPassword">New Password</label>
                         <input type="password" id="newPassword" placeholder="Enter your new password">
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="confirmPassword">Confirm New Password</label>
                         <input type="password" id="confirmPassword" placeholder="Confirm your new password">
                     </div>
-                    
+
                     <div class="form-buttons">
                         <button class="button" id="savePasswordBtn">
                             <i class="fas fa-check"></i> Save Changes
@@ -498,82 +539,182 @@
                 </div>
             </div>
         </div>
+
+        <footer style="text-align:center; margin-top:40px;">
+            <a href="jnrdashboard.html">
+                <button class="button" id="saveSettingsBtn" style="
+                background: linear-gradient(135deg, #a855f7, #9333ea);
+                color: white;
+                padding: 14px 38px;
+                font-size: 1.2rem;
+                border: none;
+                border-radius: 12px;
+                box-shadow: 0 6px 18px rgba(168,85,247,0.15);
+                cursor: pointer;
+                font-weight: 600;
+                transition: all 0.3s;
+                margin-bottom: 20px;
+                animation: fadeInUp 0.8s;
+            ">
+                    <i class="fas fa-save" style="margin-right:10px;"></i> Save Settings
+                </button>
+            </a>"
+        </footer>
     </div>
 
     <script>
         // Simple animation for toggle switches
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const toggleSwitches = document.querySelectorAll('.toggle-switch input');
-            
+
             toggleSwitches.forEach(toggle => {
-                toggle.addEventListener('change', function() {
+                toggle.addEventListener('change', function () {
                     // Add a simple animation effect
                     const slider = this.nextElementSibling;
                     slider.style.transition = 'all 0.3s ease';
                 });
             });
-            
+
             // Add pulse animation to buttons on hover
             const buttons = document.querySelectorAll('.button');
             buttons.forEach(button => {
-                button.addEventListener('mouseenter', function() {
+                button.addEventListener('mouseenter', function () {
                     this.style.animation = 'pulse 0.5s';
                 });
-                
-                button.addEventListener('mouseleave', function() {
+
+                button.addEventListener('mouseleave', function () {
                     this.style.animation = '';
                 });
             });
-            
+
             // Password reset functionality
             const resetPasswordBtn = document.getElementById('resetPasswordBtn');
             const passwordForm = document.getElementById('passwordForm');
             const cancelPasswordBtn = document.getElementById('cancelPasswordBtn');
             const savePasswordBtn = document.getElementById('savePasswordBtn');
-            
-            resetPasswordBtn.addEventListener('click', function() {
+
+            resetPasswordBtn.addEventListener('click', function () {
                 passwordForm.style.display = 'block';
             });
-            
-            cancelPasswordBtn.addEventListener('click', function() {
+
+            cancelPasswordBtn.addEventListener('click', function () {
                 passwordForm.style.display = 'none';
                 // Clear form fields
                 document.getElementById('oldPassword').value = '';
                 document.getElementById('newPassword').value = '';
                 document.getElementById('confirmPassword').value = '';
             });
-            
-            savePasswordBtn.addEventListener('click', function() {
+
+            savePasswordBtn.addEventListener('click', function () {
                 const oldPassword = document.getElementById('oldPassword').value;
                 const newPassword = document.getElementById('newPassword').value;
                 const confirmPassword = document.getElementById('confirmPassword').value;
-                
+
                 // Simple validation
                 if (!oldPassword || !newPassword || !confirmPassword) {
                     alert('Please fill in all fields');
                     return;
                 }
-                
+
                 if (newPassword !== confirmPassword) {
                     alert('New passwords do not match');
                     return;
                 }
-                
+
                 if (newPassword.length < 6) {
                     alert('Password must be at least 6 characters long');
                     return;
                 }
-                
+
                 // Simulate password change
                 alert('Password changed successfully!');
                 passwordForm.style.display = 'none';
-                
+
                 // Clear form fields
                 document.getElementById('oldPassword').value = '';
                 document.getElementById('newPassword').value = '';
                 document.getElementById('confirmPassword').value = '';
             });
         });
+
+        // Hindi translations for key UI elements
+        const hindiTranslations = {
+            'Account Settings': 'खाता सेटिंग्स',
+            'Language Preference': 'भाषा पसंद',
+            'Choose your preferred language for content': 'सामग्री के लिए अपनी पसंदीदा भाषा चुनें',
+            'Offline Mode': 'ऑफलाइन मोड',
+            'Download content for offline access': 'ऑफलाइन उपयोग के लिए सामग्री डाउनलोड करें',
+            'Manage': 'प्रबंधित करें',
+            'Notifications': 'सूचनाएं',
+            'Push Notifications': 'पुश सूचनाएं',
+            'Get alerts for new content and achievements': 'नई सामग्री और उपलब्धियों के लिए अलर्ट प्राप्त करें',
+            'Email Updates': 'ईमेल अपडेट',
+            'Receive progress reports via email': 'ईमेल के माध्यम से प्रगति रिपोर्ट प्राप्त करें',
+            'Appearance': 'रूप',
+            'Theme': 'थीम',
+            'Choose light or dark mode': 'लाइट या डार्क मोड चुनें',
+            'Font Size': 'फ़ॉन्ट आकार',
+            'Adjust text size for better readability': 'बेहतर पठनीयता के लिए पाठ का आकार समायोजित करें',
+            'Privacy & Data': 'गोपनीयता और डेटा',
+            'Data Collection': 'डेटा संग्रह',
+            'Help us improve by sharing usage data': 'उपयोग डेटा साझा करके हमें सुधारने में मदद करें',
+            'Reset Password': 'पासवर्ड रीसेट करें',
+            'Change your account password': 'अपना खाता पासवर्ड बदलें',
+            'Current Password': 'वर्तमान पासवर्ड',
+            'Enter your current password': 'अपना वर्तमान पासवर्ड दर्ज करें',
+            'New Password': 'नया पासवर्ड',
+            'Enter your new password': 'अपना नया पासवर्ड दर्ज करें',
+            'Confirm New Password': 'नया पासवर्ड पुष्टि करें',
+            'Confirm your new password': 'अपना नया पासवर्ड पुष्टि करें',
+            'Save Changes': 'परिवर्तन सहेजें',
+            'Cancel': 'रद्द करें',
+            'Settings': 'सेटिंग्स',
+            'Customize your STEM learning experience': 'अपना STEM सीखने का अनुभव अनुकूलित करें'
+        };
+
+        // Function to switch language
+        function switchLanguage(lang) {
+            if (lang === 'hi') {
+                document.querySelector('h1').innerHTML = `<i class="fas fa-cog"></i> ${hindiTranslations['Settings']}`;
+                document.querySelector('header p').textContent = hindiTranslations['Customize your STEM learning experience'];
+                document.querySelectorAll('h2').forEach(h2 => {
+                    h2.childNodes[1].textContent = ' ' + (hindiTranslations[h2.textContent.trim()] || h2.textContent.trim());
+                });
+                document.querySelectorAll('.setting-title').forEach(el => {
+                    el.textContent = hindiTranslations[el.textContent.trim()] || el.textContent.trim();
+                });
+                document.querySelectorAll('.setting-desc').forEach(el => {
+                    el.textContent = hindiTranslations[el.textContent.trim()] || el.textContent.trim();
+                });
+                document.querySelectorAll('.button').forEach(el => {
+                    if (el.textContent.includes('Manage')) el.innerHTML = `<i class="fas fa-download"></i> ${hindiTranslations['Manage']}`;
+                    if (el.textContent.includes('Reset Password')) el.innerHTML = `<i class="fas fa-key"></i> ${hindiTranslations['Reset Password']}`;
+                    if (el.textContent.includes('Save Changes')) el.innerHTML = `<i class="fas fa-check"></i> ${hindiTranslations['Save Changes']}`;
+                    if (el.textContent.includes('Cancel')) el.innerHTML = `<i class="fas fa-times"></i> ${hindiTranslations['Cancel']}`;
+                });
+                document.querySelector('label[for="oldPassword"]').textContent = hindiTranslations['Current Password'];
+                document.getElementById('oldPassword').placeholder = hindiTranslations['Enter your current password'];
+                document.querySelector('label[for="newPassword"]').textContent = hindiTranslations['New Password'];
+                document.getElementById('newPassword').placeholder = hindiTranslations['Enter your new password'];
+                document.querySelector('label[for="confirmPassword"]').textContent = hindiTranslations['Confirm New Password'];
+                document.getElementById('confirmPassword').placeholder = hindiTranslations['Confirm your new password'];
+            } else {
+                location.reload(); // Reload to reset to English (or store original text for restoration)
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Language switcher
+            document.getElementById('languageSelect').addEventListener('change', function () {
+                switchLanguage(this.value);
+            });
+        });
+
+        document.getElementById('saveSettingsBtn').addEventListener('click', function () {
+            // Add your save logic here
+            alert('Settings saved!');
+        });
     </script>
 </body>
+
 </html>
