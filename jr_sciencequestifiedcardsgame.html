@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science Card Quest - 4 Player Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e9d5ff 0%, #a855f7 100%);
+            min-height: 100vh;
+            color: #1f2937;
+        }
+
+        .game-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .game-title {
+            font-size: 3rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+
+        .game-subtitle {
+            font-size: 1.2rem;
+            color: #f3e8ff;
+            margin-bottom: 20px;
+        }
+
+        .setup-screen {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .player-input {
+            margin: 15px 0;
+        }
+
+        .player-input input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            transition: border-color 0.3s;
+        }
+
+        .player-input input:focus {
+            outline: none;
+            border-color: #a855f7;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #a855f7, #7c3aed);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-top: 20px;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .game-board {
+            display: none;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .players-panel {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .player-card {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .player-card.active {
+            border-color: #a855f7;
+            background: linear-gradient(135deg, #faf5ff, #e9d5ff);
+            transform: scale(1.02);
+        }
+
+        .player-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .player-score {
+            color: #7c3aed;
+            font-weight: bold;
+        }
+
+        .cards-remaining {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .game-area {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .current-player {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #7c3aed;
+            margin-bottom: 20px;
+        }
+
+        .playing-card {
+            width: 120px;
+            height: 168px;
+            background: white;
+            border: 2px solid #374151;
+            border-radius: 12px;
+            margin: 20px auto;
+            position: relative;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .playing-card:hover {
+            transform: translateY(-5px) scale(1.05);
+        }
+
+        .card-corner {
+            position: absolute;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .card-corner.top-left {
+            top: 8px;
+            left: 8px;
+        }
+
+        .card-corner.bottom-right {
+            bottom: 8px;
+            right: 8px;
+            transform: rotate(180deg);
+        }
+
+        .card-suit-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 40px;
+        }
+
+        .red-suit {
+            color: #dc2626;
+        }
+
+        .black-suit {
+            color: #1f2937;
+        }
+
+        .question-panel {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid #a855f7;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #a855f7;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .feedback.correct {
+            background: #d1fae5;
+            color: #065f46;
+            border: 2px solid #10b981;
+        }
+
+        .feedback.incorrect {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 2px solid #ef4444;
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, #a855f7, #7c3aed);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: transform 0.2s;
+        }
+
+        .next-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .game-over {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .winner-announcement {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #7c3aed;
+            margin-bottom: 20px;
+        }
+
+        .final-scores {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .score-item:last-child {
+            border-bottom: none;
+        }
+
+        .play-again-btn {
+            background: linear-gradient(135deg, #a855f7, #7c3aed);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .play-again-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .game-board {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .game-title {
+                font-size: 2rem;
+            }
+            
+            .playing-card {
+                width: 100px;
+                height: 140px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <h1 class="game-title">🔬 Science Card Quest</h1>
+            <p class="game-subtitle">4-Player Scientific Challenge • NCERT Class 8 Science</p>
+        </div>
+
+        <!-- Setup Screen -->
+        <div id="setupScreen" class="setup-screen">
+            <h2 style="margin-bottom: 30px; color: #7c3aed;">Enter Player Names</h2>
+            <div class="player-input">
+                <input type="text" id="player1" placeholder="Player 1 Name" maxlength="20">
+            </div>
+            <div class="player-input">
+                <input type="text" id="player2" placeholder="Player 2 Name" maxlength="20">
+            </div>
+            <div class="player-input">
+                <input type="text" id="player3" placeholder="Player 3 Name" maxlength="20">
+            </div>
+            <div class="player-input">
+                <input type="text" id="player4" placeholder="Player 4 Name" maxlength="20">
+            </div>
+            <button class="start-btn" onclick="startGame()">🚀 Start Science Quest</button>
+        </div>
+
+        <!-- Game Board -->
+        <div id="gameBoard" class="game-board">
+            <div class="players-panel">
+                <h3 style="margin-bottom: 20px; color: #7c3aed; text-align: center;">Players</h3>
+                <div id="playersContainer"></div>
+            </div>
+
+            <div class="game-area">
+                <div class="current-player" id="currentPlayerDisplay"></div>
+                <div id="cardDisplay"></div>
+                <div id="questionPanel" class="question-panel" style="display: none;">
+                    <div class="question-text" id="questionText"></div>
+                    <input type="text" id="answerInput" class="answer-input" placeholder="Enter your answer...">
+                    <button class="submit-btn" onclick="submitAnswer()">Submit Answer</button>
+                    <div id="feedback" class="feedback" style="display: none;"></div>
+                    <button id="nextBtn" class="next-btn" onclick="nextTurn()" style="display: none;">Next Player</button>
+                </div>
+            </div>
+
+            <div class="players-panel">
+                <h3 style="margin-bottom: 20px; color: #7c3aed; text-align: center;">Game Stats</h3>
+                <div style="text-align: center;">
+                    <div style="margin-bottom: 15px;">
+                        <strong>Round:</strong> <span id="roundCounter">1</span>/10
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>Cards Left:</strong> <span id="cardsLeft">40</span>
+                    </div>
+                    <div>
+                        <strong>Current Turn:</strong> <span id="turnCounter">1</span>/4
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="gameOverScreen" class="game-over">
+            <div class="winner-announcement" id="winnerText"></div>
+            <div class="final-scores" id="finalScores"></div>
+            <button class="play-again-btn" onclick="resetGame()">🔬 Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        let players = [];
+        let currentPlayerIndex = 0;
+        let currentRound = 1;
+        let currentTurn = 1;
+        let gameQuestions = [];
+        let playerCards = [[], [], [], []];
+        let currentCard = null;
+        let currentQuestion = null;
+
+        // Card deck
+        const suits = ['♠', '♥', '♦', '♣'];
+        const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+        const cardPoints = {'2': 1, '3': 2, '4': 3, '5': 4, '6': 5, '7': 6, '8': 7, '9': 8, '10': 9, 'J': 10, 'Q': 11, 'K': 12, 'A': 13};
+
+        // NCERT Class 8 Science Questions Database
+        const questionBank = [
+            // Easy Questions (2-4) - Basic concepts
+            {difficulty: 1, question: "What is the basic unit of life?", answer: "cell"},
+            {difficulty: 1, question: "What gas do plants release during photosynthesis?", answer: "oxygen"},
+            {difficulty: 1, question: "What is the hardest natural substance?", answer: "diamond"},
+            {difficulty: 1, question: "How many bones are there in an adult human body?", answer: "206"},
+            {difficulty: 1, question: "What is the chemical symbol for water?", answer: "H2O"},
+            {difficulty: 1, question: "What organ pumps blood in the human body?", answer: "heart"},
+            {difficulty: 1, question: "What is the speed of light in vacuum? (in km/s)", answer: "300000"},
+            {difficulty: 1, question: "What gas makes up about 78% of Earth's atmosphere?", answer: "nitrogen"},
+            {difficulty: 1, question: "What is the chemical symbol for gold?", answer: "Au"},
+            {difficulty: 1, question: "How many chambers does a human heart have?", answer: "4"},
+            {difficulty: 1, question: "What is the smallest unit of matter?", answer: "atom"},
+            {difficulty: 1, question: "What is the process by which plants make food?", answer: "photosynthesis"},
+            {difficulty: 1, question: "What is the chemical formula for carbon dioxide?", answer: "CO2"},
+            {difficulty: 1, question: "What type of energy is stored in food?", answer: "chemical"},
+            {difficulty: 1, question: "What is the normal body temperature of humans in Celsius?", answer: "37"},
+
+            // Medium-Easy Questions (5-7) - Intermediate concepts
+            {difficulty: 2, question: "What is the SI unit of force?", answer: "newton"},
+            {difficulty: 2, question: "What is the pH of pure water?", answer: "7"},
+            {difficulty: 2, question: "How many pairs of chromosomes do humans have?", answer: "23"},
+            {difficulty: 2, question: "What is the chemical symbol for sodium?", answer: "Na"},
+            {difficulty: 2, question: "What is the acceleration due to gravity on Earth? (m/s²)", answer: "9.8"},
+            {difficulty: 2, question: "What is the powerhouse of the cell?", answer: "mitochondria"},
+            {difficulty: 2, question: "What is the chemical formula for methane?", answer: "CH4"},
+            {difficulty: 2, question: "What is the unit of electric current?", answer: "ampere"},
+            {difficulty: 2, question: "What is the boiling point of water in Celsius?", answer: "100"},
+            {difficulty: 2, question: "What is the freezing point of water in Celsius?", answer: "0"},
+            {difficulty: 2, question: "What gas is produced when metals react with acids?", answer: "hydrogen"},
+            {difficulty: 2, question: "What is the SI unit of energy?", answer: "joule"},
+            {difficulty: 2, question: "What is the chemical symbol for iron?", answer: "Fe"},
+            {difficulty: 2, question: "How many teeth does an adult human normally have?", answer: "32"},
+            {difficulty: 2, question: "What is the unit of frequency?", answer: "hertz"},
+
+            // Medium Questions (8-10) - Applied concepts
+            {difficulty: 3, question: "What is the formula for calculating force?", answer: "F=ma"},
+            {difficulty: 3, question: "What is the atomic number of carbon?", answer: "6"},
+            {difficulty: 3, question: "What is the speed of sound in air at room temperature? (m/s)", answer: "343"},
+            {difficulty: 3, question: "What is the chemical name of common salt?", answer: "sodium chloride"},
+            {difficulty: 3, question: "What is the unit of electrical resistance?", answer: "ohm"},
+            {difficulty: 3, question: "What is the molecular formula of glucose?", answer: "C6H12O6"},
+            {difficulty: 3, question: "What is the atomic mass of hydrogen?", answer: "1"},
+            {difficulty: 3, question: "What is the formula for calculating work done?", answer: "W=Fd"},
+            {difficulty: 3, question: "What is the chemical formula for ammonia?", answer: "NH3"},
+            {difficulty: 3, question: "What is the unit of power?", answer: "watt"},
+            {difficulty: 3, question: "What is the atomic number of oxygen?", answer: "8"},
+            {difficulty: 3, question: "What is the chemical formula for sulfuric acid?", answer: "H2SO4"},
+            {difficulty: 3, question: "What is the formula for calculating pressure?", answer: "P=F/A"},
+            {difficulty: 3, question: "What is the valency of carbon?", answer: "4"},
+            {difficulty: 3, question: "What is the unit of electric charge?", answer: "coulomb"},
+
+            // Hard Questions (J-K) - Complex concepts
+            {difficulty: 4, question: "What is Ohm's law formula?", answer: "V=IR"},
+            {difficulty: 4, question: "What is the molecular weight of water?", answer: "18"},
+            {difficulty: 4, question: "What is the chemical formula for hydrochloric acid?", answer: "HCl"},
+            {difficulty: 4, question: "What is the formula for kinetic energy?", answer: "KE=1/2mv²"},
+            {difficulty: 4, question: "What is the atomic number of sodium?", answer: "11"},
+            {difficulty: 4, question: "What is the chemical formula for calcium carbonate?", answer: "CaCO3"},
+            {difficulty: 4, question: "What is the formula for potential energy?", answer: "PE=mgh"},
+            {difficulty: 4, question: "What is the valency of aluminum?", answer: "3"},
+            {difficulty: 4, question: "What is the chemical formula for nitric acid?", answer: "HNO3"},
+            {difficulty: 4, question: "What is the atomic mass of carbon?", answer: "12"},
+            {difficulty: 4, question: "What is the formula for calculating density?", answer: "density=mass/volume"},
+            {difficulty: 4, question: "What is the chemical symbol for potassium?", answer: "K"},
+            {difficulty: 4, question: "What is the molecular formula of ethane?", answer: "C2H6"},
+            {difficulty: 4, question: "What is the atomic number of chlorine?", answer: "17"},
+            {difficulty: 4, question: "What is the chemical formula for sodium hydroxide?", answer: "NaOH"},
+
+            // Very Hard Questions (Ace) - Advanced concepts
+            {difficulty: 5, question: "What is Avogadro's number?", answer: "6.022×10²³"},
+            {difficulty: 5, question: "What is the electronic configuration of neon?", answer: "2,8"},
+            {difficulty: 5, question: "What is the molecular formula of benzene?", answer: "C6H6"},
+            {difficulty: 5, question: "What is the atomic mass of chlorine?", answer: "35.5"},
+            {difficulty: 5, question: "What is the chemical formula for aluminum oxide?", answer: "Al2O3"},
+            {difficulty: 5, question: "What is the valency of phosphorus in phosphoric acid?", answer: "5"},
+            {difficulty: 5, question: "What is the molecular weight of carbon dioxide?", answer: "44"},
+            {difficulty: 5, question: "What is the electronic configuration of magnesium?", answer: "2,8,2"},
+            {difficulty: 5, question: "What is the chemical formula for magnesium sulfate?", answer: "MgSO4"},
+            {difficulty: 5, question: "What is the atomic number of phosphorus?", answer: "15"},
+            {difficulty: 5, question: "What is the molecular formula of acetic acid?", answer: "CH3COOH"},
+            {difficulty: 5, question: "What is the valency of sulfur in sulfur dioxide?", answer: "4"},
+            {difficulty: 5, question: "What is the atomic mass of oxygen?", answer: "16"},
+            {difficulty: 5, question: "What is the chemical formula for copper sulfate?", answer: "CuSO4"},
+            {difficulty: 5, question: "What is the electronic configuration of aluminum?", answer: "2,8,3"},
+
+            // Additional Biology Questions
+            {difficulty: 1, question: "What is the largest organ in the human body?", answer: "skin"},
+            {difficulty: 1, question: "How many lungs do humans have?", answer: "2"},
+            {difficulty: 1, question: "What is the main function of red blood cells?", answer: "carry oxygen"},
+            {difficulty: 2, question: "What is the scientific name for humans?", answer: "Homo sapiens"},
+            {difficulty: 2, question: "What is the green pigment in plants called?", answer: "chlorophyll"},
+            {difficulty: 2, question: "How many kidneys do humans normally have?", answer: "2"},
+            {difficulty: 3, question: "What is the process of cell division called?", answer: "mitosis"},
+            {difficulty: 3, question: "What is the liquid part of blood called?", answer: "plasma"},
+            {difficulty: 3, question: "What organelle controls cell activities?", answer: "nucleus"},
+            {difficulty: 4, question: "What is the scientific term for programmed cell death?", answer: "apoptosis"},
+            {difficulty: 4, question: "What is the hormone that regulates blood sugar?", answer: "insulin"},
+            {difficulty: 5, question: "What is the genetic material in most organisms?", answer: "DNA"},
+
+            // Additional Physics Questions
+            {difficulty: 1, question: "What is the unit of length in SI system?", answer: "meter"},
+            {difficulty: 1, question: "What happens to ice when heated?", answer: "melts"},
+            {difficulty: 2, question: "What is the unit of mass in SI system?", answer: "kilogram"},
+            {difficulty: 2, question: "What type of energy does a moving object have?", answer: "kinetic"},
+            {difficulty: 3, question: "What is the formula for calculating speed?", answer: "speed=distance/time"},
+            {difficulty: 3, question: "What is the unit of temperature in SI system?", answer: "kelvin"},
+            {difficulty: 4, question: "What is Newton's first law of motion also called?", answer: "law of inertia"},
+            {difficulty: 4, question: "What is the formula for calculating momentum?", answer: "p=mv"},
+            {difficulty: 5, question: "What is the value of universal gravitational constant G?", answer: "6.67×10⁻¹¹"},
+
+            // Additional Chemistry Questions
+            {difficulty: 1, question: "What is the chemical symbol for helium?", answer: "He"},
+            {difficulty: 1, question: "What is rust chemically?", answer: "iron oxide"},
+            {difficulty: 2, question: "What is the chemical symbol for silver?", answer: "Ag"},
+            {difficulty: 2, question: "What type of bond is formed by sharing electrons?", answer: "covalent"},
+            {difficulty: 3, question: "What is the chemical formula for ozone?", answer: "O3"},
+            {difficulty: 3, question: "What is the process of a solid changing directly to gas?", answer: "sublimation"},
+            {difficulty: 4, question: "What is the chemical formula for baking soda?", answer: "NaHCO3"},
+            {difficulty: 4, question: "What is the atomic number of helium?", answer: "2"},
+            {difficulty: 5, question: "What is the molecular formula of ethanol?", answer: "C2H5OH"},
+
+            // More varied questions to reach 100+
+            {difficulty: 1, question: "What do we call animals that eat only plants?", answer: "herbivores"},
+            {difficulty: 1, question: "What is the center of an atom called?", answer: "nucleus"},
+            {difficulty: 1, question: "What gas do we breathe in?", answer: "oxygen"},
+            {difficulty: 2, question: "What is the study of living things called?", answer: "biology"},
+            {difficulty: 2, question: "What is the smallest bone in the human body?", answer: "stapes"},
+            {difficulty: 2, question: "What is the chemical symbol for copper?", answer: "Cu"},
+            {difficulty: 3, question: "What is the process by which water changes to vapor?", answer: "evaporation"},
+            {difficulty: 3, question: "What is the unit of electric potential?", answer: "volt"},
+            {difficulty: 3, question: "What is the chemical formula for table salt?", answer: "NaCl"},
+            {difficulty: 4, question: "What is the law of conservation of energy?", answer: "energy cannot be created or destroyed"},
+            {difficulty: 4, question: "What is the chemical formula for washing soda?", answer: "Na2CO3"},
+            {difficulty: 4, question: "What is the atomic number of nitrogen?", answer: "7"},
+            {difficulty: 5, question: "What is the molecular formula of propane?", answer: "C3H8"},
+            {difficulty: 5, question: "What is the electronic configuration of carbon?", answer: "2,4"},
+            {difficulty: 5, question: "What is the chemical formula for calcium hydroxide?", answer: "Ca(OH)2"}
+        ];
+
+        function startGame() {
+            // Get player names
+            const playerNames = [
+                document.getElementById('player1').value || 'Player 1',
+                document.getElementById('player2').value || 'Player 2',
+                document.getElementById('player3').value || 'Player 3',
+                document.getElementById('player4').value || 'Player 4'
+            ];
+
+            // Initialize players
+            players = playerNames.map(name => ({
+                name: name,
+                score: 0,
+                cardsPlayed: 0
+            }));
+
+            // Create and shuffle deck
+            const deck = createDeck();
+            shuffleDeck(deck);
+
+            // Deal cards to players
+            dealCards(deck);
+
+            // Shuffle questions
+            gameQuestions = [...questionBank];
+            shuffleArray(gameQuestions);
+
+            // Show game board
+            document.getElementById('setupScreen').style.display = 'none';
+            document.getElementById('gameBoard').style.display = 'grid';
+
+            // Initialize UI
+            updatePlayersDisplay();
+            updateGameStats();
+            showCurrentPlayerTurn();
+        }
+
+        function createDeck() {
+            const deck = [];
+            for (let suit of suits) {
+                for (let value of values) {
+                    deck.push({ suit, value });
+                }
+            }
+            return deck;
+        }
+
+        function shuffleDeck(deck) {
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function dealCards(deck) {
+            let cardIndex = 0;
+            for (let round = 0; round < 10; round++) {
+                for (let player = 0; player < 4; player++) {
+                    if (!playerCards[player]) playerCards[player] = [];
+                    playerCards[player].push(deck[cardIndex++]);
+                }
+            }
+        }
+
+        function updatePlayersDisplay() {
+            const container = document.getElementById('playersContainer');
+            container.innerHTML = '';
+
+            players.forEach((player, index) => {
+                const playerDiv = document.createElement('div');
+                playerDiv.className = `player-card ${index === currentPlayerIndex ? 'active' : ''}`;
+                playerDiv.innerHTML = `
+                    <div class="player-name">${player.name}</div>
+                    <div class="player-score">Score: ${player.score} points</div>
+                    <div class="cards-remaining">Cards: ${10 - player.cardsPlayed}/10</div>
+                `;
+                container.appendChild(playerDiv);
+            });
+        }
+
+        function updateGameStats() {
+            document.getElementById('roundCounter').textContent = currentRound;
+            document.getElementById('cardsLeft').textContent = 40 - ((currentRound - 1) * 4 + currentTurn - 1);
+            document.getElementById('turnCounter').textContent = currentTurn;
+        }
+
+        function showCurrentPlayerTurn() {
+            const currentPlayer = players[currentPlayerIndex];
+            document.getElementById('currentPlayerDisplay').textContent = `${currentPlayer.name}'s Turn`;
+
+            // Get current card for this player
+            currentCard = playerCards[currentPlayerIndex][currentRound - 1];
+            
+            // Display the card
+            displayCard(currentCard);
+
+            // Hide question panel initially
+            document.getElementById('questionPanel').style.display = 'none';
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('answerInput').value = '';
+        }
+
+        function displayCard(card) {
+            const cardDisplay = document.getElementById('cardDisplay');
+            const isRed = card.suit === '♥' || card.suit === '♦';
+            
+            cardDisplay.innerHTML = `
+                <div class="playing-card" onclick="selectCard()">
+                    <div class="card-corner top-left ${isRed ? 'red-suit' : 'black-suit'}">
+                        <div>${card.value}</div>
+                        <div>${card.suit}</div>
+                    </div>
+                    <div class="card-suit-center ${isRed ? 'red-suit' : 'black-suit'}">
+                        ${card.suit}
+                    </div>
+                    <div class="card-corner bottom-right ${isRed ? 'red-suit' : 'black-suit'}">
+                        <div>${card.value}</div>
+                        <div>${card.suit}</div>
+                    </div>
+                </div>
+                <p style="margin-top: 15px; font-weight: bold; color: #7c3aed;">
+                    Click the card to reveal your science question!
+                </p>
+            `;
+        }
+
+        function selectCard() {
+            // Get question based on card difficulty
+            const cardValue = currentCard.value;
+            let difficulty;
+            
+            if (['2', '3', '4'].includes(cardValue)) difficulty = 1;
+            else if (['5', '6', '7'].includes(cardValue)) difficulty = 2;
+            else if (['8', '9', '10'].includes(cardValue)) difficulty = 3;
+            else if (['J', 'Q', 'K'].includes(cardValue)) difficulty = 4;
+            else if (cardValue === 'A') difficulty = 5;
+
+            // Find a question of appropriate difficulty
+            const availableQuestions = gameQuestions.filter(q => q.difficulty === difficulty);
+            if (availableQuestions.length === 0) {
+                // Fallback to any question if no questions of exact difficulty
+                currentQuestion = gameQuestions[Math.floor(Math.random() * gameQuestions.length)];
+            } else {
+                currentQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+            }
+
+            // Show question
+            document.getElementById('questionText').textContent = currentQuestion.question;
+            document.getElementById('questionPanel').style.display = 'block';
+            document.getElementById('answerInput').focus();
+        }
+
+        function submitAnswer() {
+            const userAnswer = document.getElementById('answerInput').value.trim();
+            const correctAnswer = currentQuestion.answer.toString();
+            const feedback = document.getElementById('feedback');
+            
+            if (userAnswer === '') {
+                alert('Please enter an answer!');
+                return;
+            }
+
+            const isCorrect = userAnswer.toLowerCase() === correctAnswer.toLowerCase() || 
+                            parseFloat(userAnswer) === parseFloat(correctAnswer);
+
+            if (isCorrect) {
+                const points = cardPoints[currentCard.value];
+                players[currentPlayerIndex].score += points;
+                feedback.className = 'feedback correct';
+                feedback.textContent = `🎉 Correct! You earned ${points} points!`;
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `❌ Incorrect. The correct answer was: ${correctAnswer}`;
+            }
+
+            feedback.style.display = 'block';
+            document.getElementById('nextBtn').style.display = 'block';
+            document.querySelector('.submit-btn').style.display = 'none';
+            document.getElementById('answerInput').disabled = true;
+
+            // Update player stats
+            players[currentPlayerIndex].cardsPlayed++;
+            updatePlayersDisplay();
+        }
+
+        function nextTurn() {
+            // Move to next player
+            currentPlayerIndex = (currentPlayerIndex + 1) % 4;
+            currentTurn++;
+
+            // Check if round is complete
+            if (currentTurn > 4) {
+                currentRound++;
+                currentTurn = 1;
+                currentPlayerIndex = 0;
+            }
+
+            // Check if game is over
+            if (currentRound > 10) {
+                endGame();
+                return;
+            }
+
+            // Reset UI for next turn
+            document.querySelector('.submit-btn').style.display = 'block';
+            document.getElementById('answerInput').disabled = false;
+            
+            updateGameStats();
+            updatePlayersDisplay();
+            showCurrentPlayerTurn();
+        }
+
+        function endGame() {
+            // Hide game board
+            document.getElementById('gameBoard').style.display = 'none';
+
+            // Sort players by score
+            const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
+            const winner = sortedPlayers[0];
+
+            // Show winner
+            document.getElementById('winnerText').textContent = `🏆 ${winner.name} Wins!`;
+
+            // Show final scores
+            const scoresContainer = document.getElementById('finalScores');
+            scoresContainer.innerHTML = '<h3 style="margin-bottom: 15px; color: #7c3aed;">Final Scores</h3>';
+            
+            sortedPlayers.forEach((player, index) => {
+                const scoreItem = document.createElement('div');
+                scoreItem.className = 'score-item';
+                scoreItem.innerHTML = `
+                    <span>${index + 1}. ${player.name}</span>
+                    <span><strong>${player.score} points</strong></span>
+                `;
+                scoresContainer.appendChild(scoreItem);
+            });
+
+            // Show game over screen
+            document.getElementById('gameOverScreen').style.display = 'block';
+        }
+
+        function resetGame() {
+            // Reset all game state
+            players = [];
+            currentPlayerIndex = 0;
+            currentRound = 1;
+            currentTurn = 1;
+            gameQuestions = [];
+            playerCards = [[], [], [], []];
+            currentCard = null;
+            currentQuestion = null;
+
+            // Reset UI
+            document.getElementById('gameOverScreen').style.display = 'none';
+            document.getElementById('setupScreen').style.display = 'block';
+            
+            // Clear input fields
+            document.getElementById('player1').value = '';
+            document.getElementById('player2').value = '';
+            document.getElementById('player3').value = '';
+            document.getElementById('player4').value = '';
+        }
+
+        // Allow Enter key to submit answers
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('answerInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !document.getElementById('answerInput').disabled) {
+                    submitAnswer();
+                }
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'977615cc170a596c',t:'MTc1NjU3NTc1MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
