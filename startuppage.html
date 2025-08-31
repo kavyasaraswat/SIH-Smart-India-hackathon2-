@@ -66,13 +66,18 @@
     <div class="absolute top-6 right-6 flex gap-3">
         <button
             class="btn-hover bg-white bg-opacity-20 hover:bg-white hover:bg-opacity-30 text-white px-4 py-2 rounded-lg font-medium"
-            onclick="delayedRedirect('loginpage.html')">
+            onclick="showSignIn(); delayedRedirect('loginpage.html')">
             Sign In
         </button>
         <button
             class="btn-hover bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium shadow-lg"
-            onclick="delayedRedirect('signup.html')">
+            onclick="showSignUp(); delayedRedirect('signup.html')">
             Sign Up
+        </button>
+        <button
+            class="btn-hover bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium shadow-lg"
+            onclick="showTeachersPortal(); delayedRedirect('teachersdash.html')">
+            Teacher's Portal
         </button>
     </div>
 
@@ -87,12 +92,12 @@
         <div class="flex gap-4 justify-center flex-wrap">
             <button
                 class="btn-hover bg-purple-700 hover:bg-purple-800 px-6 py-3 rounded-xl text-lg shadow-lg font-medium"
-                onclick="delayedRedirect('jnrdashboard.html')">
+                onclick="startQuest(); delayedRedirect('jnrdashboard.html')">
                 Start Your Quest
             </button>
             <button
                 class="btn-hover bg-black bg-opacity-40 hover:bg-black hover:bg-opacity-60 px-6 py-3 rounded-xl text-lg font-medium"
-                onclick="delayedRedirect('exploresub.html')">
+                onclick="exploreSubjects(); delayedRedirect('exploresub.html')">
                 Explore Subjects
             </button>
         </div>
@@ -174,6 +179,10 @@
             showModal("Join the Questify community! Create your account and start your STEM adventure today.");
         }
         
+        function showTeachersPortal() {
+            showModal("Access tools and analytics to track student progress in the Teacher's Portal!");
+        }
+        
         function showModal(message) {
             document.getElementById('modalText').textContent = message;
             document.getElementById('successModal').classList.remove('hidden');
@@ -235,13 +244,5 @@
             window.location.href = 'loding.html?redirect=' + encodeURIComponent(target);
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'976bcd8a723659de',t:'MTc1NjQ2NzkzNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
-<script>
-    const params = new URLSearchParams(window.location.search);
-    const redirectUrl = params.get('redirect') || 'startuppage.html';
-    setTimeout(function() {
-        window.location.href = redirectUrl;
-    }, 2000);
-</script>
 </body>
 </html>
