@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Junior Questify Dashboard - Learning Platform</title>
+    <title>Senior Questify Dashboard - Learning Platform</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -12,7 +12,7 @@
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+       
         :root {
             --primary: #a855f7;
             --secondary: #e9d5ff;
@@ -23,19 +23,19 @@
             --math: #a855f7;
             --science: #9333ea;
         }
-        
+       
         body {
             background: linear-gradient(135deg, #e9d5ff 0%, #a855f7 100%);
             color: #4a3b76;
             min-height: 100vh;
             padding: 20px;
         }
-        
+       
         .container {
             max-width: 1200px;
             margin: 0 auto;
         }
-        
+       
         /* Header Styles */
         header {
             display: flex;
@@ -49,35 +49,35 @@
             border: 1px solid rgba(168, 85, 247, 0.1);
             animation: slideInDown 0.8s ease-out;
         }
-        
+       
         .logo {
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        
+       
         .logo img {
             width: 40px;
             height: 40px;
         }
-        
+       
         .logo h1 {
             font-size: 1.5rem;
             color: var(--dark);
             font-weight: 700;
         }
-        
+       
         .user-info {
             display: flex;
             align-items: center;
             gap: 15px;
             position: relative;
         }
-        
+       
         .notification-menu {
             position: relative;
         }
-        
+       
         .notification-btn {
             background: var(--light);
             border: none;
@@ -93,13 +93,13 @@
             transition: all 0.3s ease;
             position: relative;
         }
-        
+       
         .notification-btn:hover {
             background: var(--primary);
             color: white;
             transform: scale(1.1);
         }
-        
+       
         .notification-badge {
             position: absolute;
             top: -5px;
@@ -114,7 +114,7 @@
             align-items: center;
             justify-content: center;
         }
-        
+       
         .notification-dropdown {
             display: none;
             position: absolute;
@@ -129,7 +129,7 @@
             margin-top: 10px;
             animation: fadeIn 0.3s ease;
         }
-        
+       
         .notification-header {
             padding: 15px 20px;
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
@@ -137,17 +137,17 @@
             justify-content: space-between;
             align-items: center;
         }
-        
+       
         .notification-header h3 {
             color: var(--dark);
             font-size: 1.1rem;
         }
-        
+       
         .notification-list {
             max-height: 300px;
             overflow-y: auto;
         }
-        
+       
         .notification-item {
             padding: 15px 20px;
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
@@ -156,53 +156,53 @@
             gap: 12px;
             transition: all 0.3s ease;
         }
-        
+       
         .notification-item:hover {
             background-color: #f9f7ff;
         }
-        
+       
         .notification-item i {
             color: var(--primary);
             margin-top: 3px;
         }
-        
+       
         .notification-content {
             flex: 1;
         }
-        
+       
         .notification-title {
             font-weight: 500;
             margin-bottom: 5px;
             color: var(--dark);
         }
-        
+       
         .notification-time {
             font-size: 0.8rem;
             color: var(--gray);
         }
-        
+       
         .notification-footer {
             padding: 15px 20px;
             text-align: center;
             border-top: 1px solid rgba(0, 0, 0, 0.05);
         }
-        
+       
         .notification-footer a {
             color: var(--primary);
             text-decoration: none;
             font-weight: 500;
             transition: all 0.3s ease;
         }
-        
+       
         .notification-footer a:hover {
             color: var(--secondary);
         }
-        
+       
         .profile-menu {
             position: relative;
             display: inline-block;
         }
-        
+       
         .profile-btn {
             display: flex;
             align-items: center;
@@ -217,12 +217,12 @@
             box-shadow: 0 3px 8px rgba(168, 85, 247, 0.2);
             transition: all 0.3s ease;
         }
-        
+       
         .profile-btn:hover {
             box-shadow: 0 5px 15px rgba(168, 85, 247, 0.3);
             transform: translateY(-2px);
         }
-        
+       
         .profile-btn img {
             width: 35px;
             height: 35px;
@@ -230,7 +230,7 @@
             object-fit: cover;
             border: 2px solid white;
         }
-        
+       
         .dropdown-content {
             display: none;
             position: absolute;
@@ -245,29 +245,29 @@
             margin-top: 10px;
             animation: fadeIn 0.3s ease;
         }
-        
+       
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
+       
         @keyframes slideInDown {
-            from { 
+            from {
                 opacity: 0;
                 transform: translateY(-20px);
             }
-            to { 
+            to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-        
+       
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
-        
+       
         .dropdown-content a {
             color: var(--text-dark);
             padding: 15px 20px;
@@ -278,47 +278,47 @@
             transition: all 0.3s ease;
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
-        
+       
         .dropdown-content a:last-child {
             border-bottom: none;
         }
-        
+       
         .dropdown-content a:hover {
             background: linear-gradient(to right, var(--primary), var(--accent));
             color: white;
         }
-        
+       
         .dropdown-content a:hover i {
             color: white;
         }
-        
+       
         .dropdown-content i {
             width: 20px;
             text-align: center;
             color: var(--primary);
             transition: all 0.3s ease;
         }
-        
+       
         .sign-out {
             color: #ef4444 !important;
         }
-        
+       
         .sign-out i {
             color: #ef4444 !important;
         }
-        
+       
         .sign-out:hover {
             background: #fee2e2 !important;
             color: #ef4444 !important;
         }
-        
+       
         /* Dashboard Layout */
         .dashboard {
             display: grid;
             grid-template-columns: 1fr 3fr;
             gap: 20px;
         }
-        
+       
         /* Sidebar Styles */
         .sidebar {
             background-color: rgba(255, 255, 255, 0.95);
@@ -328,27 +328,27 @@
             border: 1px solid rgba(168, 85, 247, 0.1);
             animation: fadeInLeft 0.8s ease-out;
         }
-        
+       
         @keyframes fadeInLeft {
-            from { 
+            from {
                 opacity: 0;
                 transform: translateX(-20px);
             }
-            to { 
+            to {
                 opacity: 1;
                 transform: translateX(0);
             }
         }
-        
+       
         .sidebar-menu {
             list-style: none;
             margin-top: 20px;
         }
-        
+       
         .sidebar-menu li {
             margin-bottom: 15px;
         }
-        
+       
         .sidebar-menu a {
             display: flex;
             align-items: center;
@@ -360,25 +360,25 @@
             border-radius: 8px;
             transition: all 0.3s ease;
         }
-        
+       
         .sidebar-menu a:hover, .sidebar-menu a.active {
             background: linear-gradient(to right, var(--primary), var(--accent));
             color: white;
             box-shadow: 0 3px 8px rgba(168, 85, 247, 0.2);
         }
-        
+       
         .sidebar-menu i {
             width: 20px;
             text-align: center;
         }
-        
+       
         /* Main Content Styles */
         .main-content {
             display: flex;
             flex-direction: column;
             gap: 20px;
         }
-        
+       
         /* Welcome Banner */
         .welcome-banner {
             background: linear-gradient(to right, var(--primary), var(--accent));
@@ -388,22 +388,22 @@
             box-shadow: 0 5px 15px rgba(168, 85, 247, 0.2);
             animation: fadeInRight 0.8s ease-out;
         }
-        
+       
         @keyframes fadeInRight {
-            from { 
+            from {
                 opacity: 0;
                 transform: translateX(20px);
             }
-            to { 
+            to {
                 opacity: 1;
                 transform: translateX(0);
             }
         }
-        
+       
         .welcome-banner h2 {
             margin-bottom: 10px;
         }
-        
+       
         /* Progress Section */
         .progress-section {
             background-color: rgba(255, 255, 255, 0.95);
@@ -413,31 +413,31 @@
             border: 1px solid rgba(168, 85, 247, 0.1);
             animation: fadeInUp 0.8s ease-out;
         }
-        
+       
         @keyframes fadeInUp {
-            from { 
+            from {
                 opacity: 0;
                 transform: translateY(20px);
             }
-            to { 
+            to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-        
+       
         .progress-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
         }
-        
+       
         .progress-cards {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 15px;
         }
-        
+       
         .progress-card {
             background: white;
             padding: 15px;
@@ -446,17 +446,17 @@
             border: 1px solid rgba(168, 85, 247, 0.05);
             transition: all 0.3s ease;
         }
-        
+       
         .progress-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 20px rgba(168, 85, 247, 0.2);
         }
-        
+       
         .progress-card h4 {
             color: var(--gray);
             margin-bottom: 10px;
         }
-        
+       
         .progress-bar {
             height: 10px;
             background-color: #eee;
@@ -464,30 +464,45 @@
             overflow: hidden;
             margin-bottom: 10px;
         }
-        
+       
         .progress-fill {
             height: 100%;
             border-radius: 5px;
             transition: width 1.5s ease-in-out;
         }
-        
-        .progress-math .progress-fill {
+       
+        .progress-physics .progress-fill {
             background: linear-gradient(to right, var(--math), var(--secondary));
             width: 65%;
         }
-        
-        .progress-science .progress-fill {
+       
+        .progress-chemistry .progress-fill {
             background: linear-gradient(to right, var(--science), var(--primary));
             width: 45%;
         }
-        
+       
+        .progress-biology .progress-fill {
+            background: linear-gradient(to right, var(--math), var(--secondary));
+            width: 55%;
+        }
+       
+        .progress-mathematics .progress-fill {
+            background: linear-gradient(to right, var(--science), var(--primary));
+            width: 70%;
+        }
+       
+        .progress-computer-science .progress-fill {
+            background: linear-gradient(to right, var(--math), var(--secondary));
+            width: 60%;
+        }
+       
         /* Subjects Grid */
         .subjects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 20px;
         }
-        
+       
         .subject-card {
             background-color: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
@@ -497,12 +512,12 @@
             border: 1px solid rgba(168, 85, 247, 0.1);
             animation: fadeInUp 0.8s ease-out;
         }
-        
+       
         .subject-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 20px rgba(168, 85, 247, 0.25);
         }
-        
+       
         .subject-header {
             padding: 15px;
             color: white;
@@ -512,7 +527,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+       
         .subject-header::after {
             content: '';
             position: absolute;
@@ -524,30 +539,42 @@
             transform: rotate(45deg);
             animation: shine 5s infinite;
         }
-        
+       
         @keyframes shine {
             0% { left: -100%; }
             20% { left: 100%; }
             100% { left: 100%; }
         }
-        
-        .subject-math .subject-header {
+       
+        .subject-physics .subject-header {
             background: linear-gradient(to right, var(--math), var(--secondary));
         }
-        
-        .subject-science .subject-header {
+       
+        .subject-chemistry .subject-header {
             background: linear-gradient(to right, var(--science), var(--primary));
         }
-        
+       
+        .subject-biology .subject-header {
+            background: linear-gradient(to right, var(--math), var(--secondary));
+        }
+       
+        .subject-mathematics .subject-header {
+            background: linear-gradient(to right, var(--science), var(--primary));
+        }
+       
+        .subject-computer-science .subject-header {
+            background: linear-gradient(to right, var(--math), var(--secondary));
+        }
+       
         .subject-content {
             padding: 15px;
         }
-        
+       
         .subject-content p {
             margin-bottom: 15px;
             color: var(--gray);
         }
-        
+       
         .btn {
             display: inline-block;
             padding: 10px 20px;
@@ -562,21 +589,21 @@
             box-shadow: 0 3px 8px rgba(168, 85, 247, 0.2);
             animation: pulse 2s infinite;
         }
-        
+       
         .btn:hover {
             background: linear-gradient(to right, var(--accent), var(--primary));
             box-shadow: 0 5px 12px rgba(168, 85, 247, 0.3);
             transform: translateY(-2px);
             animation: none;
         }
-        
-        /* Junior Section Styling */
+       
+        /* Senior Section Styling */
         .junior-section {
             text-align: center;
             margin-bottom: 20px;
             animation: pulse 2s infinite;
         }
-        
+       
         .junior-badge {
             display: inline-block;
             background: linear-gradient(to right, #d8b4fe, #c084fc);
@@ -590,7 +617,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+       
         .junior-badge::after {
             content: '';
             position: absolute;
@@ -602,46 +629,46 @@
             transform: rotate(45deg);
             animation: shine 6s infinite;
         }
-        
+       
         /* Responsive Design */
         @media (max-width: 768px) {
             .dashboard {
                 grid-template-columns: 1fr;
             }
-            
+           
             .sidebar {
                 order: 2;
             }
-            
+           
             .main-content {
                 order: 1;
             }
-            
+           
             header {
                 flex-direction: column;
                 text-align: center;
                 gap: 15px;
             }
-            
+           
             .user-info {
                 justify-content: center;
             }
-            
+           
             .progress-cards, .subjects-grid {
                 grid-template-columns: 1fr;
             }
-            
+           
             .notification-dropdown {
                 width: 300px;
                 right: -50px;
             }
-            
+           
             .junior-badge {
                 font-size: 1.2rem;
                 padding: 10px 20px;
             }
         }
-        
+       
         /* Additional decorative elements */
         .decoration {
             position: fixed;
@@ -652,12 +679,12 @@
             filter: blur(40px);
             z-index: -1;
         }
-        
+       
         .decoration-1 {
             top: 5%;
             left: 5%;
         }
-        
+       
         .decoration-2 {
             bottom: 5%;
             right: 5%;
@@ -668,13 +695,13 @@
     <!-- Background decorations -->
     <div class="decoration decoration-1"></div>
     <div class="decoration decoration-2"></div>
-    
+   
     <div class="container">
         <!-- Header -->
         <header>
             <div class="logo">
                 <i class="fas fa-robot fa-2x" style="color: var(--primary);"></i>
-                <h1>Junior Questify Dashboard</h1>
+                <h1>Senior Questify Dashboard</h1>
             </div>
             <div class="user-info">
                 <!-- Notification Dropdown Menu -->
@@ -716,7 +743,7 @@
                         </div>
                     </div>
                 </div>
-                
+               
                 <!-- Profile Dropdown Menu -->
                 <div class="profile-menu">
                     <button class="profile-btn">
@@ -724,7 +751,7 @@
                         Rohan Singh
                     </button>
                     <div class="dropdown-content">
-                        <a href="profile.html">
+                        <a href="profilesr.html">
                             <i class="fas fa-user"></i>
                             View Profile
                         </a>
@@ -732,10 +759,10 @@
                             <i class="fas fa-cog"></i>
                             Account Settings
                         </a>
-                        <!-- <a href="#">
+                        <a href="#">
                             <i class="fas fa-question-circle"></i>
                             Help & Support
-                        </a> -->
+                        </a>
                         <a href="loginpage.html" class="sign-out">
                             <i class="fas fa-sign-out-alt"></i>
                             Sign Out
@@ -744,27 +771,29 @@
                 </div>
             </div>
         </header>
-        
+       
         <!-- Dashboard -->
         <div class="dashboard">
             <!-- Sidebar -->
             <div class="sidebar">
                 <div class="junior-section">
                     <div class="junior-badge">
-                        <i class="fas fa-star"></i> JUNIOR EXPLORER <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i> SENIOR EXPLORER <i class="fas fa-star"></i>
                     </div>
                 </div>
-                
+               
                 <ul class="sidebar-menu">
-                    <li><a href="jnrdashboard.html" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
-                    <li><a href="loading2.html"><i class="fas fa-gamepad"></i> Quests & Games</a></li>
+                    <li><a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="#"><i class="fas fa-gamepad"></i> Quests & Games</a></li>
                     <li><a href="achievement.html"><i class="fas fa-trophy"></i> Achievements</a></li>
+                    <li><a href="#"><i class="fas fa-medal"></i> Contests</a></li>
+                    <li><a href="#"><i class="fas fa-ranking-star"></i> Leaderboard</a></li>
                     <li><a href="progress.html"><i class="fas fa-chart-line"></i> Progress</a></li>
                     <li><a href="#"><i class="fas fa-download"></i> Offline Content</a></li>
                     <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
                 </ul>
             </div>
-            
+           
             <!-- Main Content -->
             <div class="main-content">
                 <!-- Welcome Banner -->
@@ -772,7 +801,7 @@
                     <h2>Welcome back, Rohan!</h2>
                     <p>You've earned 350 points this week. Keep learning to unlock new achievements!</p>
                 </div>
-                
+               
                 <!-- Progress Section -->
                 <div class="progress-section">
                     <div class="progress-header">
@@ -780,44 +809,95 @@
                         <a href="#" class="btn">View Details</a>
                     </div>
                     <div class="progress-cards">
-                        <div class="progress-card progress-math">
-                            <h4>Mathematics</h4>
-                            <div class="progress-bar">
-                                <div class="progress-fill"></div>
-                            </div>
-                            <p>65% Complete | 12/20 Lessons</p>
+                        <div class="progress-card progress-physics">
+                            <h4>Physics</h4>
+                            <tiens>65% Complete | 12/20 Lessons</p>
                         </div>
-                        <div class="progress-card progress-science">
-                            <h4>Science</h4>
+                        <div class="progress-card progress-chemistry">
+                            <h4>Chemistry</h4>
                             <div class="progress-bar">
                                 <div class="progress-fill"></div>
                             </div>
                             <p>45% Complete | 9/20 Lessons</p>
                         </div>
+                        <div class="progress-card progress-biology">
+                            <h4>Biology</h4>
+                            <div class="progress-bar">
+                                <div class="progress-fill"></div>
+                            </div>
+                            <p>55% Complete | 11/20 Lessons</p>
+                        </div>
+                        <div class="progress-card progress-mathematics">
+                            <h4>Mathematics</h4>
+                            <div class="progress-bar">
+                                <div class="progress-fill"></div>
+                            </div>
+                            <p>70% Complete | 14/20 Lessons</p>
+                        </div>
+                        <div class="progress-card progress-computer-science">
+                            <h4>Computer Science</h4>
+                            <div class="progress-bar">
+                                <div class="progress-fill"></div>
+                            </div>
+                            <p>60% Complete | 12/20 Lessons</p>
+                        </div>
                     </div>
                 </div>
-                
+               
                 <!-- Subjects Section -->
                 <h3>Continue Your Quest</h3>
                 <div class="subjects-grid">
-                    <div class="subject-card subject-math">
+                    <div class="subject-card subject-physics">
+                        <div class="subject-header">
+                            <i class="fas fa-bolt fa-2x"></i>
+                            <h3>Physics</h3>
+                        </div>
+                        <div class="subject-content">
+                            <p>Explore mechanics, electricity, and thermodynamics through interactive simulations.</p>
+                            <a href="#" class="btn">Continue Quest</a>
+                        </div>
+                    </div>
+                   
+                    <div class="subject-card subject-chemistry">
+                        <div class="subject-header">
+                            <i class="fas fa-flask fa-2x"></i>
+                            <h3>Chemistry</h3>
+                        </div>
+                        <div class="subject-content">
+                            <p>Discover chemical reactions, periodic table, and organic chemistry with virtual labs.</p>
+                            <a href="#" class="btn">Continue Quest</a>
+                        </div>
+                    </div>
+                   
+                    <div class="subject-card subject-biology">
+                        <div class="subject-header">
+                            <i class="fas fa-leaf fa-2x"></i>
+                            <h3>Biology</h3>
+                        </div>
+                        <div class="subject-content">
+                            <p>Learn about genetics, ecosystems, and human anatomy through interactive modules.</p>
+                            <a href="#" class="btn">Continue Quest</a>
+                        </div>
+                    </div>
+                   
+                    <div class="subject-card subject-mathematics">
                         <div class="subject-header">
                             <i class="fas fa-calculator fa-2x"></i>
                             <h3>Mathematics</h3>
                         </div>
                         <div class="subject-content">
-                            <p>Explore algebra, geometry, and statistics through interactive games.</p>
+                            <p>Master calculus, algebra, and statistics with engaging problem-solving quests.</p>
                             <a href="#" class="btn">Continue Quest</a>
                         </div>
                     </div>
-                    
-                    <div class="subject-card subject-science">
+                   
+                    <div class="subject-card subject-computer-science">
                         <div class="subject-header">
-                            <i class="fas fa-flask fa-2x"></i>
-                            <h3>Science</h3>
+                            <i class="fas fa-laptop-code fa-2x"></i>
+                            <h3>Computer Science</h3>
                         </div>
                         <div class="subject-content">
-                            <p>Discover biology, chemistry, and physics with virtual experiments.</p>
+                            <p>Explore programming, algorithms, and data structures with coding challenges.</p>
                             <a href="#" class="btn">Continue Quest</a>
                         </div>
                     </div>
@@ -825,18 +905,17 @@
             </div>
         </div>
     </div>
-
     <script>
         // JavaScript for dropdown functionality
         document.addEventListener('DOMContentLoaded', function() {
             const profileMenu = document.querySelector('.profile-menu');
             const dropdownContent = document.querySelector('.dropdown-content');
             const profileBtn = document.querySelector('.profile-btn');
-            
+           
             const notificationMenu = document.querySelector('.notification-menu');
             const notificationDropdown = document.querySelector('.notification-dropdown');
             const notificationBtn = document.querySelector('.notification-btn');
-            
+           
             // Toggle profile dropdown on button click
             profileBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
@@ -844,7 +923,7 @@
                 // Close notification dropdown if open
                 notificationDropdown.style.display = 'none';
             });
-            
+           
             // Toggle notification dropdown on button click
             notificationBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
@@ -852,7 +931,7 @@
                 // Close profile dropdown if open
                 dropdownContent.style.display = 'none';
             });
-            
+           
             // Close dropdowns when clicking outside
             document.addEventListener('click', function(e) {
                 if (!profileMenu.contains(e.target)) {
@@ -862,28 +941,28 @@
                     notificationDropdown.style.display = 'none';
                 }
             });
-            
+           
             // Prevent dropdowns from closing when clicking inside them
             dropdownContent.addEventListener('click', function(e) {
                 e.stopPropagation();
             });
-            
+           
             notificationDropdown.addEventListener('click', function(e) {
                 e.stopPropagation();
             });
-            
+           
             // Simple offline capability check
             if ('serviceWorker' in navigator) {
                 console.log('Service Worker is supported, offline capabilities available');
             }
-            
+           
             // Display offline status if needed
             if (!navigator.onLine) {
                 const banner = document.querySelector('.welcome-banner');
                 banner.innerHTML = '<h2>Offline Mode</h2><p>You are currently offline. Some features may be limited.</p>';
                 banner.style.background = 'linear-gradient(to right, #a5a5a5, #c2c2c2)';
             }
-            
+           
             // Add animations to progress bars
             setTimeout(function() {
                 document.querySelectorAll('.progress-fill').forEach(function(bar) {
@@ -895,6 +974,7 @@
                 });
             }, 1000);
         });
+       
     </script>
 </body>
 </html>

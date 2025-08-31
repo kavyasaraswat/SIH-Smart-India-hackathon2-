@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile - Sarah Johnson</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #e9d5ff 0%, #a855f7 100%);
+        }
+        .profile-card {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        .info-item {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .info-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, #e9d5ff 0%, #a855f7 100%) !important;
+        }
+        .info-item:hover label {
+            color: white !important;
+        }
+        .info-item:hover p {
+            color: white !important;
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen font-sans">
+    <!-- Header -->
+    <div class="bg-white bg-opacity-20 backdrop-blur-md shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <button onclick="goBack()" class="flex items-center text-white hover:text-gray-200 transition-colors">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Back to Dashboard
+                </button>
+                <h1 class="text-2xl font-bold text-white">Student Profile</h1>
+                <div class="w-24"></div> <!-- Spacer for centering -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <!-- Profile Header -->
+        <div class="profile-card rounded-2xl shadow-2xl p-8 mb-8">
+            <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
+                <!-- Profile Picture -->
+                <div class="relative">
+                    <div class="w-32 h-32 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white text-4xl font-bold shadow-lg">
+                        SJ
+                    </div>
+                    <div class="absolute -bottom-2 -right-2 bg-green-500 w-8 h-8 rounded-full border-4 border-white flex items-center justify-center">
+                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                </div>
+                
+                <!-- Basic Info -->
+                <div class="text-center md:text-left flex-1">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">Rohan singh</h2>
+                    <p class="text-lg text-gray-600 mb-1">Class 6th - Section A</p>
+                    <p class="text-md text-gray-500 mb-4">Roll Number: 15</p>
+                    <div class="flex flex-wrap gap-2 justify-center md:justify-start">
+                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">Active Student</span>
+                        <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">Honor Roll</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Information Grid -->
+        <div class="grid md:grid-cols-2 gap-6">
+            <!-- Personal Information -->
+            <div class="profile-card rounded-xl shadow-lg p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                    </svg>
+                    Personal Information
+                </h3>
+                <div class="space-y-3">
+                    <div class="info-item bg-gray-50 rounded-lg p-3">
+                        <label class="text-sm font-medium text-gray-500">Full Name</label>
+                        <p class="text-gray-800 font-medium">Rohan Singh</p>
+                    </div>
+                    <div class="info-item bg-gray-50 rounded-lg p-3">
+                        <label class="text-sm font-medium text-gray-500">Age</label>
+                        <p class="text-gray-800 font-medium">16 years</p>
+                    </div>
+                    <div class="info-item bg-gray-50 rounded-lg p-3">
+                        <label class="text-sm font-medium text-gray-500">Date of Birth</label>
+                        <p class="text-gray-800 font-medium">March 15, 2008</p>
+                    </div>
+                    <div class="info-item bg-gray-50 rounded-lg p-3">
+                        <label class="text-sm font-medium text-gray-500">Gender</label>
+                        <p class="text-gray-800 font-medium">Female</p>
+                    </div>
+                    <div class="info-item bg-gray-50 rounded-lg p-3">
+                        <label class="text-sm font-medium text-gray-500">Blood Group</label>
+                        <p class="text-gray-800 font-medium">O+</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Academic Information -->
+            <div class="profile-card rounded-xl shadow-lg p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"></path>
+                    </svg>
+                    Academic Information
+                </h3>
+                <div class="space-y-3">
+                    <div class="info-item bg-gray-50 rounded-lg p-3">
+                        <label class="text-sm font-medium text-gray-500">Class</label>
+                        <p class="text-gray-800 font-medium">10th Grade</p>
+                    </div>
+                    <div class="info-item bg-gray-50 rounded-lg p-3">
+                        <label class="text-sm font-medium text-gray-500">Section</label>
+                        <p class="text-gray-800 font-medium">A</p>
+                    </div>
+                    <div class="info-item bg-gray-50 rounded-lg p-3">
+                        <label class="text-sm font-medium text-gray-500">Roll Number</label>
+                        <p class="text-gray-800 font-medium">15</p>
+                    </div>
+                    <div class="info-item bg-gray-50 rounded-lg p-3">
+                        <label class="text-sm font-medium text-gray-500">Student ID</label>
+                        <p class="text-gray-800 font-medium">STU2024015</p>
+                    </div>
+                    <div class="info-item bg-gray-50 rounded-lg p-3">
+                        <label class="text-sm font-medium text-gray-500">Academic Year</label>
+                        <p class="text-gray-800 font-medium">2024-2025</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Parent Information -->
+            <div class="profile-card rounded-xl shadow-lg p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"></path>
+                    </svg>
+                    Parent Information
+                </h3>
+                <div class="space-y-3">
+                    <div class="info-item bg-gray-50 rounded-lg p-3">
+                        <label class="text-sm font-medium text-gray-500">Father's Name</label>
+                        <p class="text-gray-800 font-medium">Michael Johnson</p>
+                    </div>
+                    <div class="info-item bg-gray-50 rounded-lg p-3">
+                        <label class="text-sm font-medium text-gray-500">Mother's Name</label>
+                        <p class="text-gray-800 font-medium">Emily Johnson</p>
+                    </div>
+                    <div class="info-item bg-gray-50 rounded-lg p-3">
+                        <label class="text-sm font-medium text-gray-500">Father's Mobile</label>
+                        <p class="text-gray-800 font-medium">+1 (555) 123-4567</p>
+                    </div>
+                    <div class="info-item bg-gray-50 rounded-lg p-3">
+                        <label class="text-sm font-medium text-gray-500">Mother's Mobile</label>
+                        <p class="text-gray-800 font-medium">+1 (555) 987-6543</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact & Address -->
+            <div class="profile-card rounded-xl shadow-lg p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                    </svg>
+                    Contact & Address
+                </h3>
+                <div class="space-y-3">
+                    <div class="info-item bg-gray-50 rounded-lg p-3">
+                        <label class="text-sm font-medium text-gray-500">Home Address</label>
+                        <p class="text-gray-800 font-medium">123 Maple Street<br>Springfield, IL 62701</p>
+                    </div>
+                    <div class="info-item bg-gray-50 rounded-lg p-3">
+                        <label class="text-sm font-medium text-gray-500">Emergency Contact</label>
+                        <p class="text-gray-800 font-medium">Grandmother - Mary Johnson<br>+1 (555) 456-7890</p>
+                    </div>
+                    <div class="info-item bg-gray-50 rounded-lg p-3">
+                        <label class="text-sm font-medium text-gray-500">Transportation</label>
+                        <p class="text-gray-800 font-medium">School Bus - Route 7</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="mt-8 flex flex-wrap gap-4 justify-center">
+            <button onclick="editProfile()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                </svg>
+                Edit Profile
+            </button>
+            <button onclick="downloadPDF()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Download PDF
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            alert('Navigating back to dashboard...');
+            // In a real application, this would navigate to the previous page
+        }
+
+        function editProfile() {
+            alert('Opening edit profile form...');
+            // In a real application, this would open an edit form
+        }
+
+        function downloadPDF() {
+            alert('Generating PDF download...');
+            // In a real application, this would generate and download a PDF
+        }
+
+        // Add smooth scrolling and animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const infoItems = document.querySelectorAll('.info-item');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            infoItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(20px)';
+                item.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+                observer.observe(item);
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'976ffca716fa8993',t:'MTc1NjUxMTgwNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

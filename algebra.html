@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algebra II - Subject Dashboard | STEM Adventure</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #e9d5ff 0%, #a855f7 100%); }
+        .card-shadow { box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .feature-card { transition: all 0.3s ease; }
+        .feature-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.15); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .tab-button.active { background: #3b82f6; color: white; }
+    </style>
+</head>
+<body class="bg-white min-h-screen">
+    <!-- Header -->
+    <div class="gradient-bg text-white py-6">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <button onclick="goBack()" class="flex items-center space-x-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-all">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                        <span>Back to Profile</span>
+                    </button>
+                    <div>
+                        <h1 class="text-3xl font-bold">Algebra II</h1>
+                        <p class="text-white/80">Advanced Mathematics • Grade 11-12</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="bg-white/20 px-4 py-2 rounded-lg">
+                        <p class="text-sm">Current Semester</p>
+                        <p class="font-semibold">Fall 2024</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subject Overview -->
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-xl card-shadow p-6 text-center">
+                <div class="w-12 h-12 bg-blue-100 rounded-lg mx-auto mb-3 flex items-center justify-center">
+                    <span class="text-2xl">👥</span>
+                </div>
+                <div class="text-2xl font-bold text-gray-800">32</div>
+                <div class="text-gray-600">Students Enrolled</div>
+            </div>
+            <div class="bg-white rounded-xl card-shadow p-6 text-center">
+                <div class="w-12 h-12 bg-green-100 rounded-lg mx-auto mb-3 flex items-center justify-center">
+                    <span class="text-2xl">📚</span>
+                </div>
+                <div class="text-2xl font-bold text-gray-800">15</div>
+                <div class="text-gray-600">Chapters</div>
+            </div>
+            <div class="bg-white rounded-xl card-shadow p-6 text-center">
+                <div class="w-12 h-12 bg-purple-100 rounded-lg mx-auto mb-3 flex items-center justify-center">
+                    <span class="text-2xl">⏱</span>
+                </div>
+                <div class="text-2xl font-bold text-gray-800">180</div>
+                <div class="text-gray-600">Total Hours</div>
+            </div>
+            <div class="bg-white rounded-xl card-shadow p-6 text-center">
+                <div class="w-12 h-12 bg-yellow-100 rounded-lg mx-auto mb-3 flex items-center justify-center">
+                    <span class="text-2xl">📊</span>
+                </div>
+                <div class="text-2xl font-bold text-gray-800">85%</div>
+                <div class="text-gray-600">Completion Rate</div>
+            </div>
+        </div>
+
+        <!-- Main Content Tabs -->
+        <div class="bg-white rounded-2xl card-shadow overflow-hidden">
+            <!-- Tab Navigation -->
+            <div class="border-b border-gray-200">
+                <nav class="flex space-x-8 px-8 py-4">
+                    <button onclick="switchTab('notes')" class="tab-button active px-4 py-2 rounded-lg font-medium transition-all">
+                        📝 Notes & Materials
+                    </button>
+                    <button onclick="switchTab('syllabus')" class="tab-button px-4 py-2 rounded-lg font-medium transition-all hover:bg-gray-100">
+                        📋 Syllabus
+                    </button>
+                    <button onclick="switchTab('lectures')" class="tab-button px-4 py-2 rounded-lg font-medium transition-all hover:bg-gray-100">
+                        🎯 Lecture Plans
+                    </button>
+                    <button onclick="switchTab('resources')" class="tab-button px-4 py-2 rounded-lg font-medium transition-all hover:bg-gray-100">
+                        📖 NCERT Resources
+                    </button>
+                    <button onclick="switchTab('assessments')" class="tab-button px-4 py-2 rounded-lg font-medium transition-all hover:bg-gray-100">
+                        📊 Assessments
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="p-8">
+                <!-- Notes & Materials Tab -->
+                <div id="notes" class="tab-content active">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Notes & Study Materials</h2>
+                        <button onclick="addNewNote()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-all">
+                            + Add New Note
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="feature-card bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl border border-blue-200">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-semibold text-blue-800">Chapter 1: Linear Functions</h3>
+                                <span class="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded">Updated</span>
+                            </div>
+                            <p class="text-blue-700 text-sm mb-4">Complete notes on linear functions, graphing, and applications</p>
+                            <div class="flex space-x-2">
+                                <button onclick="viewNote('linear-functions')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded text-sm transition-all">View</button>
+                                <button onclick="downloadPDF('linear-functions')" class="bg-white hover:bg-gray-50 text-blue-600 px-3 py-2 rounded text-sm border border-blue-200 transition-all">PDF</button>
+                            </div>
+                        </div>
+
+                        <div class="feature-card bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-xl border border-green-200">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-semibold text-green-800">Chapter 2: Quadratic Functions</h3>
+                                <span class="text-xs bg-green-200 text-green-800 px-2 py-1 rounded">New</span>
+                            </div>
+                            <p class="text-green-700 text-sm mb-4">Parabolas, vertex form, and solving quadratic equations</p>
+                            <div class="flex space-x-2">
+                                <button onclick="viewNote('quadratic-functions')" class="flex-1 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded text-sm transition-all">View</button>
+                                <button onclick="downloadPDF('quadratic-functions')" class="bg-white hover:bg-gray-50 text-green-600 px-3 py-2 rounded text-sm border border-green-200 transition-all">PDF</button>
+                            </div>
+                        </div>
+
+                        <div class="feature-card bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-xl border border-purple-200">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-semibold text-purple-800">Chapter 3: Polynomial Functions</h3>
+                                <span class="text-xs bg-purple-200 text-purple-800 px-2 py-1 rounded">Draft</span>
+                            </div>
+                            <p class="text-purple-700 text-sm mb-4">Higher degree polynomials and their properties</p>
+                            <div class="flex space-x-2">
+                                <button onclick="viewNote('polynomial-functions')" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded text-sm transition-all">View</button>
+                                <button onclick="downloadPDF('polynomial-functions')" class="bg-white hover:bg-gray-50 text-purple-600 px-3 py-2 rounded text-sm border border-purple-200 transition-all">PDF</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Syllabus Tab -->
+                <div id="syllabus" class="tab-content">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Course Syllabus</h2>
+                        <button onclick="downloadSyllabusPDF()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-all flex items-center space-x-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            <span>Download PDF</span>
+                        </button>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="bg-gray-50 p-6 rounded-xl">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Course Overview</h3>
+                            <p class="text-gray-700 leading-relaxed">
+                                Algebra II is an advanced mathematics course that builds upon the foundations of Algebra I. Students will explore complex functions, 
+                                advanced graphing techniques, and real-world applications of algebraic concepts. This course prepares students for Pre-Calculus and beyond.
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-blue-50 p-6 rounded-xl">
+                                <h4 class="font-semibold text-blue-800 mb-3">Unit 1: Functions & Relations (Weeks 1-4)</h4>
+                                <ul class="text-blue-700 space-y-1 text-sm">
+                                    <li>• Linear Functions and Slope</li>
+                                    <li>• Function Notation and Operations</li>
+                                    <li>• Inverse Functions</li>
+                                    <li>• Piecewise Functions</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-green-50 p-6 rounded-xl">
+                                <h4 class="font-semibold text-green-800 mb-3">Unit 2: Quadratic Functions (Weeks 5-8)</h4>
+                                <ul class="text-green-700 space-y-1 text-sm">
+                                    <li>• Parabolas and Vertex Form</li>
+                                    <li>• Solving Quadratic Equations</li>
+                                    <li>• Complex Numbers</li>
+                                    <li>• Quadratic Inequalities</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-purple-50 p-6 rounded-xl">
+                                <h4 class="font-semibold text-purple-800 mb-3">Unit 3: Polynomial Functions (Weeks 9-12)</h4>
+                                <ul class="text-purple-700 space-y-1 text-sm">
+                                    <li>• Higher Degree Polynomials</li>
+                                    <li>• Factoring Techniques</li>
+                                    <li>• Polynomial Division</li>
+                                    <li>• Zeros and Roots</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-orange-50 p-6 rounded-xl">
+                                <h4 class="font-semibold text-orange-800 mb-3">Unit 4: Exponential & Logarithmic (Weeks 13-16)</h4>
+                                <ul class="text-orange-700 space-y-1 text-sm">
+                                    <li>• Exponential Growth and Decay</li>
+                                    <li>• Logarithmic Functions</li>
+                                    <li>• Properties of Logarithms</li>
+                                    <li>• Solving Exponential Equations</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lecture Plans Tab -->
+                <div id="lectures" class="tab-content">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Lecture Delivery Plans</h2>
+                        <button onclick="createLecturePlan()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-all">
+                            + Create New Plan
+                        </button>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-all">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-800">Week 1: Introduction to Functions</h3>
+                                    <p class="text-gray-600">Duration: 5 days • 50 minutes each</p>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button onclick="editLecturePlan('week1')" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1 rounded text-sm transition-all">Edit</button>
+                                    <button onclick="downloadLecturePDF('week1')" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm transition-all">PDF</button>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                                <div class="bg-blue-50 p-3 rounded-lg">
+                                    <div class="font-medium text-blue-800 text-sm">Day 1</div>
+                                    <div class="text-blue-700 text-xs">Function Basics</div>
+                                </div>
+                                <div class="bg-green-50 p-3 rounded-lg">
+                                    <div class="font-medium text-green-800 text-sm">Day 2</div>
+                                    <div class="text-green-700 text-xs">Domain & Range</div>
+                                </div>
+                                <div class="bg-purple-50 p-3 rounded-lg">
+                                    <div class="font-medium text-purple-800 text-sm">Day 3</div>
+                                    <div class="text-purple-700 text-xs">Function Notation</div>
+                                </div>
+                                <div class="bg-yellow-50 p-3 rounded-lg">
+                                    <div class="font-medium text-yellow-800 text-sm">Day 4</div>
+                                    <div class="text-yellow-700 text-xs">Practice Problems</div>
+                                </div>
+                                <div class="bg-red-50 p-3 rounded-lg">
+                                    <div class="font-medium text-red-800 text-sm">Day 5</div>
+                                    <div class="text-red-700 text-xs">Assessment</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-all">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-800">Week 2: Linear Functions Deep Dive</h3>
+                                    <p class="text-gray-600">Duration: 5 days • 50 minutes each</p>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button onclick="editLecturePlan('week2')" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1 rounded text-sm transition-all">Edit</button>
+                                    <button onclick="downloadLecturePDF('week2')" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm transition-all">PDF</button>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                                <div class="bg-blue-50 p-3 rounded-lg">
+                                    <div class="font-medium text-blue-800 text-sm">Day 1</div>
+                                    <div class="text-blue-700 text-xs">Slope Formula</div>
+                                </div>
+                                <div class="bg-green-50 p-3 rounded-lg">
+                                    <div class="font-medium text-green-800 text-sm">Day 2</div>
+                                    <div class="text-green-700 text-xs">Point-Slope Form</div>
+                                </div>
+                                <div class="bg-purple-50 p-3 rounded-lg">
+                                    <div class="font-medium text-purple-800 text-sm">Day 3</div>
+                                    <div class="text-purple-700 text-xs">Graphing Lines</div>
+                                </div>
+                                <div class="bg-yellow-50 p-3 rounded-lg">
+                                    <div class="font-medium text-yellow-800 text-sm">Day 4</div>
+                                    <div class="text-yellow-700 text-xs">Real Applications</div>
+                                </div>
+                                <div class="bg-red-50 p-3 rounded-lg">
+                                    <div class="font-medium text-red-800 text-sm">Day 5</div>
+                                    <div class="text-red-700 text-xs">Quiz & Review</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NCERT Resources Tab -->
+                <div id="resources" class="tab-content">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">NCERT Resources & Materials</h2>
+                        <button onclick="downloadAllNCERT()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-all flex items-center space-x-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            <span>Download All PDFs</span>
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="bg-white border-2 border-red-200 rounded-xl p-6 hover:shadow-lg transition-all">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mr-4">
+                                    <span class="text-red-600 font-bold">📚</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">NCERT Class XI</h3>
+                                    <p class="text-gray-600 text-sm">Mathematics Textbook</p>
+                                </div>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Chapter 2: Relations & Functions</span>
+                                    <button onclick="downloadNCERTPDF('class11-ch2')" class="bg-red-100 hover:bg-red-200 text-red-700 px-2 py-1 rounded text-xs transition-all">PDF</button>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Chapter 3: Trigonometric Functions</span>
+                                    <button onclick="downloadNCERTPDF('class11-ch3')" class="bg-red-100 hover:bg-red-200 text-red-700 px-2 py-1 rounded text-xs transition-all">PDF</button>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Chapter 9: Sequences & Series</span>
+                                    <button onclick="downloadNCERTPDF('class11-ch9')" class="bg-red-100 hover:bg-red-200 text-red-700 px-2 py-1 rounded text-xs transition-all">PDF</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border-2 border-blue-200 rounded-xl p-6 hover:shadow-lg transition-all">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                                    <span class="text-blue-600 font-bold">📖</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">NCERT Class XII</h3>
+                                    <p class="text-gray-600 text-sm">Mathematics Textbook</p>
+                                </div>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Chapter 1: Relations & Functions</span>
+                                    <button onclick="downloadNCERTPDF('class12-ch1')" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-2 py-1 rounded text-xs transition-all">PDF</button>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Chapter 2: Inverse Trigonometric</span>
+                                    <button onclick="downloadNCERTPDF('class12-ch2')" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-2 py-1 rounded text-xs transition-all">PDF</button>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Chapter 5: Continuity & Differentiability</span>
+                                    <button onclick="downloadNCERTPDF('class12-ch5')" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-2 py-1 rounded text-xs transition-all">PDF</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border-2 border-green-200 rounded-xl p-6 hover:shadow-lg transition-all">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                                    <span class="text-green-600 font-bold">📝</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">Exercise Solutions</h3>
+                                    <p class="text-gray-600 text-sm">Detailed Solutions</p>
+                                </div>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Functions Exercise Solutions</span>
+                                    <button onclick="downloadNCERTPDF('solutions-functions')" class="bg-green-100 hover:bg-green-200 text-green-700 px-2 py-1 rounded text-xs transition-all">PDF</button>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Quadratic Exercise Solutions</span>
+                                    <button onclick="downloadNCERTPDF('solutions-quadratic')" class="bg-green-100 hover:bg-green-200 text-green-700 px-2 py-1 rounded text-xs transition-all">PDF</button>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-700">Polynomial Exercise Solutions</span>
+                                    <button onclick="downloadNCERTPDF('solutions-polynomial')" class="bg-green-100 hover:bg-green-200 text-green-700 px-2 py-1 rounded text-xs transition-all">PDF</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Resources -->
+                    <div class="mt-8 bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-xl border border-purple-200">
+                        <h3 class="text-lg font-semibold text-purple-800 mb-4">Additional Study Materials</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex items-center justify-between bg-white p-4 rounded-lg">
+                                <div>
+                                    <div class="font-medium text-gray-800">Sample Papers Collection</div>
+                                    <div class="text-sm text-gray-600">Previous year papers with solutions</div>
+                                </div>
+                                <button onclick="downloadNCERTPDF('sample-papers')" class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded text-sm transition-all">Download</button>
+                            </div>
+                            <div class="flex items-center justify-between bg-white p-4 rounded-lg">
+                                <div>
+                                    <div class="font-medium text-gray-800">Formula Reference Sheet</div>
+                                    <div class="text-sm text-gray-600">All important formulas in one place</div>
+                                </div>
+                                <button onclick="downloadNCERTPDF('formula-sheet')" class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded text-sm transition-all">Download</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Assessments Tab -->
+                <div id="assessments" class="tab-content">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Assessments & Evaluations</h2>
+                        <button onclick="createAssessment()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-all">
+                            + Create Assessment
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white border border-gray-200 rounded-xl p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Upcoming Assessments</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                                    <div>
+                                        <div class="font-medium text-yellow-800">Unit 1 Test: Functions</div>
+                                        <div class="text-sm text-yellow-700">Due: March 15, 2024</div>
+                                    </div>
+                                    <button onclick="viewAssessment('unit1-test')" class="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-2 rounded text-sm transition-all">View</button>
+                                </div>
+                                <div class="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200">
+                                    <div>
+                                        <div class="font-medium text-blue-800">Quiz: Quadratic Functions</div>
+                                        <div class="text-sm text-blue-700">Due: March 22, 2024</div>
+                                    </div>
+                                    <button onclick="viewAssessment('quadratic-quiz')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded text-sm transition-all">View</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border border-gray-200 rounded-xl p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Assessment Analytics</h3>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-700">Average Class Score</span>
+                                    <span class="font-semibold text-green-600">82.5%</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-700">Completion Rate</span>
+                                    <span class="font-semibold text-blue-600">94%</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-700">Students Needing Help</span>
+                                    <span class="font-semibold text-red-600">3 students</span>
+                                </div>
+                                <button onclick="viewDetailedAnalytics()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-lg transition-all">View Detailed Analytics</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked button
+            // Use event delegation to find the correct button
+            // event.target may be a child, so find closest .tab-button
+            if (window.event) {
+                let btn = window.event.target.closest('.tab-button');
+                if (btn) btn.classList.add('active');
+            }
+        }
+
+        // Navigation functions
+        function goBack() {
+            alert('Returning to Teacher Profile...');
+        }
+
+        // Notes functions
+        function addNewNote() {
+            alert('Opening note editor for new chapter...');
+        }
+
+        function viewNote(noteId) {
+            alert(`Opening detailed view for ${noteId} notes...`);
+        }
+
+        function downloadPDF(noteId) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFontSize(20);
+            doc.text('Algebra II - ' + noteId.replace('-', ' ').toUpperCase(), 20, 30);
+
+            doc.setFontSize(12);
+            doc.text('Chapter Notes and Study Materials', 20, 50);
+            doc.text('Generated from STEM Adventure Platform', 20, 60);
+            doc.text('Date: ' + new Date().toLocaleDateString(), 20, 70);
+
+            doc.text('Content:', 20, 90);
+            doc.text('• Key concepts and definitions', 25, 105);
+            doc.text('• Worked examples and solutions', 25, 115);
+            doc.text('• Practice problems', 25, 125);
+            doc.text('• Additional resources and references', 25, 135);
+
+            doc.save(`algebra2-${noteId}-notes.pdf`);
+        }
+
+        // Syllabus functions
+        function downloadSyllabusPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFontSize(20);
+            doc.text('Algebra II - Course Syllabus', 20, 30);
+
+            doc.setFontSize(14);
+            doc.text('Fall 2024 Semester', 20, 50);
+
+            doc.setFontSize(12);
+            doc.text('Course Overview:', 20, 70);
+            doc.text('Advanced mathematics course building upon Algebra I foundations.', 20, 80);
+
+            doc.text('Units Covered:', 20, 100);
+            doc.text('Unit 1: Functions & Relations (Weeks 1-4)', 25, 115);
+            doc.text('Unit 2: Quadratic Functions (Weeks 5-8)', 25, 125);
+            doc.text('Unit 3: Polynomial Functions (Weeks 9-12)', 25, 135);
+            doc.text('Unit 4: Exponential & Logarithmic (Weeks 13-16)', 25, 145);
+
+            doc.save('algebra2-syllabus.pdf');
+        }
+
+        // Lecture plan functions
+        function createLecturePlan() {
+            alert('Opening lecture plan creator...');
+        }
+
+        function editLecturePlan(planId) {
+            alert(`Editing lecture plan for ${planId}...`);
+        }
+
+        function downloadLecturePDF(planId) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFontSize(18);
+            doc.text(`Algebra II - ${planId.toUpperCase()} Lecture Plan`, 20, 30);
+
+            doc.setFontSize(12);
+            doc.text('Duration: 5 days, 50 minutes each', 20, 50);
+            doc.text('Learning Objectives:', 20, 70);
+            doc.text('• Understand core concepts', 25, 85);
+            doc.text('• Apply problem-solving techniques', 25, 95);
+            doc.text('• Complete practice exercises', 25, 105);
+
+            doc.text('Daily Breakdown:', 20, 125);
+            doc.text('Day 1: Introduction and basic concepts', 25, 140);
+            doc.text('Day 2: Detailed explanations and examples', 25, 150);
+            doc.text('Day 3: Guided practice', 25, 160);
+            doc.text('Day 4: Independent practice', 25, 170);
+            doc.text('Day 5: Assessment and review', 25, 180);
+
+            doc.save(`algebra2-${planId}-lecture-plan.pdf`);
+        }
+
+        // NCERT functions
+        function downloadNCERTPDF(resourceId) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFontSize(18);
+            doc.text('NCERT Mathematics Resource', 20, 30);
+
+            doc.setFontSize(14);
+            doc.text(`Resource: ${resourceId.replace('-', ' ').toUpperCase()}`, 20, 50);
+
+            doc.setFontSize(12);
+            doc.text('This is a sample NCERT resource document.', 20, 70);
+            doc.text('In a real implementation, this would contain:', 20, 90);
+            doc.text('• Complete chapter content', 25, 105);
+            doc.text('• Solved examples', 25, 115);
+            doc.text('• Exercise problems', 25, 125);
+            doc.text('• Additional practice questions', 25, 135);
+
+            doc.save(`ncert-${resourceId}.pdf`);
+        }
+
+        function downloadAllNCERT() {
+            alert('Preparing complete NCERT resource package for download...\nThis may take a few moments.');
+        }
+
+        // Assessment functions
+        function createAssessment() {
+            alert('Opening assessment creator...');
+        }
+
+        function viewAssessment(assessmentId) {
+            alert(`Opening ${assessmentId} assessment details...`);
+        }
+
+        function viewDetailedAnalytics() {
+            alert('Opening detailed assessment analytics dashboard...');
+        }
+
+        // Initialize page
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease-in-out';
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9776766124a891aa',t:'MTc1NjU3OTcwNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

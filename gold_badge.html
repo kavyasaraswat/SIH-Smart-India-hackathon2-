@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hurray! Gold Badge Earned</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #1a1a1a; /* Dark background like HackerRank */
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Overlay for full-screen badge */
+        .badge-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.9); /* Darker overlay */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+            z-index: 9999;
+        }
+
+        .badge-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Badge container */
+        .badge {
+            position: relative;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle at center, #ffd700, #e6b800, #b8860b); /* Gold gradient */
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: badgePop 1.8s ease-in-out;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.8), 0 0 100px rgba(255, 215, 0, 0.4);
+            border: 8px solid #ffffff; /* White border for emphasis */
+            transform-origin: center;
+        }
+
+        /* Badge content */
+        .badge-content {
+            text-align: center;
+            color: #fff;
+            font-size: 48px;
+            font-weight: 900;
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.6);
+            font-family: 'Verdana', sans-serif; /* Cleaner, bold font */
+        }
+
+        .badge-content::before {
+            content: "🥇"; /* Gold medal emoji */
+            display: block;
+            font-size: 160px;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        .badge-content span {
+            display: block;
+            font-size: 36px;
+            margin-top: 10px;
+            letter-spacing: 2px;
+        }
+
+        /* Pulse animation for badge icon */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Animation keyframes for badge pop */
+        @keyframes badgePop {
+            0% {
+                transform: scale(0.2) rotate(-10deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.4) rotate(10deg);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        /* Sparkle effect */
+        .sparkle {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #fff;
+            border-radius: 50%;
+            animation: sparkle 1.5s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        @keyframes sparkle {
+            0% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1.3); }
+            100% { opacity: 0; transform: scale(0); }
+        }
+
+        /* Close button */
+        .close-btn {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            font-size: 40px;
+            color: #fff;
+            cursor: pointer;
+            transition: transform 0.3s, color 0.3s;
+        }
+
+        .close-btn:hover {
+            transform: scale(1.3);
+            color: #ffd700; /* Gold on hover */
+        }
+    </style>
+</head>
+<body>
+    <!-- Badge Overlay -->
+    <div class="badge-overlay active" id="badge-overlay">
+        <div class="close-btn" id="close-btn">&times;</div>
+        <div class="badge">
+            <div class="badge-content">
+                Hurray!<br>
+                <span>Gold Badge Earned</span>
+            </div>
+            <!-- Sparkle effects around badge -->
+            <div class="sparkle" style="top: 8%; left: 12%; animation-delay: 0s;"></div>
+            <div class="sparkle" style="top: 15%; right: 10%; animation-delay: 0.3s;"></div>
+            <div class="sparkle" style="bottom: 10%; left: 15%; animation-delay: 0.6s;"></div>
+            <div class="sparkle" style="bottom: 8%; right: 12%; animation-delay: 0.9s;"></div>
+            <div class="sparkle" style="top: 50%; left: 5%; animation-delay: 0.2s;"></div>
+            <div class="sparkle" style="top: 5%; right: 50%; animation-delay: 0.5s;"></div>
+            <div class="sparkle" style="top: 30%; left: 80%; animation-delay: 0.7s;"></div>
+            <div class="sparkle" style="bottom: 30%; right: 80%; animation-delay: 1.1s;"></div>
+        </div>
+    </div>
+
+    <script>
+        const badgeOverlay = document.getElementById('badge-overlay');
+        const closeBtn = document.getElementById('close-btn');
+
+        // Hide badge
+        function hideBadge() {
+            badgeOverlay.classList.remove('active');
+        }
+
+        // Auto-hide after 4.5 seconds
+        setTimeout(() => {
+            hideBadge();
+        }, 4500);
+
+        // Close on button click
+        closeBtn.addEventListener('click', hideBadge);
+
+        // Close on overlay click
+        badgeOverlay.addEventListener('click', (e) => {
+            if (e.target === badgeOverlay) {
+                hideBadge();
+            }
+        });
+    </script>
+</body>
+</html>

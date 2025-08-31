@@ -854,11 +854,13 @@
                         </div>
                         
                         <div class="profile-menu">
-                            <button class="profile-menu-item" onclick="viewProfile()">
-                                <i class="fas fa-user profile-menu-icon"></i>
-                                <span class="profile-menu-text">View Profile</span>
-                                <i class="fas fa-chevron-right profile-menu-arrow"></i>
-                            </button>
+                            <a href="teacherprofile.html">
+                                <button class="profile-menu-item" onclick="viewProfile()">
+                                  <i class="fas fa-user profile-menu-icon"></i>
+                                  <span class="profile-menu-text">View Profile</span>
+                                  <i class="fas fa-chevron-right profile-menu-arrow"></i>
+                               </button>
+                            </a>
                             
                             <button class="profile-menu-item" onclick="editProfile()">
                                 <i class="fas fa-edit profile-menu-icon"></i>
@@ -866,11 +868,6 @@
                                 <i class="fas fa-chevron-right profile-menu-arrow"></i>
                             </button>
                             
-                            <button class="profile-menu-item" onclick="accountSettings()">
-                                <i class="fas fa-cog profile-menu-icon"></i>
-                                <span class="profile-menu-text">Account Settings</span>
-                                <i class="fas fa-chevron-right profile-menu-arrow"></i>
-                            </button>
                             
                             <button class="profile-menu-item" onclick="teacherPreferences()">
                                 <i class="fas fa-chalkboard-teacher profile-menu-icon"></i>
@@ -898,19 +895,15 @@
                                 <i class="fas fa-chevron-right profile-menu-arrow"></i>
                             </button>
                             
-                            <button class="profile-menu-item" onclick="privacyPolicy()">
-                                <i class="fas fa-shield-alt profile-menu-icon"></i>
-                                <span class="profile-menu-text">Privacy Policy</span>
-                                <i class="fas fa-chevron-right profile-menu-arrow"></i>
-                            </button>
-                            
                             <div class="profile-menu-divider"></div>
                             
-                            <button class="profile-menu-item danger" onclick="signOut()">
-                                <i class="fas fa-sign-out-alt profile-menu-icon"></i>
-                                <span class="profile-menu-text">Sign Out</span>
-                                <i class="fas fa-chevron-right profile-menu-arrow"></i>
-                            </button>
+                            <a href="loginpage.html">
+                                <button class="profile-menu-item danger" onclick="signOut()">
+                                  <i class="fas fa-sign-out-alt profile-menu-icon"></i>
+                                  <span class="profile-menu-text">Sign Out</span>
+                                  <i class="fas fa-chevron-right profile-menu-arrow"></i>
+                                </button>
+                            </a>
                         </div>
                     </div>
                 </div>
