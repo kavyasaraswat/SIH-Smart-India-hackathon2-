@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Python Debugging Challenge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e9d5ff 0%, #a855f7 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .header {
+            background: linear-gradient(to right, #7e22ce, #a855f7);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            padding: 25px;
+        }
+        
+        .level-selector {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .level-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .easy {
+            background-color: #4ade80;
+            color: white;
+        }
+        
+        .medium {
+            background-color: #60a5fa;
+            color: white;
+        }
+        
+        .hard {
+            background-color: #f87171;
+            color: white;
+        }
+        
+        .level-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .level-btn.active {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 3px white, 0 0 0 6px currentColor;
+        }
+        
+        .game-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .timer-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #c084fc, #a855f7);
+            padding: 12px 20px;
+            border-radius: 10px;
+            color: white;
+        }
+        
+        .timer {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .score {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        
+        .question-container {
+            margin-bottom: 25px;
+        }
+        
+        .question {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #4c1d95;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+        
+        .code-container {
+            background: #1e293b;
+            color: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 20px;
+            position: relative;
+            overflow-x: auto;
+        }
+        
+        .code-line {
+            padding: 5px 10px;
+            display: block;
+            white-space: pre;
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+        
+        .code-line:hover {
+            background: #334155;
+            border-left: 3px solid #a855f7;
+        }
+        
+        .line-number {
+            color: #94a3b8;
+            margin-right: 15px;
+            width: 25px;
+            display: inline-block;
+            text-align: right;
+        }
+        
+        .answer-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .answer-input {
+            padding: 15px;
+            border: 2px solid #c4b5fd;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .answer-input:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px #ddd6fe;
+        }
+        
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        
+        .action-btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+        
+        .submit-btn {
+            background: #8b5cf6;
+            color: white;
+        }
+        
+        .submit-btn:hover {
+            background: #7c3aed;
+            transform: translateY(-2px);
+        }
+        
+        .hint-btn {
+            background: #c4b5fd;
+            color: #4c1d95;
+        }
+        
+        .hint-btn:hover {
+            background: #a78bfa;
+            transform: translateY(-2px);
+        }
+        
+        .try-again-btn {
+            background: #f59e0b;
+            color: white;
+            display: none;
+        }
+        
+        .try-again-btn:hover {
+            background: #d97706;
+            transform: translateY(-2px);
+        }
+        
+        .result-container {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+        
+        .success {
+            background: #dcfce7;
+            color: #166534;
+            border: 2px solid #bbf7d0;
+            display: block;
+        }
+        
+        .error {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 2px solid #fecaca;
+            display: block;
+        }
+        
+        .hint-text {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+            border-left: 5px solid #f59e0b;
+        }
+        
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .progress-item {
+            text-align: center;
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            background: #ede9fe;
+            margin: 0 5px;
+            font-weight: 600;
+            color: #5b21b6;
+        }
+        
+        .progress-item.active {
+            background: #8b5cf6;
+            color: white;
+            box-shadow: 0 4px 8px rgba(139, 92, 246, 0.3);
+        }
+        
+        .completed {
+            background: #4ade80;
+            color: white;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #7e22ce;
+            font-weight: 600;
+            background: #f3e8ff;
+        }
+        
+        /* 3D Effect for code container */
+        .code-container {
+            transform: perspective(1000px) rotateX(5deg);
+            transition: transform 0.5s ease;
+        }
+        
+        .code-container:hover {
+            transform: perspective(1000px) rotateX(0deg);
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .level-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn-container {
+                flex-direction: column;
+            }
+            
+            .progress-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>3D Python Debugging Challenge</h1>
+            <div class="subtitle">Find and fix bugs in Python code across three difficulty levels</div>
+        </div>
+        
+        <div class="game-container">
+            <div class="progress-container">
+                <div class="progress-item active" id="progress-easy">Easy</div>
+                <div class="progress-item" id="progress-medium">Medium</div>
+                <div class="progress-item" id="progress-hard">Hard</div>
+            </div>
+            
+            <div class="level-selector">
+                <button class="level-btn easy active" data-level="easy">Easy Level</button>
+                <button class="level-btn medium" data-level="medium">Medium Level</button>
+                <button class="level-btn hard" data-level="hard">Hard Level</button>
+            </div>
+            
+            <div class="game-panel">
+                <div class="timer-container">
+                    <div>Time Left:</div>
+                    <div class="timer" id="timer">05:00</div>
+                    <div>Score: <span class="score" id="score">0</span> points</div>
+                </div>
+                
+                <div class="question-container">
+                    <div class="question" id="question">Find the bug in the following code that calculates the factorial of a number:</div>
+                    
+                    <div class="code-container">
+                        <span class="code-line"><span class="line-number">1</span>def factorial(n):</span>
+                        <span class="code-line"><span class="line-number">2</span>    if n == 0 or n == 1:</span>
+                        <span class="code-line"><span class="line-number">3</span>        return 0</span>
+                        <span class="code-line"><span class="line-number">4</span>    else:</span>
+                        <span class="code-line"><span class="line-number">5</span>        return n * factorial(n-1)</span>
+                    </div>
+                </div>
+                
+                <div class="answer-container">
+                    <input type="text" class="answer-input" id="answer" placeholder="Enter your correction for line 3...">
+                    
+                    <div class="btn-container">
+                        <button class="action-btn hint-btn" id="hint-btn">Get Hint</button>
+                        <button class="action-btn submit-btn" id="submit-btn">Submit Answer</button>
+                        <button class="action-btn try-again-btn" id="try-again-btn">Try Again</button>
+                    </div>
+                </div>
+                
+                <div class="hint-text" id="hint-text">
+                    <strong>Hint:</strong> The factorial of 0 and 1 should return 1, not 0. Remember that 0! is defined as 1 in mathematics.
+                </div>
+                
+                <div class="result-container" id="result"></div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            Debugging Master | Improve your Python skills by finding and fixing bugs
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Game state
+            const gameState = {
+                level: 'easy',
+                score: 0,
+                timeLeft: 300, // 5 minutes in seconds
+                timerInterval: null,
+                currentQuestion: 0,
+                questions: {
+                    easy: [
+                        {
+                            question: "Find the bug in the following code that calculates the factorial of a number:",
+                            code: `def factorial(n):
+    if n == 0 or n == 1:
+        return 0
+    else:
+        return n * factorial(n-1)`,
+                            answer: "return 1",
+                            line: 3,
+                            hint: "The factorial of 0 and 1 should return 1, not 0. Remember that 0! is defined as 1 in mathematics."
+                        },
+                        {
+                            question: "Debug the function that checks if a number is prime:",
+                            code: `def is_prime(n):
+    if n <= 1:
+        return False
+    for i in range(2, n):
+        if n % i == 0:
+            return True
+    return False`,
+                            answer: "return False",
+                            line: 5,
+                            hint: "If a number is divisible by any other number, it's not prime. The return value should be False in that case."
+                        }
+                    ],
+                    medium: [
+                        {
+                            question: "Debug the function that finds the maximum value in a list:",
+                            code: `def find_max(numbers):
+    max_num = numbers[0]
+    for num in numbers:
+        if num > max_num:
+            max_num = num
+    return max_num`,
+                            answer: "max_num = numbers[0]",
+                            line: 2,
+                            hint: "What if the list is empty? You should handle that case to avoid an IndexError."
+                        }
+                    ],
+                    hard: [
+                        {
+                            question: "Debug the recursive function that calculates Fibonacci numbers:",
+                            code: `def fibonacci(n):
+    if n <= 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        return fibonacci(n) + fibonacci(n-1)`,
+                            answer: "return fibonacci(n-1) + fibonacci(n-2)",
+                            line: 6,
+                            hint: "The Fibonacci sequence is defined as F(n) = F(n-1) + F(n-2). Check the recursive calls."
+                        }
+                    ]
+                }
+            };
+            
+            // DOM elements
+            const levelButtons = document.querySelectorAll('.level-btn');
+            const progressItems = document.querySelectorAll('.progress-item');
+            const timerElement = document.getElementById('timer');
+            const scoreElement = document.getElementById('score');
+            const questionElement = document.getElementById('question');
+            const codeContainer = document.querySelector('.code-container');
+            const answerInput = document.getElementById('answer');
+            const hintBtn = document.getElementById('hint-btn');
+            const hintText = document.getElementById('hint-text');
+            const submitBtn = document.getElementById('submit-btn');
+            const tryAgainBtn = document.getElementById('try-again-btn');
+            const resultElement = document.getElementById('result');
+            
+            // Initialize game
+            initGame();
+            
+            // Event listeners
+            levelButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const level = this.getAttribute('data-level');
+                    setLevel(level);
+                });
+            });
+            
+            hintBtn.addEventListener('click', function() {
+                hintText.style.display = 'block';
+                // Deduct points for using hint
+                gameState.score = Math.max(0, gameState.score - 5);
+                updateScore();
+            });
+            
+            submitBtn.addEventListener('click', checkAnswer);
+            
+            tryAgainBtn.addEventListener('click', function() {
+                // Reset UI for another attempt
+                resultElement.style.display = 'none';
+                tryAgainBtn.style.display = 'none';
+                submitBtn.style.display = 'block';
+                hintBtn.style.display = 'block';
+                answerInput.disabled = false;
+                answerInput.focus();
+            });
+            
+            answerInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkAnswer();
+                }
+            });
+            
+            // Functions
+            function initGame() {
+                updateScore();
+                startTimer();
+                loadQuestion();
+            }
+            
+            function setLevel(level) {
+                gameState.level = level;
+                gameState.currentQuestion = 0;
+                
+                // Update active button
+                levelButtons.forEach(button => {
+                    if (button.getAttribute('data-level') === level) {
+                        button.classList.add('active');
+                    } else {
+                        button.classList.remove('active');
+                    }
+                });
+                
+                // Update progress indicators
+                progressItems.forEach(item => {
+                    item.classList.remove('active', 'completed');
+                });
+                
+                document.getElementById(progress-${level}).classList.add('active');
+                
+                // Load question for the selected level
+                loadQuestion();
+            }
+            
+            function loadQuestion() {
+                const questions = gameState.questions[gameState.level];
+                if (gameState.currentQuestion < questions.length) {
+                    const question = questions[gameState.currentQuestion];
+                    questionElement.textContent = question.question;
+                    
+                    // Format code with line numbers
+                    const codeLines = question.code.split('\n');
+                    let formattedCode = '';
+                    
+                    codeLines.forEach((line, index) => {
+                        formattedCode += <span class="code-line"><span class="line-number">${index + 1}</span>${line}</span>;
+                    });
+                    
+                    codeContainer.innerHTML = formattedCode;
+                    
+                    // Update input placeholder
+                    answerInput.setAttribute('placeholder', Enter your correction for line ${question.line}...);
+                    
+                    // Reset UI elements
+                    hintText.style.display = 'none';
+                    resultElement.className = 'result-container';
+                    resultElement.textContent = '';
+                    tryAgainBtn.style.display = 'none';
+                    submitBtn.style.display = 'block';
+                    hintBtn.style.display = 'block';
+                    answerInput.disabled = false;
+                    
+                    // Set focus to input
+                    answerInput.value = '';
+                    answerInput.focus();
+                } else {
+                    // No more questions for this level
+                    endGame();
+                }
+            }
+            
+            function checkAnswer() {
+                const questions = gameState.questions[gameState.level];
+                const question = questions[gameState.currentQuestion];
+                const userAnswer = answerInput.value.trim();
+                
+                if (userAnswer.toLowerCase() === question.answer.toLowerCase()) {
+                    // Correct answer
+                    resultElement.textContent = 'Correct! Well done!';
+                    resultElement.className = 'result-container success';
+                    
+                    // Award points based on level
+                    let points = 0;
+                    if (gameState.level === 'easy') points = 10;
+                    else if (gameState.level === 'medium') points = 20;
+                    else points = 30;
+                    
+                    gameState.score += points;
+                    updateScore();
+                    
+                    // Move to next question after a delay
+                    setTimeout(() => {
+                        gameState.currentQuestion++;
+                        if (gameState.currentQuestion < questions.length) {
+                            loadQuestion();
+                        } else {
+                            // Mark level as completed
+                            document.getElementById(progress-${gameState.level}).classList.add('completed');
+                            
+                            // Move to next level if available
+                            if (gameState.level === 'easy') {
+                                setLevel('medium');
+                            } else if (gameState.level === 'medium') {
+                                setLevel('hard');
+                            } else {
+                                endGame();
+                            }
+                        }
+                    }, 1500);
+                } else {
+                    // Incorrect answer
+                    resultElement.textContent = 'Not quite right. Try again!';
+                    resultElement.className = 'result-container error';
+                    resultElement.style.display = 'block';
+                    
+                    // Show try again button and hide others
+                    tryAgainBtn.style.display = 'block';
+                    submitBtn.style.display = 'none';
+                    hintBtn.style.display = 'none';
+                    answerInput.disabled = true;
+                    
+                    // Shake animation for wrong answer
+                    answerInput.classList.add('error');
+                    setTimeout(() => {
+                        answerInput.classList.remove('error');
+                    }, 500);
+                }
+            }
+            
+            function startTimer() {
+                clearInterval(gameState.timerInterval);
+                
+                gameState.timerInterval = setInterval(() => {
+                    gameState.timeLeft--;
+                    
+                    if (gameState.timeLeft <= 0) {
+                        clearInterval(gameState.timerInterval);
+                        endGame();
+                    }
+                    
+                    updateTimer();
+                }, 1000);
+            }
+            
+            function updateTimer() {
+                const minutes = Math.floor(gameState.timeLeft / 60);
+                const seconds = gameState.timeLeft % 60;
+                timerElement.textContent = ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')};
+                
+                // Change color when time is running out
+                if (gameState.timeLeft < 60) {
+                    timerElement.style.color = '#ef4444';
+                }
+            }
+            
+            function updateScore() {
+                scoreElement.textContent = gameState.score;
+            }
+            
+            function endGame() {
+                clearInterval(gameState.timerInterval);
+                
+                questionElement.textContent = 'Game Over!';
+                codeContainer.innerHTML = `
+                    <div style="text-align: center; padding: 30px;">
+                        <h3 style="margin-bottom: 20px; color: #8b5cf6;">Your final score: ${gameState.score} points</h3>
+                        <p>Thanks for playing! Refresh the page to start again.</p>
+                    </div>
+                `;
+                
+                answerInput.style.display = 'none';
+                hintBtn.style.display = 'none';
+                submitBtn.style.display = 'none';
+                tryAgainBtn.style.display = 'none';
+                resultElement.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

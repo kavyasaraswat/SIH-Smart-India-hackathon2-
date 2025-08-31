@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Card Quest - Advanced Edition</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            color: #1f2937;
+            overflow-x: hidden;
+        }
+
+        /* Animated background particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 1; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 0.8; }
+        }
+
+        .game-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: slideDown 1s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .game-title {
+            font-size: 4rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #fff, #f0f9ff, #dbeafe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255,255,255,0.5);
+            margin-bottom: 15px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px rgba(255,255,255,0.3)); }
+            to { filter: drop-shadow(0 0 30px rgba(255,255,255,0.6)); }
+        }
+
+        .game-subtitle {
+            font-size: 1.4rem;
+            color: #e0e7ff;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .physics-formula {
+            font-size: 1rem;
+            color: #c7d2fe;
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        .setup-screen {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 50px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+            border: 1px solid rgba(255,255,255,0.3);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .setup-title {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .setup-subtitle {
+            color: #6b7280;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        .player-input {
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .player-input input {
+            width: 100%;
+            padding: 20px 25px;
+            border: 2px solid transparent;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            background: linear-gradient(white, white) padding-box,
+                        linear-gradient(135deg, #667eea, #764ba2) border-box;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .player-input input:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .player-input input::placeholder {
+            color: #9ca3af;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            border-radius: 15px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.6);
+        }
+
+        .start-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .start-btn:hover::before {
+            left: 100%;
+        }
+
+        .game-board {
+            display: none;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 30px;
+            align-items: start;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .players-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .panel-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .player-card {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 3px solid transparent;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .player-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: -1;
+        }
+
+        .player-card.active {
+            border-color: #667eea;
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .player-card.active::before {
+            opacity: 0.1;
+        }
+
+        .player-name {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: #1f2937;
+        }
+
+        .player-score {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .cards-remaining {
+            color: #6b7280;
+            font-size: 0.95rem;
+            margin-top: 5px;
+        }
+
+        .game-area {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .current-player {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 25px;
+        }
+
+        .playing-card {
+            width: 140px;
+            height: 196px;
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            border: 3px solid #374151;
+            border-radius: 15px;
+            margin: 25px auto;
+            position: relative;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.4s ease;
+            overflow: hidden;
+        }
+
+        .playing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .playing-card:hover {
+            transform: translateY(-10px) scale(1.1) rotateY(5deg);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+
+        .playing-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-corner {
+            position: absolute;
+            font-weight: bold;
+            font-size: 16px;
+            z-index: 2;
+        }
+
+        .card-corner.top-left {
+            top: 12px;
+            left: 12px;
+        }
+
+        .card-corner.bottom-right {
+            bottom: 12px;
+            right: 12px;
+            transform: rotate(180deg);
+        }
+
+        .card-suit-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 50px;
+            z-index: 2;
+        }
+
+        .red-suit {
+            color: #dc2626;
+        }
+
+        .black-suit {
+            color: #1f2937;
+        }
+
+        .question-panel {
+            background: linear-gradient(135deg, #f8fafc, #e0e7ff);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 25px 0;
+            border-left: 6px solid #667eea;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            line-height: 1.7;
+            color: #1f2937;
+            font-weight: 500;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 18px 25px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .feedback.correct {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            color: #065f46;
+            border: 2px solid #10b981;
+        }
+
+        .feedback.incorrect {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            color: #991b1b;
+            border: 2px solid #ef4444;
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .game-over {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 50px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+            border: 1px solid rgba(255,255,255,0.3);
+            animation: bounceIn 1s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .winner-announcement {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 25px;
+        }
+
+        .final-scores {
+            background: linear-gradient(135deg, #f8fafc, #e0e7ff);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 25px 0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 1.1rem;
+        }
+
+        .score-item:last-child {
+            border-bottom: none;
+        }
+
+        .play-again-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 18px 45px;
+            border-radius: 15px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .play-again-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.6);
+        }
+
+        .stats-item {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+            border: 1px solid #bae6fd;
+        }
+
+        .stats-label {
+            font-weight: bold;
+            color: #0369a1;
+            margin-bottom: 5px;
+        }
+
+        .stats-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #1e40af;
+        }
+
+        @media (max-width: 768px) {
+            .game-board {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .game-title {
+                font-size: 2.5rem;
+            }
+            
+            .playing-card {
+                width: 120px;
+                height: 168px;
+            }
+
+            .setup-screen {
+                padding: 30px;
+                margin: 20px;
+            }
+        }
+
+        /* Physics-themed decorations */
+        .physics-icon {
+            display: inline-block;
+            margin: 0 10px;
+            font-size: 1.5rem;
+            animation: rotate 4s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .formula-decoration {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.6);
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated background particles -->
+    <div class="particles" id="particles"></div>
+
+    <div class="game-container">
+        <div class="game-header">
+            <h1 class="game-title">⚛ Physics Card Quest</h1>
+            <p class="game-subtitle">Advanced Edition • Class 11th & 12th Physics</p>
+            <p class="physics-formula">E = mc² • F = ma • v = u + at</p>
+        </div>
+
+        <!-- Setup Screen -->
+        <div id="setupScreen" class="setup-screen">
+            <div class="formula-decoration">∫F·dx = ΔKE</div>
+            <h2 class="setup-title">🎓 Physics Masters</h2>
+            <p class="setup-subtitle">Enter the names of four brilliant physics students ready to tackle advanced concepts!</p>
+            
+            <div class="player-input">
+                <input type="text" id="player1" placeholder="🔬 First Physics Scholar" maxlength="20">
+            </div>
+            <div class="player-input">
+                <input type="text" id="player2" placeholder="⚡ Second Physics Expert" maxlength="20">
+            </div>
+            <div class="player-input">
+                <input type="text" id="player3" placeholder="🌊 Third Wave Master" maxlength="20">
+            </div>
+            <div class="player-input">
+                <input type="text" id="player4" placeholder="🚀 Fourth Quantum Genius" maxlength="20">
+            </div>
+            
+            <button class="start-btn" onclick="startGame()">
+                <span class="physics-icon">⚛</span>
+                Begin Physics Challenge
+                <span class="physics-icon">🔬</span>
+            </button>
+        </div>
+
+        <!-- Game Board -->
+        <div id="gameBoard" class="game-board">
+            <div class="players-panel">
+                <h3 class="panel-title">🏆 Physics Masters</h3>
+                <div id="playersContainer"></div>
+            </div>
+
+            <div class="game-area">
+                <div class="current-player" id="currentPlayerDisplay"></div>
+                <div id="cardDisplay"></div>
+                <div id="questionPanel" class="question-panel" style="display: none;">
+                    <div class="question-text" id="questionText"></div>
+                    <input type="text" id="answerInput" class="answer-input" placeholder="Enter your precise answer...">
+                    <button class="submit-btn" onclick="submitAnswer()">⚡ Submit Answer</button>
+                    <div id="feedback" class="feedback" style="display: none;"></div>
+                    <button id="nextBtn" class="next-btn" onclick="nextTurn()" style="display: none;">🚀 Next Physicist</button>
+                </div>
+            </div>
+
+            <div class="players-panel">
+                <h3 class="panel-title">📊 Game Statistics</h3>
+                <div class="stats-item">
+                    <div class="stats-label">Current Round</div>
+                    <div class="stats-value"><span id="roundCounter">1</span>/10</div>
+                </div>
+                <div class="stats-item">
+                    <div class="stats-label">Questions Remaining</div>
+                    <div class="stats-value"><span id="cardsLeft">40</span></div>
+                </div>
+                <div class="stats-item">
+                    <div class="stats-label">Current Turn</div>
+                    <div class="stats-value"><span id="turnCounter">1</span>/4</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="gameOverScreen" class="game-over">
+            <div class="winner-announcement" id="winnerText"></div>
+            <div class="final-scores" id="finalScores"></div>
+            <button class="play-again-btn" onclick="resetGame()">
+                <span class="physics-icon">🔄</span>
+                Challenge Physics Again
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Create animated background particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Initialize particles on load
+        createParticles();
+
+        // Game state
+        let players = [];
+        let currentPlayerIndex = 0;
+        let currentRound = 1;
+        let currentTurn = 1;
+        let gameQuestions = [];
+        let playerCards = [[], [], [], []];
+        let currentCard = null;
+        let currentQuestion = null;
+
+        // Card deck
+        const suits = ['♠', '♥', '♦', '♣'];
+        const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+        const cardPoints = {'2': 1, '3': 2, '4': 3, '5': 4, '6': 5, '7': 6, '8': 7, '9': 8, '10': 9, 'J': 10, 'Q': 11, 'K': 12, 'A': 13};
+
+        // Class 11th & 12th Physics Questions Database
+        const questionBank = [
+            // Easy Questions (2-4) - Basic concepts
+            {difficulty: 1, question: "What is the SI unit of force?", answer: "newton"},
+            {difficulty: 1, question: "What is the acceleration due to gravity on Earth? (m/s²)", answer: "9.8"},
+            {difficulty: 1, question: "What is the speed of light in vacuum? (×10⁸ m/s)", answer: "3"},
+            {difficulty: 1, question: "What is the SI unit of energy?", answer: "joule"},
+            {difficulty: 1, question: "What is the SI unit of power?", answer: "watt"},
+            {difficulty: 1, question: "What is the SI unit of electric current?", answer: "ampere"},
+            {difficulty: 1, question: "What is the SI unit of electric charge?", answer: "coulomb"},
+            {difficulty: 1, question: "What is the SI unit of frequency?", answer: "hertz"},
+            {difficulty: 1, question: "What is the SI unit of pressure?", answer: "pascal"},
+            {difficulty: 1, question: "What is the SI unit of magnetic field?", answer: "tesla"},
+            {difficulty: 1, question: "What is the value of Planck's constant? (×10⁻³⁴ J·s)", answer: "6.626"},
+            {difficulty: 1, question: "What is the charge of an electron? (×10⁻¹⁹ C)", answer: "-1.6"},
+            {difficulty: 1, question: "What is the mass of an electron? (×10⁻³¹ kg)", answer: "9.1"},
+            {difficulty: 1, question: "What is the SI unit of momentum?", answer: "kg m/s"},
+            {difficulty: 1, question: "What is the SI unit of angular velocity?", answer: "rad/s"},
+
+            // Medium-Easy Questions (5-7) - Intermediate concepts
+            {difficulty: 2, question: "What is Newton's second law of motion?", answer: "F=ma"},
+            {difficulty: 2, question: "What is the formula for kinetic energy?", answer: "KE=1/2mv²"},
+            {difficulty: 2, question: "What is the formula for potential energy?", answer: "PE=mgh"},
+            {difficulty: 2, question: "What is Ohm's law?", answer: "V=IR"},
+            {difficulty: 2, question: "What is the formula for power in terms of voltage and current?", answer: "P=VI"},
+            {difficulty: 2, question: "What is the formula for centripetal force?", answer: "F=mv²/r"},
+            {difficulty: 2, question: "What is the formula for gravitational force?", answer: "F=Gm₁m₂/r²"},
+            {difficulty: 2, question: "What is the formula for electric field?", answer: "E=F/q"},
+            {difficulty: 2, question: "What is the formula for magnetic force on a current-carrying conductor?", answer: "F=BIL"},
+            {difficulty: 2, question: "What is the formula for work done?", answer: "W=Fd"},
+            {difficulty: 2, question: "What is the formula for impulse?", answer: "J=Ft"},
+            {difficulty: 2, question: "What is the formula for angular momentum?", answer: "L=Iω"},
+            {difficulty: 2, question: "What is the formula for simple harmonic motion displacement?", answer: "x=Asin(ωt)"},
+            {difficulty: 2, question: "What is the formula for wave speed?", answer: "v=fλ"},
+            {difficulty: 2, question: "What is the formula for capacitance?", answer: "C=Q/V"},
+
+            // Medium Questions (8-10) - Applied concepts
+            {difficulty: 3, question: "What is the escape velocity from Earth? (km/s)", answer: "11.2"},
+            {difficulty: 3, question: "What is the value of universal gravitational constant G? (×10⁻¹¹ N·m²/kg²)", answer: "6.67"},
+            {difficulty: 3, question: "What is the formula for time period of a simple pendulum?", answer: "T=2π√(l/g)"},
+            {difficulty: 3, question: "What is the formula for lens equation?", answer: "1/f=1/u+1/v"},
+            {difficulty: 3, question: "What is the formula for refractive index?", answer: "n=c/v"},
+            {difficulty: 3, question: "What is the formula for electric potential?", answer: "V=kq/r"},
+            {difficulty: 3, question: "What is the formula for magnetic field due to a straight conductor?", answer: "B=μ₀I/2πr"},
+            {difficulty: 3, question: "What is the formula for self-inductance of a solenoid?", answer: "L=μ₀n²Al"},
+            {difficulty: 3, question: "What is the formula for energy stored in a capacitor?", answer: "U=1/2CV²"},
+            {difficulty: 3, question: "What is the formula for RMS value of AC current?", answer: "Irms=I₀/√2"},
+            {difficulty: 3, question: "What is the formula for de Broglie wavelength?", answer: "λ=h/p"},
+            {difficulty: 3, question: "What is the formula for photoelectric effect?", answer: "E=hf-φ"},
+            {difficulty: 3, question: "What is the formula for Doppler effect in sound?", answer: "f'=f(v±v₀)/(v±vs)"},
+            {difficulty: 3, question: "What is the formula for Young's modulus?", answer: "Y=σ/ε"},
+            {difficulty: 3, question: "What is the formula for coefficient of restitution?", answer: "e=(v₂-v₁)/(u₁-u₂)"},
+
+            // Hard Questions (J-K) - Complex concepts
+            {difficulty: 4, question: "What is the Rydberg constant? (×10⁷ m⁻¹)", answer: "1.097"},
+            {difficulty: 4, question: "What is the formula for Compton scattering?", answer: "λ'-λ=h/mc(1-cosθ)"},
+            {difficulty: 4, question: "What is the formula for Stefan-Boltzmann law?", answer: "P=σAT⁴"},
+            {difficulty: 4, question: "What is the value of Boltzmann constant? (×10⁻²³ J/K)", answer: "1.38"},
+            {difficulty: 4, question: "What is the formula for Wien's displacement law?", answer: "λmax=b/T"},
+            {difficulty: 4, question: "What is the formula for Heisenberg uncertainty principle?", answer: "Δx·Δp≥h/4π"},
+            {difficulty: 4, question: "What is the formula for Schrödinger equation (time-independent)?", answer: "Hψ=Eψ"},
+            {difficulty: 4, question: "What is the formula for magnetic dipole moment?", answer: "μ=IA"},
+            {difficulty: 4, question: "What is the formula for Hall effect voltage?", answer: "VH=BIl/nqt"},
+            {difficulty: 4, question: "What is the formula for cyclotron frequency?", answer: "f=qB/2πm"},
+            {difficulty: 4, question: "What is the formula for binding energy per nucleon?", answer: "BE/A=(Zmp+Nmn-M)c²/A"},
+            {difficulty: 4, question: "What is the formula for radioactive decay?", answer: "N=N₀e^(-λt)"},
+            {difficulty: 4, question: "What is the formula for Bragg's law?", answer: "nλ=2dsinθ"},
+            {difficulty: 4, question: "What is the formula for Malus law?", answer: "I=I₀cos²θ"},
+            {difficulty: 4, question: "What is the formula for blackbody radiation energy density?", answer: "u=aT⁴"},
+
+            // Very Hard Questions (Ace) - Advanced concepts
+            {difficulty: 5, question: "What is the fine structure constant? (approximate)", answer: "1/137"},
+            {difficulty: 5, question: "What is the formula for relativistic energy?", answer: "E=γmc²"},
+            {difficulty: 5, question: "What is the formula for Lorentz factor?", answer: "γ=1/√(1-v²/c²)"},
+            {difficulty: 5, question: "What is the formula for relativistic momentum?", answer: "p=γmv"},
+            {difficulty: 5, question: "What is the formula for time dilation?", answer: "Δt=γΔt₀"},
+            {difficulty: 5, question: "What is the formula for length contraction?", answer: "L=L₀/γ"},
+            {difficulty: 5, question: "What is the formula for mass-energy equivalence?", answer: "E=mc²"},
+            {difficulty: 5, question: "What is the formula for Planck's energy quantization?", answer: "E=nhf"},
+            {difficulty: 5, question: "What is the formula for Einstein's photoelectric equation?", answer: "hf=φ+KEmax"},
+            {difficulty: 5, question: "What is the formula for Bohr's radius?", answer: "r=n²h²/4π²mke²"},
+            {difficulty: 5, question: "What is the formula for energy levels in hydrogen atom?", answer: "En=-13.6/n² eV"},
+            {difficulty: 5, question: "What is the formula for quantum tunneling probability?", answer: "T=e^(-2κa)"},
+            {difficulty: 5, question: "What is the formula for Fermi energy?", answer: "EF=h²/2m(3π²n)^(2/3)"},
+            {difficulty: 5, question: "What is the formula for superconductor critical temperature (BCS)?", answer: "kTc=1.14ℏωDe^(-1/N(0)V)"},
+            {difficulty: 5, question: "What is the formula for Josephson effect?", answer: "I=Icsin(δ)"},
+
+            // Additional Physics Questions to reach 100+
+            {difficulty: 1, question: "What is the SI unit of temperature?", answer: "kelvin"},
+            {difficulty: 1, question: "What is the SI unit of luminous intensity?", answer: "candela"},
+            {difficulty: 1, question: "What is the SI unit of amount of substance?", answer: "mole"},
+            {difficulty: 1, question: "What is the dimensional formula of force?", answer: "MLT⁻²"},
+            {difficulty: 1, question: "What is the dimensional formula of energy?", answer: "ML²T⁻²"},
+            
+            {difficulty: 2, question: "What is the formula for elastic potential energy?", answer: "U=1/2kx²"},
+            {difficulty: 2, question: "What is the formula for torque?", answer: "τ=rFsinθ"},
+            {difficulty: 2, question: "What is the formula for moment of inertia of a rod about center?", answer: "I=ML²/12"},
+            {difficulty: 2, question: "What is the formula for frequency of oscillation?", answer: "f=1/T"},
+            {difficulty: 2, question: "What is the formula for electric flux?", answer: "Φ=E·A"},
+            
+            {difficulty: 3, question: "What is the formula for thermal conductivity?", answer: "Q/t=kAΔT/d"},
+            {difficulty: 3, question: "What is the formula for coefficient of linear expansion?", answer: "ΔL=αL₀ΔT"},
+            {difficulty: 3, question: "What is the formula for ideal gas law?", answer: "PV=nRT"},
+            {difficulty: 3, question: "What is the formula for efficiency of Carnot engine?", answer: "η=1-T₂/T₁"},
+            {difficulty: 3, question: "What is the formula for surface tension force?", answer: "F=γL"},
+            
+            {difficulty: 4, question: "What is the formula for mutual inductance?", answer: "M=k√(L₁L₂)"},
+            {difficulty: 4, question: "What is the formula for impedance in AC circuit?", answer: "Z=√(R²+(XL-XC)²)"},
+            {difficulty: 4, question: "What is the formula for quality factor of resonance?", answer: "Q=ω₀L/R"},
+            {difficulty: 4, question: "What is the formula for Poynting vector?", answer: "S=E×B/μ₀"},
+            {difficulty: 4, question: "What is the formula for group velocity?", answer: "vg=dω/dk"},
+            
+            {difficulty: 5, question: "What is the formula for Chandrasekhar limit?", answer: "M≈1.4M☉"},
+            {difficulty: 5, question: "What is the formula for Schwarzschild radius?", answer: "rs=2GM/c²"},
+            {difficulty: 5, question: "What is the formula for Hawking radiation temperature?", answer: "T=ℏc³/8πGMk"},
+            {difficulty: 5, question: "What is the formula for cosmological redshift?", answer: "z=(λobs-λem)/λem"},
+            {difficulty: 5, question: "What is the formula for dark energy density parameter?", answer: "ΩΛ≈0.7"},
+
+            // More specialized physics questions
+            {difficulty: 2, question: "What is Avogadro's number? (×10²³)", answer: "6.022"},
+            {difficulty: 3, question: "What is the speed of sound in air at 20°C? (m/s)", answer: "343"},
+            {difficulty: 3, question: "What is the critical angle for total internal reflection in glass-air interface? (degrees, n=1.5)", answer: "42"},
+            {difficulty: 4, question: "What is the work function of cesium? (eV)", answer: "2.1"},
+            {difficulty: 4, question: "What is the magnetic permeability of free space? (×10⁻⁷ H/m)", answer: "4π"},
+            {difficulty: 5, question: "What is the electron rest mass energy? (MeV)", answer: "0.511"},
+            {difficulty: 5, question: "What is the proton rest mass energy? (MeV)", answer: "938.3"},
+            
+            // Quantum mechanics and modern physics
+            {difficulty: 3, question: "What is the ground state energy of hydrogen atom? (eV)", answer: "-13.6"},
+            {difficulty: 4, question: "What is the Compton wavelength of electron? (×10⁻¹² m)", answer: "2.43"},
+            {difficulty: 4, question: "What is the classical electron radius? (×10⁻¹⁵ m)", answer: "2.82"},
+            {difficulty: 5, question: "What is the reduced Planck constant ℏ? (×10⁻³⁴ J·s)", answer: "1.055"},
+            
+            // Thermodynamics and statistical mechanics
+            {difficulty: 2, question: "What is absolute zero temperature? (°C)", answer: "-273.15"},
+            {difficulty: 3, question: "What is the gas constant R? (J/mol·K)", answer: "8.314"},
+            {difficulty: 4, question: "What is the Stefan-Boltzmann constant? (×10⁻⁸ W/m²·K⁴)", answer: "5.67"},
+            {difficulty: 5, question: "What is the Wien displacement constant? (×10⁻³ m·K)", answer: "2.898"}
+        ];
+
+        function startGame() {
+            // Get player names
+            const playerNames = [
+                document.getElementById('player1').value || 'Physics Scholar 1',
+                document.getElementById('player2').value || 'Physics Expert 2',
+                document.getElementById('player3').value || 'Wave Master 3',
+                document.getElementById('player4').value || 'Quantum Genius 4'
+            ];
+
+            // Initialize players
+            players = playerNames.map(name => ({
+                name: name,
+                score: 0,
+                cardsPlayed: 0
+            }));
+
+            // Create and shuffle deck
+            const deck = createDeck();
+            shuffleDeck(deck);
+
+            // Deal cards to players
+            dealCards(deck);
+
+            // Shuffle questions
+            gameQuestions = [...questionBank];
+            shuffleArray(gameQuestions);
+
+            // Show game board
+            document.getElementById('setupScreen').style.display = 'none';
+            document.getElementById('gameBoard').style.display = 'grid';
+
+            // Initialize UI
+            updatePlayersDisplay();
+            updateGameStats();
+            showCurrentPlayerTurn();
+        }
+
+        function createDeck() {
+            const deck = [];
+            for (let suit of suits) {
+                for (let value of values) {
+                    deck.push({ suit, value });
+                }
+            }
+            return deck;
+        }
+
+        function shuffleDeck(deck) {
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function dealCards(deck) {
+            let cardIndex = 0;
+            for (let round = 0; round < 10; round++) {
+                for (let player = 0; player < 4; player++) {
+                    if (!playerCards[player]) playerCards[player] = [];
+                    playerCards[player].push(deck[cardIndex++]);
+                }
+            }
+        }
+
+        function updatePlayersDisplay() {
+            const container = document.getElementById('playersContainer');
+            container.innerHTML = '';
+
+            players.forEach((player, index) => {
+                const playerDiv = document.createElement('div');
+                playerDiv.className = player-card ${index === currentPlayerIndex ? 'active' : ''};
+                playerDiv.innerHTML = `
+                    <div class="player-name">${player.name}</div>
+                    <div class="player-score">Score: ${player.score} points</div>
+                    <div class="cards-remaining">Cards: ${10 - player.cardsPlayed}/10</div>
+                `;
+                container.appendChild(playerDiv);
+            });
+        }
+
+        function updateGameStats() {
+            document.getElementById('roundCounter').textContent = currentRound;
+            document.getElementById('cardsLeft').textContent = 40 - ((currentRound - 1) * 4 + currentTurn - 1);
+            document.getElementById('turnCounter').textContent = currentTurn;
+        }
+
+        function showCurrentPlayerTurn() {
+            const currentPlayer = players[currentPlayerIndex];
+            document.getElementById('currentPlayerDisplay').textContent = ${currentPlayer.name}'s Physics Challenge;
+
+            // Get current card for this player
+            currentCard = playerCards[currentPlayerIndex][currentRound - 1];
+            
+            // Display the card
+            displayCard(currentCard);
+
+            // Hide question panel initially
+            document.getElementById('questionPanel').style.display = 'none';
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('answerInput').value = '';
+        }
+
+        function displayCard(card) {
+            const cardDisplay = document.getElementById('cardDisplay');
+            const isRed = card.suit === '♥' || card.suit === '♦';
+            
+            cardDisplay.innerHTML = `
+                <div class="playing-card" onclick="selectCard()">
+                    <div class="card-corner top-left ${isRed ? 'red-suit' : 'black-suit'}">
+                        <div>${card.value}</div>
+                        <div>${card.suit}</div>
+                    </div>
+                    <div class="card-suit-center ${isRed ? 'red-suit' : 'black-suit'}">
+                        ${card.suit}
+                    </div>
+                    <div class="card-corner bottom-right ${isRed ? 'red-suit' : 'black-suit'}">
+                        <div>${card.value}</div>
+                        <div>${card.suit}</div>
+                    </div>
+                </div>
+                <p style="margin-top: 20px; font-weight: bold; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                    ⚡ Click the card to reveal your physics challenge!
+                </p>
+            `;
+        }
+
+        function selectCard() {
+            // Get question based on card difficulty
+            const cardValue = currentCard.value;
+            let difficulty;
+            
+            if (['2', '3', '4'].includes(cardValue)) difficulty = 1;
+            else if (['5', '6', '7'].includes(cardValue)) difficulty = 2;
+            else if (['8', '9', '10'].includes(cardValue)) difficulty = 3;
+            else if (['J', 'Q', 'K'].includes(cardValue)) difficulty = 4;
+            else if (cardValue === 'A') difficulty = 5;
+
+            // Find a question of appropriate difficulty
+            const availableQuestions = gameQuestions.filter(q => q.difficulty === difficulty);
+            if (availableQuestions.length === 0) {
+                // Fallback to any question if no questions of exact difficulty
+                currentQuestion = gameQuestions[Math.floor(Math.random() * gameQuestions.length)];
+            } else {
+                currentQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+            }
+
+            // Show question
+            document.getElementById('questionText').textContent = currentQuestion.question;
+            document.getElementById('questionPanel').style.display = 'block';
+            document.getElementById('answerInput').focus();
+        }
+
+        function submitAnswer() {
+            const userAnswer = document.getElementById('answerInput').value.trim();
+            const correctAnswer = currentQuestion.answer.toString();
+            const feedback = document.getElementById('feedback');
+            
+            if (userAnswer === '') {
+                alert('Please enter an answer!');
+                return;
+            }
+
+            const isCorrect = userAnswer.toLowerCase() === correctAnswer.toLowerCase() || 
+                            Math.abs(parseFloat(userAnswer) - parseFloat(correctAnswer)) < 0.01;
+
+            if (isCorrect) {
+                const points = cardPoints[currentCard.value];
+                players[currentPlayerIndex].score += points;
+                feedback.className = 'feedback correct';
+                feedback.textContent = 🎉 Brilliant! You earned ${points} points! The physics is strong with you!;
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = ❌ Not quite right. The correct answer was: ${correctAnswer}. Keep exploring the physics!;
+            }
+
+            feedback.style.display = 'block';
+            document.getElementById('nextBtn').style.display = 'block';
+            document.querySelector('.submit-btn').style.display = 'none';
+            document.getElementById('answerInput').disabled = true;
+
+            // Update player stats
+            players[currentPlayerIndex].cardsPlayed++;
+            updatePlayersDisplay();
+        }
+
+        function nextTurn() {
+            // Move to next player
+            currentPlayerIndex = (currentPlayerIndex + 1) % 4;
+            currentTurn++;
+
+            // Check if round is complete
+            if (currentTurn > 4) {
+                currentRound++;
+                currentTurn = 1;
+                currentPlayerIndex = 0;
+            }
+
+            // Check if game is over
+            if (currentRound > 10) {
+                endGame();
+                return;
+            }
+
+            // Reset UI for next turn
+            document.querySelector('.submit-btn').style.display = 'block';
+            document.getElementById('answerInput').disabled = false;
+            
+            updateGameStats();
+            updatePlayersDisplay();
+            showCurrentPlayerTurn();
+        }
+
+        function endGame() {
+            // Hide game board
+            document.getElementById('gameBoard').style.display = 'none';
+
+            // Sort players by score
+            const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
+            const winner = sortedPlayers[0];
+
+            // Show winner
+            document.getElementById('winnerText').textContent = 🏆 ${winner.name} - Physics Champion!;
+
+            // Show final scores
+            const scoresContainer = document.getElementById('finalScores');
+            scoresContainer.innerHTML = '<h3 style="margin-bottom: 20px; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">🎓 Final Physics Rankings</h3>';
+            
+            sortedPlayers.forEach((player, index) => {
+                const scoreItem = document.createElement('div');
+                scoreItem.className = 'score-item';
+                const medals = ['🥇', '🥈', '🥉', '🏅'];
+                scoreItem.innerHTML = `
+                    <span>${medals[index]} ${player.name}</span>
+                    <span><strong>${player.score} points</strong></span>
+                `;
+                scoresContainer.appendChild(scoreItem);
+            });
+
+            // Show game over screen
+            document.getElementById('gameOverScreen').style.display = 'block';
+        }
+
+        function resetGame() {
+            // Reset all game state
+            players = [];
+            currentPlayerIndex = 0;
+            currentRound = 1;
+            currentTurn = 1;
+            gameQuestions = [];
+            playerCards = [[], [], [], []];
+            currentCard = null;
+            currentQuestion = null;
+
+            // Reset UI
+            document.getElementById('gameOverScreen').style.display = 'none';
+            document.getElementById('setupScreen').style.display = 'block';
+            
+            // Clear input fields
+            document.getElementById('player1').value = '';
+            document.getElementById('player2').value = '';
+            document.getElementById('player3').value = '';
+            document.getElementById('player4').value = '';
+        }
+
+        // Allow Enter key to submit answers
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('answerInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !document.getElementById('answerInput').disabled) {
+                    submitAnswer();
+                }
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97772439140b0c2e',t:'MTc1NjU4NjgyOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
